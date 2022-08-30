@@ -73,7 +73,7 @@
                             <div class="col-md-3">
                                 <div class="form-group">
                                     <label>Código:</label>
-                                    <input type="number" class="form-control" autocomplete="off" id="codigo-nuevo" maxlength="12">
+                                    <input type="text" class="form-control" autocomplete="off" id="codigo-nuevo" maxlength="12">
                                 </div>
                             </div>
 
@@ -134,7 +134,7 @@
                                     <div class="col-md-3">
                                         <div class="form-group">
                                             <label>Código:</label>
-                                            <input type="number" class="form-control" autocomplete="off" id="codigo-editar" maxlength="12">
+                                            <input type="text" class="form-control" autocomplete="off" id="codigo-editar" maxlength="12">
                                         </div>
                                     </div>
 
