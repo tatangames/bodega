@@ -171,6 +171,13 @@ class PrincipalController extends Controller
 
         if ($validar->fails()){ return ['success' => 0];}
 
+        if(Materiales::where('id', '!=', $request->id)
+            ->where('nombre', $request->nombre)
+            ->where('id_medida', $request->unidad)
+            ->first()){
+            return ['success' => 3];
+        }
+
         Materiales::where('id', $request->id)->update([
             'id_medida' => $request->unidad,
             'nombre' => $request->nombre,

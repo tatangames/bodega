@@ -296,8 +296,20 @@
                     }
                     else if(response.data.success === 3){
 
+                        Swal.fire({
+                            title: 'Material Repetido',
+                            text: "El nuevo material con su unidad de medida ya se encuentra registrado",
+                            icon: 'question',
+                            showCancelButton: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            cancelButtonText: 'Cancelar',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
 
-
+                            }
+                        });
                     }
                     else {
                         toastr.error('Error al registrar');
@@ -390,6 +402,23 @@
                         toastr.success('Actualizado correctamente');
                         $('#modalEditar').modal('hide');
                         recargar();
+                    }
+                    else if(response.data.success === 3){
+
+                        Swal.fire({
+                            title: 'Material Repetido',
+                            text: "El material a editar con su unidad de medida ya se encuentra registrado",
+                            icon: 'question',
+                            showCancelButton: false,
+                            confirmButtonColor: '#28a745',
+                            cancelButtonColor: '#d33',
+                            cancelButtonText: 'Cancelar',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+
+                            }
+                        });
                     }
                     else {
                         toastr.error('Error al registrar');
