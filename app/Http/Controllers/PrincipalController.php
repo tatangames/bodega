@@ -124,6 +124,12 @@ class PrincipalController extends Controller
 
         if ($validar->fails()){ return ['success' => 0];}
 
+        if(Materiales::where('nombre', $request->nombre)
+            ->where('id_medida', $request->unidad)
+            ->first()){
+            return ['success' => 3];
+        }
+
         $dato = new Materiales();
         $dato->id_medida = $request->unidad;
         $dato->nombre = $request->nombre;
@@ -186,7 +192,6 @@ class PrincipalController extends Controller
             $query = $request->get('query');
             $data = Materiales::where('nombre', 'LIKE', "%{$query}%")
                 ->orWhere('codigo', 'LIKE', "%{$query}%")
-                ->take(25)
                 ->get();
 
             foreach ($data as $dd){

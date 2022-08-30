@@ -294,6 +294,11 @@
                         $('#modalAgregar').modal('hide');
                         recargar();
                     }
+                    else if(response.data.success === 3){
+
+
+
+                    }
                     else {
                         toastr.error('Error al registrar');
                     }
@@ -323,6 +328,7 @@
                         contarcaracteresEditar();
 
                         document.getElementById("select-unidad-editar").options.length = 0;
+                        $('#select-unidad-editar').append('<option value="" selected="selected">Seleccione una opción...</option>');
 
                         // unidad de medida
                         $.each(response.data.unidad, function( key, val ){
