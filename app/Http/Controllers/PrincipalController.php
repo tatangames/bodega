@@ -429,16 +429,23 @@ class PrincipalController extends Controller
                 // obtener detalle
                 $listaDetalle = DB::table('entradas_detalle AS ed')
                     ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
-                    ->select('m.nombre', 'ed.cantidad')
+                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida')
                     ->where('ed.id_entrada', $ll->id)
                     ->orderBy('m.id', 'ASC')
                     ->get();
+
+                foreach ($listaDetalle as $dd){
+                    if($info = UnidadMedida::where('id', $dd->id_medida)->first()){
+                        $dd->nombre = $dd->nombre . " - " . $info->medida;
+                    }
+                }
 
                 $resultsBloque[$index]->detalle = $listaDetalle;
                 $index++;
             }
 
-            $mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+            //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+            $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
             $mpdf->SetTitle('Entradas');
 
             // mostrar errores
@@ -514,16 +521,23 @@ class PrincipalController extends Controller
                 // obtener detalle
                 $listaDetalle = DB::table('salidas_detalle AS ed')
                     ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
-                    ->select('m.nombre', 'ed.cantidad')
+                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida')
                     ->where('ed.id_salida', $ll->id)
                     ->orderBy('m.id', 'ASC')
                     ->get();
+
+                foreach ($listaDetalle as $dd){
+                    if($info = UnidadMedida::where('id', $dd->id_medida)->first()){
+                        $dd->nombre = $dd->nombre . " - " . $info->medida;
+                    }
+                }
 
                 $resultsBloque[$index]->detalle = $listaDetalle;
                 $index++;
             }
 
-            $mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+            //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+            $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
             $mpdf->SetTitle('Salidas');
 
             // mostrar errores

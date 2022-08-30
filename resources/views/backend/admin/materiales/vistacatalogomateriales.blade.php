@@ -270,28 +270,11 @@
                 return;
             }
 
-            if(unidad === ''){
-                toastr.error('unidad de medida es requerido');
-                return;
-            }
-
             if(codigo === ''){
-                codigo = 0;
+
             }else{
-                var reglaNumeroDecimal = /^[0-9]\d*(\.\d+)?$/;
-
-                if (!codigo.match(reglaNumeroDecimal)) {
-                    toastr.error('codigo debe ser número');
-                    return;
-                }
-
-                if (codigo < 0) {
-                    toastr.error('codigo no permite números negativos');
-                    return;
-                }
-
-                if (codigo.length > 12) {
-                    toastr.error('codigo máximo 12 dígitos de límite');
+                if(codigo.length > 100){
+                    toastr.error('Código máximo 100 caracteres');
                     return;
                 }
             }
@@ -378,22 +361,10 @@
             }
 
             if(codigo === ''){
-                codigo = 0;
+
             }else{
-                var reglaNumeroDecimal = /^[0-9]\d*(\.\d+)?$/;
-
-                if (!codigo.match(reglaNumeroDecimal)) {
-                    toastr.error('codigo debe ser número');
-                    return;
-                }
-
-                if (codigo < 0) {
-                    toastr.error('codigo no permite números negativos');
-                    return;
-                }
-
-                if (codigo.length > 12) {
-                    toastr.error('codigo máximo 12 dígitos de límite');
+                if(codigo.length > 100){
+                    toastr.error('Código máximo 100 caracteres');
                     return;
                 }
             }
