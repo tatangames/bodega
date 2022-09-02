@@ -17,6 +17,14 @@ class CreateEntradasTable extends Migration
             $table->id();
             $table->date('fecha');
             $table->string('descripcion', 800)->nullable();
+
+            $table->string('documento', 100)->nullable();
+
+            // 0: el repuesto es nuevo
+            // 1: el repuesto ya estaba en bodega
+            $table->boolean('inventario');
+
+            $table->string('factura', 50);
         });
     }
 

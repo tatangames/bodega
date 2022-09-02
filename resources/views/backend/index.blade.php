@@ -18,7 +18,6 @@
 </head>
 
 
-
 <!-- para iniciar con el menu cerrado colocar
  <body class="sidebar-mini sidebar-closed sidebar-collapse" style="height: auto;">
  -->

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\EntradaDetalle;
 use App\Models\Entradas;
+use App\Models\Equipos;
 use App\Models\Materiales;
 use App\Models\SalidaDetalle;
 use App\Models\Salidas;
@@ -190,7 +191,10 @@ class PrincipalController extends Controller
     //***********************************************************
 
     public function indexRegistroEntrada(){
-        return view('backend.admin.registros.entradaregistro');
+
+        $equipos = Equipos::orderBy('nombre')->get();
+
+        return view('backend.admin.registros.entradaregistro', compact('equipos'));
     }
 
     public function buscadorMaterial(Request $request){
@@ -259,7 +263,11 @@ class PrincipalController extends Controller
             $r = new Entradas();
             $r->fecha = $request->fecha;
             $r->descripcion = $request->descripcion;
+            $r->documento = null;
+            $r->inventario = $request->entrada;
+            $r->factura = $request->factura;
             $r->save();
+
 
             for ($i = 0; $i < count($request->cantidad); $i++) {
 
@@ -267,6 +275,8 @@ class PrincipalController extends Controller
                 $rDetalle->id_entrada = $r->id;
                 $rDetalle->id_material = $request->datainfo[$i];
                 $rDetalle->cantidad = $request->cantidad[$i];
+                $rDetalle->precio = $request->precio[$i];
+                $rDetalle->id_equipo = $request->equipo[$i];
                 $rDetalle->save();
             }
 

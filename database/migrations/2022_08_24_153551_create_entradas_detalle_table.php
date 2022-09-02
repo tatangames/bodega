@@ -17,11 +17,15 @@ class CreateEntradasDetalleTable extends Migration
             $table->id();
             $table->bigInteger('id_material')->unsigned();
             $table->bigInteger('id_entrada')->unsigned();
+            $table->bigInteger('id_equipo')->unsigned();
 
             $table->integer('cantidad');
 
+            $table->decimal('precio', 10, 2);
+
             $table->foreign('id_material')->references('id')->on('materiales');
             $table->foreign('id_entrada')->references('id')->on('entradas');
+            $table->foreign('id_equipo')->references('id')->on('equipos');
         });
     }
 
