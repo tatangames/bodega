@@ -13,7 +13,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class PrincipalController extends Controller
 {
@@ -260,29 +262,70 @@ class PrincipalController extends Controller
 
         try {
 
-            $r = new Entradas();
-            $r->fecha = $request->fecha;
-            $r->descripcion = $request->descripcion;
-            $r->documento = null;
-            $r->inventario = $request->entrada;
-            $r->factura = $request->factura;
-            $r->save();
+            if ($request->hasFile('documento')) {
 
+                $cadena = Str::random(15);
+                $tiempo = microtime();
+                $union = $cadena . $tiempo;
+                $nombre = str_replace(' ', '_', $union);
 
-            for ($i = 0; $i < count($request->cantidad); $i++) {
+                $extension = '.' . $request->documento->getClientOriginalExtension();
+                $nomDocumento = $nombre . strtolower($extension);
+                $avatar = $request->file('documento');
+                $archivo = Storage::disk('archivos')->put($nomDocumento, \File::get($avatar));
 
-                $rDetalle = new EntradaDetalle();
-                $rDetalle->id_entrada = $r->id;
-                $rDetalle->id_material = $request->datainfo[$i];
-                $rDetalle->cantidad = $request->cantidad[$i];
-                $rDetalle->precio = $request->precio[$i];
-                $rDetalle->id_equipo = $request->equipo[$i];
-                $rDetalle->save();
+                if($archivo){
+
+                    $r = new Entradas();
+                    $r->fecha = $request->fecha;
+                    $r->descripcion = $request->descripcion;
+                    $r->documento = null;
+                    $r->inventario = $request->entrada;
+                    $r->factura = $request->factura;
+                    $r->save();
+
+                    for ($i = 0; $i < count($request->cantidad); $i++) {
+
+                        $rDetalle = new EntradaDetalle();
+                        $rDetalle->id_entrada = $r->id;
+                        $rDetalle->id_material = $request->datainfo[$i];
+                        $rDetalle->cantidad = $request->cantidad[$i];
+                        $rDetalle->precio = $request->precio[$i];
+                        $rDetalle->id_equipo = $request->equipo[$i];
+                        $rDetalle->save();
+                    }
+
+                    DB::commit();
+                    return ['success' => 1];
+                }else{
+                    return ['success' => 2];
+                }
             }
+            else{
 
-            DB::commit();
-            return ['success' => 1];
+                $r = new Entradas();
+                $r->fecha = $request->fecha;
+                $r->descripcion = $request->descripcion;
+                $r->documento = null;
+                $r->inventario = $request->entrada;
+                $r->factura = $request->factura;
+                $r->save();
 
+
+                for ($i = 0; $i < count($request->cantidad); $i++) {
+
+                    $rDetalle = new EntradaDetalle();
+                    $rDetalle->id_entrada = $r->id;
+                    $rDetalle->id_material = $request->datainfo[$i];
+                    $rDetalle->cantidad = $request->cantidad[$i];
+                    $rDetalle->precio = $request->precio[$i];
+                    $rDetalle->id_equipo = $request->equipo[$i];
+                    $rDetalle->save();
+                }
+
+                DB::commit();
+                return ['success' => 1];
+            }
         }catch(\Throwable $e){
             DB::rollback();
             return ['success' => 2];

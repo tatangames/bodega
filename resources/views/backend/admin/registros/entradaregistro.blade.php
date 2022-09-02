@@ -98,6 +98,11 @@
                                     </div>
                                 </div>
 
+                                <div class="form-group">
+                                    <label>Documento (opcional)</label>
+                                    <input type="file" id="documento" class="form-control" accept="image/jpeg, image/jpg, image/png, .pdf"/>
+                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -474,7 +479,14 @@
             var checkNuevo = document.getElementById('check-nuevo').checked;
             var checkInventario = document.getElementById('check-inventario').checked;
 
+            var documento = document.getElementById('documento'); // null file
 
+            if(documento.files && documento.files[0]){ // si trae doc
+                if (!documento.files[0].type.match('image/jpeg|image/jpeg|image/png|.pdf')){
+                    toastr.error('formato permitidos: .png .jpg .jpeg .pdf');
+                    return;
+                }
+            }
 
             if(fecha === ''){
                 toastr.error('Fecha es requerida');
@@ -649,6 +661,7 @@
             formData.append('descripcion', descripc);
             formData.append('entrada', entrada);
             formData.append('factura', factura);
+            formData.append('documento', documento.files[0]);
 
             axios.post(url+'/entrada/guardar', formData, {
             })
