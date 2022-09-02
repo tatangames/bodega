@@ -336,7 +336,8 @@ class PrincipalController extends Controller
     //**********************************************************************
 
     public function indexRegistroSalida(){
-        return view('backend.admin.registros.salidaregistro');
+        $equipos = Equipos::orderBy('nombre')->get();
+        return view('backend.admin.registros.salidaregistro', compact('equipos'));
     }
 
     public function guardarSalida(Request $request){
@@ -357,6 +358,7 @@ class PrincipalController extends Controller
             $r = new Salidas();
             $r->fecha = $request->fecha;
             $r->descripcion = $request->descripcion;
+            $r->talonario = $request->talonario;
             $r->save();
 
             for ($i = 0; $i < count($request->cantidad); $i++) {
@@ -373,10 +375,10 @@ class PrincipalController extends Controller
                     return ['success' => 3, 'fila' => ($i + 1), 'cantidad' => $cantidadBodega];
                 }
 
-
                 $rDetalle = new SalidaDetalle();
                 $rDetalle->id_salida = $r->id;
                 $rDetalle->id_material = $request->datainfo[$i];
+                $rDetalle->id_equipo = $request->equipo[$i];
                 $rDetalle->cantidad = $request->cantidad[$i];
                 $rDetalle->save();
             }
@@ -385,6 +387,7 @@ class PrincipalController extends Controller
             return ['success' => 1];
 
         }catch(\Throwable $e){
+            Log::info('ee' . $e);
             DB::rollback();
             return ['success' => 2];
         }

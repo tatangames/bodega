@@ -34,7 +34,7 @@
 
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="card-title">Registro de Entrada</h3>
+                            <h3 class="card-title">Información</h3>
                         </div>
 
                         <div class="card-body">
@@ -182,7 +182,7 @@
     <section class="content-header">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h2>Registro de Entradas</h2>
+                <h2>Detalle</h2>
             </div>
         </div>
     </section>
@@ -384,6 +384,7 @@
                 timer: 1500
             })
 
+            $(txtContenedorGlobal).attr('data-info', '0');
             document.getElementById("formulario-repuesto").reset();
         }
 
@@ -496,7 +497,7 @@
 
             }else{
                 if(factura.length > 50){
-                    toastr.error('factura máximo 800 caracteres');
+                    toastr.error('factura máximo 50 caracteres');
                     return;
                 }
             }

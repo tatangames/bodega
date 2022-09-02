@@ -17,6 +17,7 @@ class CreateSalidasTable extends Migration
             $table->id();
             $table->date('fecha');
             $table->string('descripcion', 800)->nullable();
+            $table->string('talonario', 50)->nullable();
         });
     }
 
