@@ -19,9 +19,36 @@
                                     <td>{{ $dato->fecha }}</td>
                                     <td>{{ $dato->descripcion }}</td>
                                     <td>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="informacion({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Detalle"></i>&nbsp; Detalle
+                                        <button type="button" class="btn btn-success btn-xs" onclick="informacion({{ $dato->id }})">
+                                            <i class="fas fa-file" title="Detalle"></i>&nbsp; Detalle
                                         </button>
+
+                                        @if($dato->documento != null)
+                                            <br><br>
+                                            <a class="btn btn-primary btn-xs" href="{{ url('/admin/entradas/documento/'.$dato->id) }}">
+                                                <i class="fas fa-eye" title="Documento"></i> Ver Documento </a>
+
+                                            @can('btn.historial.entrada.btn.borrardocumento')
+                                                <br><br>
+                                                <button type="button" class="btn btn-danger btn-xs" onclick="modalBorrarDoc({{ $dato->id }})">
+                                                    <i class="fas fa-trash-alt" title="Borrar"></i>&nbsp; Borrar Documento
+                                                </button>
+                                            @endcan
+                                        @else
+                                            @can('btn.historial.entrada.btn.agregardocumento')
+                                                <br><br>
+                                                <button type="button" class="btn btn-success btn-xs" onclick="infoSubirDoc({{ $dato->id }})">
+                                                    <i class="fas fa-upload" title="Cargar Documento"></i>&nbsp; Cargar Documento
+                                                </button>
+                                            @endcan
+                                        @endif
+
+                                        @can('btn.historial.entrada.btn.borrarregistro')
+                                        <br><br>
+                                        <button type="button" class="btn btn-danger btn-xs" onclick="informacionBorrarRegistro({{ $dato->id }})">
+                                            <i class="fas fa-trash-alt" title="Borrar"></i>&nbsp; Borrar Registro
+                                        </button>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

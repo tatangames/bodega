@@ -240,8 +240,9 @@
 
             document.getElementById("formulario-repuesto").reset();
             $('#select-equipo').prop('selectedIndex', 0).change();
-            $('#modalRepuesto').css('overflow-y', 'auto');
-            $('#modalRepuesto').modal({backdrop: 'static', keyboard: false})
+            $('#modalRepuesto').modal('show');
+           // $('#modalRepuesto').css('overflow-y', 'auto');
+           // $('#modalRepuesto').modal({backdrop: 'static', keyboard: false})
         }
 
         function agregarFila(){
@@ -270,8 +271,8 @@
                 return;
             }
 
-            if(cantidad < 0){
-                toastr.error('Cantidad no debe ser negativo');
+            if(cantidad <= 0){
+                toastr.error('Cantidad no debe ser negativo o cero');
                 return;
             }
 
@@ -344,7 +345,7 @@
                 confirmButtonText: 'Si'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    guardarEntrada();
+                    guardarSalida();
                 }
             })
         }
@@ -401,7 +402,7 @@
             }
         }
 
-        function guardarEntrada(){
+        function guardarSalida(){
 
             var fecha = document.getElementById('fecha').value;
             var descripc = document.getElementById('descripcion').value; // max 800
@@ -541,11 +542,28 @@
             })
                 .then((response) => {
                     closeLoading();
-                    console.log(response);
 
                     if(response.data.success === 1){
                         toastr.success('Registrado correctamente');
                         limpiar();
+                    }
+                    else if(response.data.success === 3){
+
+                        let fila = response.data.fila;
+                        let cantidad = response.data.cantidad;
+                        colorRojoTabla(fila);
+                        Swal.fire({
+                            title: 'Cantidad no Disponible',
+                            text: "Fila #" + (fila+1) + ", el repuesto cuenta con: " + cantidad + " unidades disponible",
+                            icon: 'question',
+                            showCancelButton: false,
+                            confirmButtonColor: '#28a745',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+
+                            }
+                        })
                     }
                     else{
                         toastr.error('error al guardar');

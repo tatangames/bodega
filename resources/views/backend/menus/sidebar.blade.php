@@ -41,7 +41,7 @@
                     </li>
                 @endcan
 
-
+                    @can('sidebar.registros')
                 <li class="nav-item">
 
                     <a href="#" class="nav-link nav-">
@@ -54,46 +54,57 @@
 
                     <ul class="nav nav-treeview">
 
+                        @can('registros.repuestos')
                         <li class="nav-item">
                             <a href="{{ route('admin.materiales.index') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Materiales</p>
+                                <p>Repuestos</p>
                             </a>
                         </li>
+                        @endcan
 
+                        @can('registros.entradas')
                         <li class="nav-item">
                             <a href="{{ route('admin.entrada.registro.index') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Registrar Entrada</p>
                             </a>
                         </li>
+                            @endcan
 
+                            @can('registros.salidas')
                         <li class="nav-item">
                             <a href="{{ route('admin.salida.registro.index') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Registrar Salida</p>
                             </a>
                         </li>
+                            @endcan
 
+                            @can('registros.unidadmedida')
                         <li class="nav-item">
                             <a href="{{ route('admin.unidadmedida.index') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Unidad de Medida</p>
                             </a>
                         </li>
+                            @endcan
 
+                            @can('registros.equipo')
                         <li class="nav-item">
                             <a href="{{ route('admin.equipos.index') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Registrar Equipos</p>
                             </a>
                         </li>
-
+                            @endcan
 
                     </ul>
                 </li>
+                    @endcan
 
 
+                    @can('sidebar.historial')
                 <li class="nav-item">
 
                     <a href="#" class="nav-link nav-">
@@ -106,23 +117,30 @@
 
                     <ul class="nav nav-treeview">
 
-                        <li class="nav-item">
-                            <a href="{{ route('admin.entrada.vista.index') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Entradas</p>
-                            </a>
-                        </li>
+                        @can('historial.entrada')
+                            <li class="nav-item">
+                                <a href="{{ route('admin.entrada.vista.index') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Entradas</p>
+                                </a>
+                            </li>
+                        @endcan
 
-                        <li class="nav-item">
-                            <a href="{{ route('admin.salida.vista.index') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Salidas</p>
-                            </a>
-                        </li>
+                        @can('historial.salida')
+                            <li class="nav-item">
+                                <a href="{{ route('admin.salida.vista.index') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Salidas</p>
+                                </a>
+                            </li>
+                        @endcan
 
                     </ul>
                 </li>
+                    @endcan
 
+
+                    @can('sidebar.reporte')
                 <li class="nav-item">
 
                     <a href="#" class="nav-link nav-">
@@ -135,15 +153,18 @@
 
                     <ul class="nav nav-treeview">
 
+                        @can('reporte.entradas.y.salidas')
                         <li class="nav-item">
                             <a href="{{ route('admin.entrada.reporte.index') }}" target="frameprincipal" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Registros PDF</p>
+                                <p>Entradas y Salidas</p>
                             </a>
                         </li>
+                        @endcan
 
                     </ul>
                 </li>
+                    @endcan
 
             </ul>
         </nav>

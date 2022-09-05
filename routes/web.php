@@ -81,6 +81,15 @@ Route::post('/admin/salida/guardar',  [PrincipalController::class,'guardarSalida
 Route::get('/admin/entradas/vista', [PrincipalController::class,'indexEntradas'])->name('admin.entrada.vista.index');
 Route::get('/admin/entradas/tabla', [PrincipalController::class,'indexTablaEntradas']);
 
+Route::get('/admin/entradas/documento/{id}', [PrincipalController::class,'documentoEntrada']);
+Route::post('/admin/entradas/borrar/documento',  [PrincipalController::class,'borrarDocumento']);
+Route::post('/admin/entradas/borrar/registro',  [PrincipalController::class,'borrarRegistro']);
+Route::post('/admin/entradas/guardar/documento',  [PrincipalController::class,'guardarDocumento']);
+
+
+
+
+
 Route::get('/admin/entradas/detalle/{id}', [PrincipalController::class,'indexEntradasDetalle']);
 Route::get('/admin/entradas/detalle/tabla/{id}', [PrincipalController::class,'indexEntradasDetalleTabla']);
 
@@ -91,9 +100,14 @@ Route::get('/admin/salidas/tabla', [PrincipalController::class,'indexTablaSalida
 Route::get('/admin/salidas/detalle/{id}', [PrincipalController::class,'indexSalidasDetalle']);
 Route::get('/admin/salidas/detalle/tabla/{id}', [PrincipalController::class,'indexSalidasDetalleTabla']);
 
+Route::post('/admin/salidas/borrar/registro',  [PrincipalController::class,'borrarRegistroSalida']);
+
+
 Route::get('/admin/entrada/reporte/vista', [PrincipalController::class,'indexEntradaReporte'])->name('admin.entrada.reporte.index');
 Route::get('/admin/reporte/registro/{tipo}/{desde}/{hasta}', [PrincipalController::class,'reportePdf']);
 
+// reporte por equipos
+Route::get('/admin/reporte/porequipo/{desde}/{hasta}/{tipo}/{unidad}', [PrincipalController::class, 'reportePorEquipo']);
 
 
 

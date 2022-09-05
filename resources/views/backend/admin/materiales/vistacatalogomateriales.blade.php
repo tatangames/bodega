@@ -25,10 +25,12 @@
     <section class="content-header">
         <div class="row">
             <h1 style="margin-left: 5px">Materiales</h1>
+            @can('btn.registros.repuestos.material.nuevo')
             <button type="button" style="margin-left: 15px" onclick="modalAgregar()" class="btn btn-primary btn-sm">
                 <i class="fas fa-plus-square"></i>
                 Nuevo Material
             </button>
+            @endcan
         </div>
     </section>
 

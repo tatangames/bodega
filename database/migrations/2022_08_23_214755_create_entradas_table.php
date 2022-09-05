@@ -24,7 +24,7 @@ class CreateEntradasTable extends Migration
             // 1: el repuesto ya estaba en bodega
             $table->boolean('inventario');
 
-            $table->string('factura', 50);
+            $table->string('factura', 50)->nullable();
         });
     }
 

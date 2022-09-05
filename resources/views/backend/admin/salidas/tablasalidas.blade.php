@@ -22,7 +22,16 @@
                                         <button type="button" class="btn btn-primary btn-xs" onclick="informacion({{ $dato->id }})">
                                             <i class="fas fa-eye" title="Detalle"></i>&nbsp; Detalle
                                         </button>
+
+                                        @can('btn.historial.salida.borrarregistro')
+                                            <br><br>
+                                            <button type="button" class="btn btn-danger btn-xs" onclick="informacionBorrarRegistro({{ $dato->id }})">
+                                                <i class="fas fa-trash-alt" title="Borrar"></i>&nbsp; Borrar Registro
+                                            </button>
+                                        @endcan
                                     </td>
+
+
                                 </tr>
                             @endforeach
 

@@ -24,9 +24,11 @@
                                     <td>{{ $dato->medida }}</td>
                                     <td>{{ $dato->cantidad }}</td>
                                     <td>
+                                        @can('btn.registros.repuestos.material.editar')
                                         <button type="button" class="btn btn-primary btn-xs" onclick="informacion({{ $dato->id }})">
                                             <i class="fas fa-eye" title="Editar"></i>&nbsp; Editar
                                         </button>
+                                        @endcan
                                     </td>
                                 </tr>
                             @endforeach

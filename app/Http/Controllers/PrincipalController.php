@@ -327,6 +327,7 @@ class PrincipalController extends Controller
                 return ['success' => 1];
             }
         }catch(\Throwable $e){
+
             DB::rollback();
             return ['success' => 2];
         }
@@ -372,7 +373,7 @@ class PrincipalController extends Controller
                 $resta = $cantidadBodega - $request->cantidad[$i];
 
                 if($resta < 0){
-                    return ['success' => 3, 'fila' => ($i + 1), 'cantidad' => $cantidadBodega];
+                    return ['success' => 3, 'fila' => ($i), 'cantidad' => $cantidadBodega];
                 }
 
                 $rDetalle = new SalidaDetalle();
@@ -469,7 +470,9 @@ class PrincipalController extends Controller
     }
 
     public function indexEntradaReporte(){
-        return view('backend.admin.reporte.vistaentradareporte');
+
+        $equipos = Equipos::orderBy('nombre')->get();
+        return view('backend.admin.reporte.vistaentradareporte', compact('equipos'));
     }
 
     public function reportePdf($tipo, $desde, $hasta){
@@ -492,20 +495,34 @@ class PrincipalController extends Controller
 
                 $ll->fecha = date("d-m-Y", strtotime($ll->fecha));
 
+                // 0: el repuesto es nuevo
+                // 1: el repuesto ya estaba en bodega
+                if($ll->inventario == 0){
+                    $ll->tipo = "Repuesto Nuevo";
+                }else{
+                    $ll->tipo = "Repuesto en Inventario";
+                }
+
+
                 array_push($resultsBloque,$ll);
 
                 // obtener detalle
                 $listaDetalle = DB::table('entradas_detalle AS ed')
                     ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
-                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida')
+                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo')
                     ->where('ed.id_entrada', $ll->id)
                     ->orderBy('m.id', 'ASC')
                     ->get();
 
                 foreach ($listaDetalle as $dd){
                     if($info = UnidadMedida::where('id', $dd->id_medida)->first()){
-                        $dd->nombre = $dd->nombre . " - " . $info->medida;
+                        $dd->medida = $info->medida;
+                    }else{
+                        $dd->medida = "";
                     }
+
+                    $infoEquipo = Equipos::where('id', $dd->id_equipo)->first();
+                    $dd->equipo = $infoEquipo->nombre;
                 }
 
                 $resultsBloque[$index]->detalle = $listaDetalle;
@@ -533,16 +550,36 @@ class PrincipalController extends Controller
             <tbody>";
 
                 $tabla .= "<tr>
-                    <td colspan='1' width='17%'>Fecha</td>
-                    <td colspan='3' width='30%'>Descripción</td>
+                    <td  width='17%'>Fecha</td>
+                    <td  width='15%'>Factura u Orden de Compra</td>
+                    <td  width='15%'>Tipo Ingreso</td>
                 </tr>
                 ";
 
                 $tabla .= "<tr>
-                    <td colspan='1' width='17%'>$dd->fecha</td>
-                    <td colspan='3' width='30%'>$dd->descripcion</td>
-                </tr>
-                ";
+                    <td width='17%'>$dd->fecha</td>
+                    <td  width='15%'>$dd->factura</td>";
+
+                if ($dd->inventario == 0){
+
+                    $tabla .= "<td  width='15%' >$dd->tipo</td>
+                    </tr>";
+                }else{
+                    $tabla .= "<td  width='15%' style='background-color:#e7f512;'>$dd->tipo</td>
+                    </tr>";
+                }
+
+                if($dd->descripcion != null){
+                        $tabla .= "<tr>
+                        <td colspan='3'>Descripción</td>
+                    </tr>
+                    ";
+
+                        $tabla .= "<tr>
+                        <td colspan='3' width='30%'>$dd->descripcion</td>
+                    </tr>
+                    ";
+                }
 
                 $tabla .= "</tbody></table>";
 
@@ -550,14 +587,18 @@ class PrincipalController extends Controller
             <tbody>";
 
                 $tabla .= "<tr>
-                    <td width='20%'>Nombre</td>
-                    <td width='10%'>Cantidad</td>
+                    <td width='25%'>Repuesto</td>
+                    <td width='8%'>Medida</td>
+                    <td width='8%'>Cantidad</td>
+                    <td width='8%'>Equipo</td>
                 </tr>";
 
                 foreach ($dd->detalle as $gg) {
                     $tabla .= "<tr>
-                    <td width='20%'>$gg->nombre</td>
-                    <td width='10%'>$gg->cantidad</td>
+                    <td width='25%'>$gg->nombre</td>
+                    <td width='8%'>$gg->medida</td>
+                    <td width='8%'>$gg->cantidad</td>
+                    <td width='8%'>$gg->equipo</td>
                 </tr>";
                 }
 
@@ -589,15 +630,20 @@ class PrincipalController extends Controller
                 // obtener detalle
                 $listaDetalle = DB::table('salidas_detalle AS ed')
                     ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
-                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida')
+                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo')
                     ->where('ed.id_salida', $ll->id)
                     ->orderBy('m.id', 'ASC')
                     ->get();
 
                 foreach ($listaDetalle as $dd){
                     if($info = UnidadMedida::where('id', $dd->id_medida)->first()){
-                        $dd->nombre = $dd->nombre . " - " . $info->medida;
+                        $dd->medida = $info->medida;
+                    }else{
+                        $dd->medida = "";
                     }
+
+                    $infoEquipo = Equipos::where('id', $dd->id_equipo)->first();
+                    $dd->equipo = $infoEquipo->nombre;
                 }
 
                 $resultsBloque[$index]->detalle = $listaDetalle;
@@ -622,34 +668,50 @@ class PrincipalController extends Controller
             foreach ($listaSalida as $dd) {
 
                 $tabla .= "<table width='100%' id='tablaFor'>
-            <tbody>";
+                    <tbody>";
+
 
                 $tabla .= "<tr>
-                    <td colspan='1' width='17%'>Fecha</td>
-                    <td colspan='3' width='30%'>Descripción</td>
-                </tr>
-                ";
+                    <td  width='17%'>Fecha</td>
+                    <td  width='15%'># Talonario</td>
+                </tr>";
 
                 $tabla .= "<tr>
-                    <td colspan='1' width='17%'>$dd->fecha</td>
-                    <td colspan='3' width='30%'>$dd->descripcion</td>
-                </tr>
-                ";
+                    <td width='17%'>$dd->fecha</td>
+                    <td width='15%'>$dd->talonario</td>";
+
+
+                if($dd->descripcion != null){
+                    $tabla .= "<tr>
+                        <td colspan='2'>Descripción</td>
+                            </tr>
+                            ";
+
+                    $tabla .= "<tr>
+                        <td colspan='2' width='30%'>$dd->descripcion</td>
+                    </tr>
+                    ";
+                }
 
                 $tabla .= "</tbody></table>";
 
                 $tabla .= "<table width='100%' id='tablaFor' style='margin-top: 20px'>
             <tbody>";
 
+
                 $tabla .= "<tr>
-                    <td width='20%'>Nombre</td>
-                    <td width='10%'>Cantidad</td>
+                    <td width='25%'>Repuesto</td>
+                    <td width='8%'>Medida</td>
+                    <td width='8%'>Cantidad</td>
+                    <td width='8%'>Equipo</td>
                 </tr>";
 
                 foreach ($dd->detalle as $gg) {
                     $tabla .= "<tr>
-                    <td width='20%'>$gg->nombre</td>
-                    <td width='10%'>$gg->cantidad</td>
+                    <td width='25%'>$gg->nombre</td>
+                    <td width='8%'>$gg->medida</td>
+                    <td width='8%'>$gg->cantidad</td>
+                    <td width='8%'>$gg->equipo</td>
                 </tr>";
                 }
 
@@ -666,4 +728,429 @@ class PrincipalController extends Controller
         }
     }
 
+    public function documentoEntrada($id){
+
+        $url = Entradas::where('id', $id)->pluck('documento')->first();
+        $pathToFile = "storage/archivos/".$url;
+        $extension = pathinfo(($pathToFile), PATHINFO_EXTENSION);
+        $nombre = "Documento." . $extension;
+        return response()->download($pathToFile, $nombre);
+    }
+
+    public function borrarDocumento(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = Entradas::where('id', $request->id)->first()){
+
+            if(Storage::disk('archivos')->exists($lista->documento)){
+                Storage::disk('archivos')->delete($lista->documento);
+            }
+
+            Entradas::where('id', $request->id)->update([
+                'documento' => null
+            ]);
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function borrarRegistro(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = Entradas::where('id', $request->id)->first()){
+
+            if(Storage::disk('archivos')->exists($lista->documento)){
+                Storage::disk('archivos')->delete($lista->documento);
+            }
+
+            EntradaDetalle::where('id_entrada', $request->id)->delete();
+            Entradas::where('id', $request->id)->delete();
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function guardarDocumento(Request $request){
+
+        $rules = array(
+            'id' => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if ( $validator->fails()){
+            return ['success' => 0];
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            if ($request->hasFile('documento')) {
+
+                $cadena = Str::random(15);
+                $tiempo = microtime();
+                $union = $cadena . $tiempo;
+                $nombre = str_replace(' ', '_', $union);
+
+                $extension = '.' . $request->documento->getClientOriginalExtension();
+                $nomDocumento = $nombre . strtolower($extension);
+                $avatar = $request->file('documento');
+                $archivo = Storage::disk('archivos')->put($nomDocumento, \File::get($avatar));
+
+                if($archivo){
+
+                    $info = Entradas::where('id', $request->id)->first();
+
+                    if(Storage::disk('archivos')->exists($info->documento)){
+                        Storage::disk('archivos')->delete($info->documento);
+                    }
+
+                    Entradas::where('id', $request->id)->update([
+                        'documento' => $nomDocumento
+                    ]);
+
+                    DB::commit();
+                    return ['success' => 1];
+                }else{
+                    return ['success' => 2];
+                }
+            }
+            else{
+                return ['success' => 2];
+            }
+        }catch(\Throwable $e){
+
+            DB::rollback();
+            return ['success' => 2];
+        }
+    }
+
+    public function borrarRegistroSalida(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = Salidas::where('id', $request->id)->first()){
+
+            SalidaDetalle::where('id_salida', $request->id)->delete();
+            Salidas::where('id', $request->id)->delete();
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+
+    public function reportePorEquipo($desde, $hasta, $tipo, $unidad)
+    {
+
+        $porciones = explode("-", $unidad);
+
+        $desdeFormat = date("d-m-Y", strtotime($desde));
+        $hastaFormat = date("d-m-Y", strtotime($hasta));
+
+        $start = Carbon::parse($desde)->startOfDay();
+        $end = Carbon::parse($hasta)->endOfDay();
+
+        $resultsBloque = array();
+        $index = 0;
+
+        $listaEquipos = Equipos::whereIn('id', $porciones)->orderBy('nombre')->get();
+
+        // entrada
+        if ($tipo == 1) {
+
+            // lista de entradas
+            $listaEntrada = Entradas::whereBetween('fecha', [$start, $end])
+                ->orderBy('fecha', 'ASC')
+                ->get();
+
+            foreach ($listaEntrada as $ll) {
+
+                $ll->fecha = date("d-m-Y", strtotime($ll->fecha));
+
+                // 0: el repuesto es nuevo
+                // 1: el repuesto ya estaba en bodega
+                if ($ll->inventario == 0) {
+                    $ll->tipo = "Repuesto Nuevo";
+                } else {
+                    $ll->tipo = "Repuesto en Inventario";
+                }
+
+                array_push($resultsBloque, $ll);
+
+                // obtener detalle
+                $listaDetalle = DB::table('entradas_detalle AS ed')
+                    ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
+                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo')
+                    ->where('ed.id_entrada', $ll->id)
+                    ->whereIn('ed.id_equipo', $porciones)
+                    ->orderBy('m.id', 'ASC')
+                    ->get();
+
+                foreach ($listaDetalle as $dd) {
+                    if ($info = UnidadMedida::where('id', $dd->id_medida)->first()) {
+                        $dd->medida = $info->medida;
+                    } else {
+                        $dd->medida = "";
+                    }
+
+                    $infoEquipo = Equipos::where('id', $dd->id_equipo)->first();
+                    $dd->equipo = $infoEquipo->nombre;
+                }
+
+                $resultsBloque[$index]->detalle = $listaDetalle;
+                $index++;
+            }
+
+            //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+            $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
+            $mpdf->SetTitle('Entradas');
+
+            // mostrar errores
+            $mpdf->showImageErrors = false;
+
+            $logoalcaldia = 'images/logo2.png';
+
+            $tabla = "<div class='content'>
+            <img id='logo' src='$logoalcaldia'>
+            <p id='titulo'>ALCALDÍA MUNICIPAL DE METAPÁN <br>
+            Reporte de Entradas <br>
+            Fecha: $desdeFormat  &nbsp;-&nbsp; $hastaFormat <br>
+            </p>
+            </div>";
+
+            $tabla .= "
+                <p>Equipos Seleccionados</p>";
+
+            foreach ($listaEquipos as $dd) {
+                $tabla .= "<label><strong>$dd->nombre, </strong></label>";
+            }
+
+            foreach ($listaEntrada as $dd) {
+
+                if(sizeof($dd->detalle) > 0){
+
+                    $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+                    $tabla .= "<tr>
+                    <td  width='17%'>Fecha</td>
+                    <td  width='15%'>Factura u Orden de Compra</td>
+                    <td  width='15%'>Tipo Ingreso</td>
+                </tr>
+                ";
+
+                    $tabla .= "<tr>
+                    <td width='17%'>$dd->fecha</td>
+                    <td  width='15%'>$dd->factura</td>";
+
+                    if ($dd->inventario == 0) {
+
+                        $tabla .= "<td  width='15%' >$dd->tipo</td>
+                    </tr>";
+                    } else {
+                        $tabla .= "<td  width='15%' style='background-color:#e7f512;'>$dd->tipo</td>
+                    </tr>";
+                    }
+
+                    if ($dd->descripcion != null) {
+                        $tabla .= "<tr>
+                        <td colspan='3'>Descripción</td>
+                    </tr>
+                    ";
+
+                        $tabla .= "<tr>
+                        <td colspan='3' width='30%'>$dd->descripcion</td>
+                    </tr>
+                    ";
+                    }
+
+                    $tabla .= "</tbody></table>";
+
+                    $tabla .= "<table width='100%' id='tablaFor' style='margin-top: 20px'>
+            <tbody>";
+
+                    $tabla .= "<tr>
+                    <td width='25%'>Repuesto</td>
+                    <td width='8%'>Medida</td>
+                    <td width='8%'>Cantidad</td>
+                    <td width='8%'>Equipo</td>
+                </tr>";
+
+                    foreach ($dd->detalle as $gg) {
+                        $tabla .= "<tr>
+                    <td width='25%'>$gg->nombre</td>
+                    <td width='8%'>$gg->medida</td>
+                    <td width='8%'>$gg->cantidad</td>
+                    <td width='8%'>$gg->equipo</td>
+                </tr>";
+                    }
+
+                    $tabla .= "</tbody></table>";
+                }
+            }
+
+            $stylesheet = file_get_contents('css/cssregistro.css');
+            $mpdf->WriteHTML($stylesheet, 1);
+
+            $mpdf->setFooter("Página: " . '{PAGENO}' . "/" . '{nb}');
+            $mpdf->WriteHTML($tabla, 2);
+
+            $mpdf->Output();
+
+
+
+
+        } else {
+            // salida
+
+            // lista de salidas
+            $listaSalida = Salidas::whereBetween('fecha', [$start, $end])
+                ->orderBy('fecha', 'ASC')
+                ->get();
+
+            foreach ($listaSalida as $ll) {
+
+                $ll->fecha = date("d-m-Y", strtotime($ll->fecha));
+
+                array_push($resultsBloque, $ll);
+
+                // obtener detalle
+                $listaDetalle = DB::table('salidas_detalle AS ed')
+                    ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
+                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo')
+                    ->where('ed.id_salida', $ll->id)
+                    ->whereIn('ed.id_equipo', $porciones)
+                    ->orderBy('m.id', 'ASC')
+                    ->get();
+
+                foreach ($listaDetalle as $dd) {
+                    if ($info = UnidadMedida::where('id', $dd->id_medida)->first()) {
+                        $dd->medida = $info->medida;
+                    } else {
+                        $dd->medida = "";
+                    }
+
+                    $infoEquipo = Equipos::where('id', $dd->id_equipo)->first();
+                    $dd->equipo = $infoEquipo->nombre;
+                }
+
+                $resultsBloque[$index]->detalle = $listaDetalle;
+                $index++;
+            }
+
+            //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+            $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
+            $mpdf->SetTitle('Salidas');
+
+            // mostrar errores
+            $mpdf->showImageErrors = false;
+
+            $logoalcaldia = 'images/logo2.png';
+
+            $tabla = "<div class='content'>
+            <img id='logo' src='$logoalcaldia'>
+            <p id='titulo'>ALCALDÍA MUNICIPAL DE METAPÁN <br>
+            Reporte de Salidas <br>
+            Fecha: $desdeFormat  &nbsp;-&nbsp; $hastaFormat <br>
+            </p>
+            </div>";
+
+            $tabla .= "
+                <p>Equipos Seleccionados</p>";
+
+            foreach ($listaEquipos as $dd) {
+                $tabla .= "<label><strong>$dd->nombre, </strong></label>";
+            }
+
+            foreach ($listaSalida as $dd) {
+
+                if(sizeof($dd->detalle) > 0){
+
+                    $tabla .= "<table width='100%' id='tablaFor'>
+                    <tbody>";
+
+
+                    $tabla .= "<tr>
+                    <td  width='17%'>Fecha</td>
+                    <td  width='15%'># Talonario</td>
+                </tr>";
+
+                    $tabla .= "<tr>
+                    <td width='17%'>$dd->fecha</td>
+                    <td width='15%'>$dd->talonario</td>";
+
+
+                    if ($dd->descripcion != null) {
+                        $tabla .= "<tr>
+                        <td colspan='2'>Descripción</td>
+                            </tr>
+                            ";
+
+                        $tabla .= "<tr>
+                        <td colspan='2' width='30%'>$dd->descripcion</td>
+                    </tr>
+                    ";
+                    }
+
+                    $tabla .= "</tbody></table>";
+
+                    $tabla .= "<table width='100%' id='tablaFor' style='margin-top: 20px'>
+                    <tbody>";
+
+
+                    $tabla .= "<tr>
+                    <td width='25%'>Repuesto</td>
+                    <td width='8%'>Medida</td>
+                    <td width='8%'>Cantidad</td>
+                    <td width='8%'>Equipo</td>
+                </tr>";
+
+                    foreach ($dd->detalle as $gg) {
+                        $tabla .= "<tr>
+                    <td width='25%'>$gg->nombre</td>
+                    <td width='8%'>$gg->medida</td>
+                    <td width='8%'>$gg->cantidad</td>
+                    <td width='8%'>$gg->equipo</td>
+                </tr>";
+                    }
+
+                    $tabla .= "</tbody></table>";
+                }
+            }
+
+            $stylesheet = file_get_contents('css/cssregistro.css');
+            $mpdf->WriteHTML($stylesheet, 1);
+
+            $mpdf->setFooter("Página: " . '{PAGENO}' . "/" . '{nb}');
+            $mpdf->WriteHTML($tabla, 2);
+
+            $mpdf->Output();
+        }
+    }
 }

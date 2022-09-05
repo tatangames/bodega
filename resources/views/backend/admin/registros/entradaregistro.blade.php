@@ -302,8 +302,8 @@
                 return;
             }
 
-            if(cantidad < 0){
-                toastr.error('Cantidad no debe ser negativo');
+            if(cantidad <= 0){
+                toastr.error('Cantidad no debe ser negativo o cero');
                 return;
             }
 
