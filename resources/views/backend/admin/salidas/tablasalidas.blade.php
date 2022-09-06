@@ -8,6 +8,7 @@
                             <thead>
                             <tr>
                                 <th style="width: 5%">Fecha</th>
+                                <th style="width: 10%">Talonario</th>
                                 <th style="width: 20%">Descripción</th>
                                 <th style="width: 5%">Opciones</th>
                             </tr>
@@ -17,6 +18,7 @@
                             @foreach($lista as $dato)
                                 <tr>
                                     <td>{{ $dato->fecha }}</td>
+                                    <td>{{ $dato->talonario }}</td>
                                     <td>{{ $dato->descripcion }}</td>
                                     <td>
                                         <button type="button" class="btn btn-primary btn-xs" onclick="informacion({{ $dato->id }})">

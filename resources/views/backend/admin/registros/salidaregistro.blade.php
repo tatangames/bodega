@@ -129,7 +129,7 @@
                             </div>
 
                             <div class="form-group" >
-                                <label class="control-label">Seleccionar Equipo</label>
+                                <label class="control-label">Seleccionar Equipo o Destino</label>
                                 <div class="col-md-6">
                                     <select id="select-equipo" class="form-control">
                                         @foreach($equipos as $item)
@@ -328,6 +328,7 @@
             })
 
             $(txtContenedorGlobal).attr('data-info', '0');
+            $('#select-equipo').prop('selectedIndex', 0).change();
             document.getElementById("formulario-repuesto").reset();
         }
 

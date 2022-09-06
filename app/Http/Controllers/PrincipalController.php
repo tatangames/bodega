@@ -279,7 +279,7 @@ class PrincipalController extends Controller
                     $r = new Entradas();
                     $r->fecha = $request->fecha;
                     $r->descripcion = $request->descripcion;
-                    $r->documento = null;
+                    $r->documento = $nomDocumento;
                     $r->inventario = $request->entrada;
                     $r->factura = $request->factura;
                     $r->save();

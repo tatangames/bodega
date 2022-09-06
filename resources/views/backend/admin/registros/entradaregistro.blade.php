@@ -149,7 +149,7 @@
                             </div>
 
                             <div class="form-group" >
-                                <label class="control-label">Seleccionar Equipo</label>
+                                <label class="control-label">Seleccionar Equipo o Destino</label>
                                 <div class="col-md-6">
                                     <select id="select-equipo" class="form-control">
                                         @foreach($equipos as $item)
@@ -385,6 +385,7 @@
             })
 
             $(txtContenedorGlobal).attr('data-info', '0');
+            $('#select-equipo').prop('selectedIndex', 0).change();
             document.getElementById("formulario-repuesto").reset();
         }
 
@@ -617,27 +618,27 @@
 
             for(var f = 0; f < precio.length; f++){
 
-                let datoCantidad = precio[f];
+                let datoPrecio = precio[f];
 
-                if (datoCantidad === '') {
+                if (datoPrecio === '') {
                     colorRojoTabla(f);
                     toastr.error('Fila #' + (f + 1) + ' Precio es requerido');
                     return;
                 }
 
-                if (!datoCantidad.match(reglaNumeroDecimal)) {
+                if (!datoPrecio.match(reglaNumeroDecimal)) {
                     colorRojoTabla(f);
                     toastr.error('Fila #' + (f + 1) + ' Precio debe ser decimal y no negativo');
                     return;
                 }
 
-                if (datoCantidad <= 0) {
+                if (datoPrecio < 0) {
                     colorRojoTabla(f);
                     toastr.error('Fila #' + (f + 1) + ' Precio no debe ser negativo');
                     return;
                 }
 
-                if (datoCantidad.length > 10) {
+                if (datoPrecio.length > 10) {
                     colorRojoTabla(f);
                     toastr.error('Fila #' + (f + 1) + ' Precio máximo 10 caracteres');
                     return;
@@ -694,6 +695,8 @@
         function limpiar(){
             document.getElementById('descripcion').value = '';
             document.getElementById('factura').value = '';
+            document.getElementById('documento').value = '';
+
 
             document.getElementById('check-nuevo').checked = false;
             document.getElementById('check-inventario').checked = false;

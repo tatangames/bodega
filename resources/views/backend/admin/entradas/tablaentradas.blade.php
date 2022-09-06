@@ -6,18 +6,29 @@
                     <div class="card-body">
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
-                            <tr>
-                                <th style="width: 5%">Fecha</th>
-                                <th style="width: 20%">Descripción</th>
-                                <th style="width: 5%">Opciones</th>
-                            </tr>
-                            </thead>
+                                    <tr>
+                                        <th style="width: 5%">Fecha</th>
+                                        <th style="width: 10%">Factura</th>
+                                        <th style="width: 12%">Tipo Ingreso</th>
+                                        <th style="width: 20%">Descripción</th>
+                                        <th style="width: 5%">Opciones</th>
+                                    </tr>
+                                </thead>
                             <tbody>
 
                             @foreach($lista as $dato)
                                 <tr>
                                     <td>{{ $dato->fecha }}</td>
+                                    <td>{{ $dato->factura }}</td>
+                                    <td>
+                                    @if($dato->inventario == 0)
+                                        <span class="badge bg-warning">Repuesto en Inventario</span>
+                                    @else
+                                        <span class="badge bg-transparent">Repuesto Nuevo</span>
+                                    @endif
+                                    </td>
                                     <td>{{ $dato->descripcion }}</td>
+
                                     <td>
                                         <button type="button" class="btn btn-success btn-xs" onclick="informacion({{ $dato->id }})">
                                             <i class="fas fa-file" title="Detalle"></i>&nbsp; Detalle

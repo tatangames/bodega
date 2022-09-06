@@ -17,13 +17,18 @@ class ControlController extends Controller
         $user = Auth::user();
 
         // ADMINISTRADOR
-        if($user->hasPermissionTo('sidebar.roles.y.permisos')){
+        if($user->hasRole('admin')){
             $ruta = 'admin.roles.index';
         }
 
         // Inventario
-        else  if($user->hasPermissionTo('sidebar.seccion.materiales')){
-            $ruta = 'admin.estadisticas.index';
+        else  if($user->hasRole('inventario')){
+            $ruta = 'admin.materiales.index';
+        }
+
+        // Auditora
+        else  if($user->hasRole('auditora')){
+            $ruta = 'admin.entrada.reporte.index';
         }
 
         return view('backend.index', compact( 'ruta', 'user'));

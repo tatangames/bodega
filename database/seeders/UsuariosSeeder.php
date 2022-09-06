@@ -27,5 +27,12 @@ class UsuariosSeeder extends Seeder
             'password' => bcrypt('1234'),
             'activo' => 1,
         ])->assignRole('inventario');
+
+        Usuario::create([
+            'nombre' => 'Auditora',
+            'usuario' => 'auditora',
+            'password' => bcrypt('1234'),
+            'activo' => 1,
+        ])->assignRole('auditora');
     }
 }
