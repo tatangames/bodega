@@ -22,9 +22,9 @@
                                     <td>{{ $dato->factura }}</td>
                                     <td>
                                     @if($dato->inventario == 0)
-                                        <span class="badge bg-warning">Repuesto en Inventario</span>
+                                        <span class="badge bg-warning">Repuesto Nuevo</span>
                                     @else
-                                        <span class="badge bg-transparent">Repuesto Nuevo</span>
+                                        <span class="badge bg-transparent">Repuesto en Inventario</span>
                                     @endif
                                     </td>
                                     <td>{{ $dato->descripcion }}</td>
