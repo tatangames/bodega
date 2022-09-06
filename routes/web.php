@@ -12,8 +12,8 @@ use App\Http\Controllers\Backend\Equipos\EquiposController;
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 
-Route::post('admin/login', [LoginController::class, 'login']);
-Route::post('admin/logout', [LoginController::class, 'logout'])->name('admin.logout');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('admin.logout');
 
 // --- CONTROL WEB ---
 Route::get('/panel', [ControlController::class,'indexRedireccionamiento'])->name('admin.panel');
