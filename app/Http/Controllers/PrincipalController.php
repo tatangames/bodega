@@ -424,10 +424,23 @@ class PrincipalController extends Controller
     public function indexEntradasDetalleTabla($id){
         $lista = DB::table('entradas_detalle AS ed')
             ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
-            ->select('ed.cantidad', 'm.nombre', 'm.codigo')
+            ->select('ed.cantidad', 'm.nombre', 'm.codigo', 'ed.id_equipo', 'ed.precio', 'm.id as idmaterial')
             ->where('ed.id_entrada', $id)
             ->orderBy('m.nombre', 'ASC')
             ->get();
+
+        foreach ($lista as $ll){
+
+            $ll->precio = number_format((float)$ll->precio, 2, '.', ',');
+
+            $infoEquipo = Equipos::where('id', $ll->id_equipo)->first();
+            $ll->equipo = $infoEquipo->nombre;
+
+            $infoMaterial = Materiales::where('id', $ll->idmaterial)->first();
+            $infoUnidad = UnidadMedida::where('id', $infoMaterial->id_medida)->first();
+            $ll->unidad = $infoUnidad->medida;
+
+        }
 
         return view('backend.admin.entradas.detalle.tablaentradadetalle', compact('lista'));
     }
@@ -462,10 +475,21 @@ class PrincipalController extends Controller
     public function indexSalidasDetalleTabla($id){
         $lista = DB::table('salidas_detalle AS ed')
             ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
-            ->select('ed.cantidad', 'm.nombre', 'm.codigo')
+            ->select('ed.cantidad', 'm.nombre', 'm.codigo', 'ed.id_equipo', 'm.id as idmaterial')
             ->where('ed.id_salida', $id)
             ->orderBy('m.nombre', 'ASC')
             ->get();
+
+        foreach ($lista as $ll){
+
+            $infoEquipo = Equipos::where('id', $ll->id_equipo)->first();
+            $ll->equipo = $infoEquipo->nombre;
+
+            $infoMaterial = Materiales::where('id', $ll->idmaterial)->first();
+            $infoUnidad = UnidadMedida::where('id', $infoMaterial->id_medida)->first();
+            $ll->unidad = $infoUnidad->medida;
+
+        }
 
         return view('backend.admin.salidas.detalle.tablasalidadetalle', compact('lista'));
     }

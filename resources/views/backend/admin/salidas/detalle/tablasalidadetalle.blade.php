@@ -10,6 +10,8 @@
                                 <th style="width: 5%">Código</th>
                                 <th style="width: 20%">Material</th>
                                 <th style="width: 5%">Cantidad</th>
+                                <th style="width: 10%">Medida</th>
+                                <th style="width: 10%">Equipo o Destino</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -19,7 +21,8 @@
                                     <td>{{ $dato->codigo }}</td>
                                     <td>{{ $dato->nombre }}</td>
                                     <td>{{ $dato->cantidad }}</td>
-
+                                    <td>{{ $dato->unidad }}</td>
+                                    <td>{{ $dato->equipo }}</td>
                                 </tr>
                             @endforeach
 
