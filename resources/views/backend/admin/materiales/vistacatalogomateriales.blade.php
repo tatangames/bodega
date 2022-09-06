@@ -300,7 +300,7 @@
 
                         Swal.fire({
                             title: 'Material Repetido',
-                            text: "El nuevo material con su unidad de medida ya se encuentra registrado",
+                            text: "El nuevo material, con el código y su unidad de medida ya se encuentra registrado",
                             icon: 'question',
                             showCancelButton: false,
                             confirmButtonColor: '#28a745',

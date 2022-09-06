@@ -129,6 +129,7 @@ class PrincipalController extends Controller
 
         if(Materiales::where('nombre', $request->nombre)
             ->where('id_medida', $request->unidad)
+            ->where('codigo', $request->codigo)
             ->first()){
             return ['success' => 3];
         }
