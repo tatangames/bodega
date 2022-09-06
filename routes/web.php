@@ -77,7 +77,6 @@ Route::get('/admin/registro/salida', [PrincipalController::class,'indexRegistroS
 Route::post('/admin/salida/guardar',  [PrincipalController::class,'guardarSalida']);
 
 
-
 Route::get('/admin/entradas/vista', [PrincipalController::class,'indexEntradas'])->name('admin.entrada.vista.index');
 Route::get('/admin/entradas/tabla', [PrincipalController::class,'indexTablaEntradas']);
 
@@ -85,8 +84,6 @@ Route::get('/admin/entradas/documento/{id}', [PrincipalController::class,'docume
 Route::post('/admin/entradas/borrar/documento',  [PrincipalController::class,'borrarDocumento']);
 Route::post('/admin/entradas/borrar/registro',  [PrincipalController::class,'borrarRegistro']);
 Route::post('/admin/entradas/guardar/documento',  [PrincipalController::class,'guardarDocumento']);
-
-
 
 
 

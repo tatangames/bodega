@@ -534,7 +534,7 @@ class PrincipalController extends Controller
                 // obtener detalle
                 $listaDetalle = DB::table('entradas_detalle AS ed')
                     ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
-                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo')
+                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo', 'ed.precio')
                     ->where('ed.id_entrada', $ll->id)
                     ->orderBy('m.id', 'ASC')
                     ->get();
@@ -545,6 +545,8 @@ class PrincipalController extends Controller
                     }else{
                         $dd->medida = "";
                     }
+
+                    $dd->precio = '$' . number_format((float)$dd->precio, 2, '.', ',');
 
                     $infoEquipo = Equipos::where('id', $dd->id_equipo)->first();
                     $dd->equipo = $infoEquipo->nombre;
@@ -615,6 +617,7 @@ class PrincipalController extends Controller
                     <td width='25%'>Repuesto</td>
                     <td width='8%'>Medida</td>
                     <td width='8%'>Cantidad</td>
+                    <td width='8%'>Precio</td>
                     <td width='8%'>Equipo</td>
                 </tr>";
 
@@ -623,6 +626,7 @@ class PrincipalController extends Controller
                     <td width='25%'>$gg->nombre</td>
                     <td width='8%'>$gg->medida</td>
                     <td width='8%'>$gg->cantidad</td>
+                    <td width='8%'>$gg->precio</td>
                     <td width='8%'>$gg->equipo</td>
                 </tr>";
                 }
@@ -931,7 +935,7 @@ class PrincipalController extends Controller
                 // obtener detalle
                 $listaDetalle = DB::table('entradas_detalle AS ed')
                     ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
-                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo')
+                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo', 'ed.precio')
                     ->where('ed.id_entrada', $ll->id)
                     ->whereIn('ed.id_equipo', $porciones)
                     ->orderBy('m.id', 'ASC')
@@ -943,6 +947,8 @@ class PrincipalController extends Controller
                     } else {
                         $dd->medida = "";
                     }
+
+                    $dd->precio = '$' . number_format((float)$dd->precio, 2, '.', ',');
 
                     $infoEquipo = Equipos::where('id', $dd->id_equipo)->first();
                     $dd->equipo = $infoEquipo->nombre;
@@ -1024,6 +1030,7 @@ class PrincipalController extends Controller
                     <td width='25%'>Repuesto</td>
                     <td width='8%'>Medida</td>
                     <td width='8%'>Cantidad</td>
+                    <td width='8%'>Precio</td>
                     <td width='8%'>Equipo</td>
                 </tr>";
 
@@ -1032,6 +1039,7 @@ class PrincipalController extends Controller
                     <td width='25%'>$gg->nombre</td>
                     <td width='8%'>$gg->medida</td>
                     <td width='8%'>$gg->cantidad</td>
+                    <td width='8%'>$gg->precio</td>
                     <td width='8%'>$gg->equipo</td>
                 </tr>";
                     }
