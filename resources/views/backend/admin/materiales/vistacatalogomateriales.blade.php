@@ -409,7 +409,7 @@
 
                         Swal.fire({
                             title: 'Material Repetido',
-                            text: "El material a editar con su unidad de medida ya se encuentra registrado",
+                            text: "El material a editar, con el código y su unidad de medida ya se encuentra registrado",
                             icon: 'question',
                             showCancelButton: false,
                             confirmButtonColor: '#28a745',
