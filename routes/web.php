@@ -8,7 +8,7 @@ use App\Http\Controllers\Backend\Roles\RolesController;
 use App\Http\Controllers\Backend\Roles\PermisoController;
 use App\Http\Controllers\Backend\Perfil\PerfilController;
 use App\Http\Controllers\Backend\Equipos\EquiposController;
-
+use App\Http\Controllers\Backend\Repuestos\RepuestosController;
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 
@@ -72,6 +72,10 @@ Route::post('/admin/materiales/editar', [PrincipalController::class, 'editarMate
 Route::get('/admin/registro/entrada', [PrincipalController::class,'indexRegistroEntrada'])->name('admin.entrada.registro.index');
 Route::post('/admin/buscar/material',  [PrincipalController::class,'buscadorMaterial']);
 Route::post('/admin/entrada/guardar',  [PrincipalController::class,'guardarEntrada']);
+
+// bloque de cantidades
+Route::get('/admin/repuesto/cantidad/bloque/{id}', [RepuestosController::class,'bloqueCantidades']);
+
 
 Route::get('/admin/registro/salida', [PrincipalController::class,'indexRegistroSalida'])->name('admin.salida.registro.index');
 Route::post('/admin/salida/guardar',  [PrincipalController::class,'guardarSalida']);

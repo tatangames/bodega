@@ -291,6 +291,7 @@ class PrincipalController extends Controller
                         $rDetalle->id_entrada = $r->id;
                         $rDetalle->id_material = $request->datainfo[$i];
                         $rDetalle->cantidad = $request->cantidad[$i];
+                        $rDetalle->cantidad_bloque = $request->cantidad[$i];
                         $rDetalle->precio = $request->precio[$i];
                         $rDetalle->id_equipo = $request->equipo[$i];
                         $rDetalle->save();
@@ -312,13 +313,13 @@ class PrincipalController extends Controller
                 $r->factura = $request->factura;
                 $r->save();
 
-
                 for ($i = 0; $i < count($request->cantidad); $i++) {
 
                     $rDetalle = new EntradaDetalle();
                     $rDetalle->id_entrada = $r->id;
                     $rDetalle->id_material = $request->datainfo[$i];
                     $rDetalle->cantidad = $request->cantidad[$i];
+                    $rDetalle->cantidad_bloque = $request->cantidad[$i];
                     $rDetalle->precio = $request->precio[$i];
                     $rDetalle->id_equipo = $request->equipo[$i];
                     $rDetalle->save();
@@ -1186,4 +1187,9 @@ class PrincipalController extends Controller
             $mpdf->Output();
         }
     }
+
+
+
+
+
 }

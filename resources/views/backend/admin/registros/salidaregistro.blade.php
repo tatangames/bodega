@@ -66,13 +66,10 @@
                                     <i class="fas fa-plus" title="Agregar Repuesto"></i> Agregar Repuesto</button>
                             </div>
                         </div>
-
-
                     </div>
-
                 </div>
 
-                <!--
+                <!-- bloque por algun uso
                 <div class="col-md-6">
                     <div class="card card-danger">
                         <div class="card-header">
@@ -96,7 +93,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Agregar Repuesto</h4>
+                    <h4 class="modal-title">Buscar Repuesto</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -105,6 +102,17 @@
 
                     <form id="formulario-repuesto">
                         <div class="card-body">
+
+                            <div class="form-group" >
+                                <label class="control-label">Seleccionar Equipo o Destino</label>
+                                <div class="col-md-6">
+                                    <select id="select-equipo" class="form-control">
+                                        @foreach($equipos as $item)
+                                            <option value="{{$item->id}}">{{ $item->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
 
                             <div class="form-group">
                                 <label class="control-label">Repuesto</label>
@@ -121,21 +129,14 @@
                                 </table>
                             </div>
 
-                            <div class="form-group" >
-                                <label class="control-label">Cantidad</label>
-                                <div class="col-md-6">
-                                    <input id="cantidad" class='form-control' type='number' placeholder="0">
-                                </div>
-                            </div>
+                            <!-- cargara vista de selección -->
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div id="tablaRepuesto">
 
-                            <div class="form-group" >
-                                <label class="control-label">Seleccionar Equipo o Destino</label>
-                                <div class="col-md-6">
-                                    <select id="select-equipo" class="form-control">
-                                        @foreach($equipos as $item)
-                                            <option value="{{$item->id}}">{{ $item->nombre }}</option>
-                                        @endforeach
-                                    </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -145,7 +146,9 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <!--
                     <button type="button" class="btn btn-primary" onclick="agregarFila()">Agregar</button>
+                    -->
                 </div>
             </div>
         </div>
@@ -202,6 +205,11 @@
     <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
     <script src="{{ asset('js/alertaPersonalizada.js') }}"></script>
     <script src="{{ asset('js/select2.min.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/bootstrap-input-spinner.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('js/custom-editors.js') }}" type="text/javascript"></script>
+
+
+
     <script type="text/javascript">
         $(document).ready(function(){
             document.getElementById("divcontenedor").style.display = "block";
@@ -245,79 +253,135 @@
            // $('#modalRepuesto').modal({backdrop: 'static', keyboard: false})
         }
 
+        function verificarSalida(){
+            var divs = document.getElementsByClassName('arraycolor');
+            for (var i = 0; i < divs.length; i++) {
+                $(divs[i]).css("background-color", "transparent");
+            }
+
+            Swal.fire({
+                title: 'Verificar?',
+                text: "",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Si'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    agregarFila();
+                }
+            })
+        }
+
         function agregarFila(){
+
             var repuesto = document.querySelector('#repuesto');
             var nomRepuesto = document.getElementById('repuesto').value;
-            var cantidad = document.getElementById('cantidad').value;
             var equipo = document.getElementById('select-equipo').value;
             var equipoNombre = $( "#select-equipo option:selected" ).text();
+            var reglaNumeroEntero = /^[0-9]\d*$/;
 
+            // VERIFICACIONES
             if(repuesto.dataset.info == 0){
                 toastr.error("Repuesto es requerido");
                 return;
             }
 
-            var reglaNumeroEntero = /^[0-9]\d*$/;
-
-            //*************
-
-            if(cantidad === ''){
-                toastr.error('Cantidad es requerida');
-                return;
+            if(nomRepuesto === ''){
+                toastr.error('Repuesto es requerido');
             }
 
-            if(!cantidad.match(reglaNumeroEntero)) {
-                toastr.error('Cantidad debe ser número Entero y no Negativo');
-                return;
+            /*for (var i = 0; i < divs.length; i++) {
+                $(divs[i]).css("background-color", "transparent");
+            }*/
+
+            // id de entrada_material
+            var inputidcantidad = $("input[name='arraysalida[]']").map(function(){return $(this).attr("data-idcantidad");}).get();
+            // input cantidad a sacar
+            var inputcantidad = $("input[name='arraysalida[]']").map(function(){return $(this).val();}).get();
+            // input max cantidad
+            var inputmaxcantidad = $("input[name='arraysalida[]']").map(function(){return $(this).attr("data-maxcantidad");}).get();
+
+            for(var a = 0; a < inputcantidad.length; a++) {
+
+                let datoNumero = inputcantidad[a];
+                let detalleIdCantidad = inputidcantidad[a];
+                let detalleMaxCantidad = inputmaxcantidad[a];
+
+                // identifica si el 0 es tipo number o texto
+                if(detalleIdCantidad == 0){
+                    divColorRojo(a);
+                    alertaMensaje('info', 'No encontrado', 'En el Bloque de salida #' + (a+1) + " No se encuentra el identificador. Volver a buscar el Repuesto.");
+                    return;
+                }
+
+                // identifica si el 0 es tipo number o texto
+                if(datoNumero === ''){
+                    divColorRojo(a);
+                    toastr.error('Cantidad es requerida');
+                    return;
+                }
+
+                if(!datoNumero.match(reglaNumeroEntero)) {
+                    divColorRojo(a);
+                    toastr.error('Cantidad debe ser número Entero y no Negativo');
+                    return;
+                }
+
+                if(datoNumero < 0){
+                    divColorRojo(a);
+                    toastr.error('Cantidad no debe ser negativo');
+                    return;
+                }
+
+                // no superar la maxima cantidad
+                if(datoNumero.length > detalleMaxCantidad){
+                    divColorRojo(a);
+                    toastr.error('La cantidad a Retirar no puede ser mayor a: ' + detalleMaxCantidad);
+                    return;
+                }
             }
 
-            if(cantidad <= 0){
-                toastr.error('Cantidad no debe ser negativo o cero');
-                return;
-            }
-
-            if(cantidad.length > 10){
-                toastr.error('Cantidad máximo 10 caracteres');
-                return;
-            }
-
-            //*****************
-
-            if(equipo === ''){
-                toastr.error('Equipo es requerido');
-                return;
-            }
-
+            // agregar a fila cada iteracion mayor a 0
             //**************
+            for(var z = 0; z < inputcantidad.length; z++) {
 
-            var nFilas = $('#matriz >tbody >tr').length;
-            nFilas += 1;
+                let datoNumero = inputcantidad[z];
+                let detalleIdEntrDeta = inputidcantidad[z]; // id entrada_detalle
+                let detalleMaxCantidad = inputmaxcantidad[z]; // cantidad en inventario de este bloque
 
-            var markup = "<tr>" +
+                var nFilas = $('#matriz >tbody >tr').length;
+                nFilas += 1;
 
-                "<td>" +
-                "<p id='fila" + (nFilas) + "' class='form-control' style='max-width: 65px'>" + (nFilas) + "</p>" +
-                "</td>" +
+                var markup = "<tr>" +
 
-                "<td>" +
-                "<input name='descripcionArray[]' disabled data-info='" + repuesto.dataset.info + "' value='" + nomRepuesto + "' class='form-control' type='text'>" +
-                "</td>" +
+                    "<td>" +
+                    "<p id='fila" + (nFilas) + "' class='form-control' style='max-width: 65px'>" + (nFilas) + "</p>" +
+                    "</td>" +
 
-                "<td>" +
-                "<input name='cantidadArray[]' disabled value='" + cantidad + "' class='form-control' type='number'>" +
-                "</td>" +
+                    "<td>" +
+                    "<input name='identradadetalleArray[]' type='hidden' data-identradadetalle='" + detalleIdEntrDeta + "'>" +
+                    "<input name='descripcionArray[]' disabled value='" + nomRepuesto + "' class='form-control' type='text'>" +
+                    "</td>" +
 
-                "<td>" +
-                "<input name='equipoArray[]' disabled data-info='" + equipo + "' value='" + equipoNombre + "' class='form-control' type='text'>" +
-                "</td>" +
+                    "<td>" +
+                    "<input name='cantidadArray[]' disabled value='0' class='form-control' type='number'>" +
+                    "</td>" +
 
-                "<td>" +
-                "<button type='button' class='btn btn-block btn-danger' onclick='borrarFila(this)'>Borrar</button>" +
-                "</td>" +
+                    "<td>" +
+                    "<input name='equipoArray[]' disabled data-info='" + equipo + "' value='" + equipoNombre + "' class='form-control' type='text'>" +
+                    "</td>" +
 
-                "</tr>";
+                    "<td>" +
+                    "<button type='button' class='btn btn-block btn-danger' onclick='borrarFila(this)'>Borrar</button>" +
+                    "</td>" +
 
-            $("#matriz tbody").append(markup);
+                    "</tr>";
+
+                $("#matriz tbody").append(markup);
+            }
 
             Swal.fire({
                 position: 'center',
@@ -330,6 +394,11 @@
             $(txtContenedorGlobal).attr('data-info', '0');
             $('#select-equipo').prop('selectedIndex', 0).change();
             document.getElementById("formulario-repuesto").reset();
+        }
+
+        function divColorRojo(pos){
+            var divs = document.getElementsByClassName('arraycolor');
+            $(divs[pos]).css("background-color", "red");
         }
 
         function preguntaGuardar(){
@@ -384,6 +453,7 @@
                 if(texto === ''){
                     // si se limpia el input, setear el atributo id
                     $(e).attr('data-info', 0);
+                    document.getElementById('tablaRepuesto').innerHTML = "";
                 }
 
                 axios.post(url+'/buscar/material', {
@@ -593,6 +663,9 @@
 
             // agregar el id al atributo del input descripcion
             $(txtContenedorGlobal).attr('data-info', edrop.id);
+
+            var ruta = "{{ URL::to('/admin/repuesto/cantidad/bloque') }}/" + edrop.id;
+            $('#tablaRepuesto').load(ruta);
 
             //$(txtContenedorGlobal).data("info");
         }

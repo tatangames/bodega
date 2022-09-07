@@ -20,6 +20,7 @@ class CreateEntradasDetalleTable extends Migration
             $table->bigInteger('id_equipo')->unsigned();
 
             $table->integer('cantidad');
+            $table->integer('cantidad_bloque');
 
             $table->decimal('precio', 10, 2);
 
