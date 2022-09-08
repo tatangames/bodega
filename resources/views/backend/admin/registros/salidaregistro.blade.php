@@ -173,8 +173,10 @@
                     <thead>
                     <tr>
                         <th style="width: 3%">#</th>
-                        <th style="width: 10%">Descripción</th>
-                        <th style="width: 6%">Cantidad</th>
+                        <th style="width: 10%">Repuesto</th>
+                        <th style="width: 6%">Inventario</th>
+                        <th style="width: 6%">Salida</th>
+                        <th style="width: 6%">Precio</th>
                         <th style="width: 8%">Equipo</th>
                         <th style="width: 5%">Opciones</th>
                     </tr>
@@ -303,6 +305,9 @@
             var inputcantidad = $("input[name='arraysalida[]']").map(function(){return $(this).val();}).get();
             // input max cantidad
             var inputmaxcantidad = $("input[name='arraysalida[]']").map(function(){return $(this).attr("data-maxcantidad");}).get();
+            // precio del material en entrada_detalle
+            var inputprecio = $("input[name='arraysalida[]']").map(function(){return $(this).attr("data-precio");}).get();
+
 
             for(var a = 0; a < inputcantidad.length; a++) {
 
@@ -344,56 +349,69 @@
                 }
             }
 
-            // agregar a fila cada iteracion mayor a 0
+            // agregar a fila cada iteración mayor a 0
             //**************
             for(var z = 0; z < inputcantidad.length; z++) {
 
                 let datoNumero = inputcantidad[z];
                 let detalleIdEntrDeta = inputidcantidad[z]; // id entrada_detalle
                 let detalleMaxCantidad = inputmaxcantidad[z]; // cantidad en inventario de este bloque
+                let detallePrecio = inputprecio[z]; // precio del material
 
-                var nFilas = $('#matriz >tbody >tr').length;
-                nFilas += 1;
+                if(datoNumero > 0){
 
-                var markup = "<tr>" +
+                    var nFilas = $('#matriz >tbody >tr').length;
+                    nFilas += 1;
 
-                    "<td>" +
-                    "<p id='fila" + (nFilas) + "' class='form-control' style='max-width: 65px'>" + (nFilas) + "</p>" +
-                    "</td>" +
+                    var markup = "<tr>" +
 
-                    "<td>" +
-                    "<input name='identradadetalleArray[]' type='hidden' data-identradadetalle='" + detalleIdEntrDeta + "'>" +
-                    "<input name='descripcionArray[]' disabled value='" + nomRepuesto + "' class='form-control' type='text'>" +
-                    "</td>" +
+                        "<td>" +
+                        "<p id='fila" + (nFilas) + "' class='form-control' style='max-width: 65px'>" + (nFilas) + "</p>" +
+                        "</td>" +
 
-                    "<td>" +
-                    "<input name='cantidadArray[]' disabled value='0' class='form-control' type='number'>" +
-                    "</td>" +
+                        "<td>" +
+                        "<input name='identradadetalleArray[]' type='hidden' data-identradadetalle='" + detalleIdEntrDeta + "'>" +
+                        "<input disabled value='" + nomRepuesto + "' class='form-control' type='text'>" +
+                        "</td>" +
 
-                    "<td>" +
-                    "<input name='equipoArray[]' disabled data-info='" + equipo + "' value='" + equipoNombre + "' class='form-control' type='text'>" +
-                    "</td>" +
+                        "<td>" +
+                        "<input disabled value='" + detalleMaxCantidad + "' class='form-control' type='text'>" +
+                        "</td>" +
 
-                    "<td>" +
-                    "<button type='button' class='btn btn-block btn-danger' onclick='borrarFila(this)'>Borrar</button>" +
-                    "</td>" +
+                        "<td>" +
+                        "<input name='salidaArray[]' disabled value='" + datoNumero + "' class='form-control' type='number'>" +
+                        "</td>" +
 
-                    "</tr>";
+                        "<td>" +
+                        "<input disabled value='$" + detallePrecio + "' class='form-control' type='text'>" +
+                        "</td>" +
 
-                $("#matriz tbody").append(markup);
+                        "<td>" +
+                        "<input name='equipoArray[]' disabled data-infoequipo='" + equipo + "' value='" + equipoNombre + "' class='form-control' type='text'>" +
+                        "</td>" +
+
+                        "<td>" +
+                        "<button type='button' class='btn btn-block btn-danger' onclick='borrarFila(this)'>Borrar</button>" +
+                        "</td>" +
+
+                        "</tr>";
+
+                    $("#matriz tbody").append(markup);
+                }
+
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Agregado al Detalle',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+
+                    $(txtContenedorGlobal).attr('data-info', '0');
+                    document.getElementById('tablaRepuesto').innerHTML = "";
+                    $('#select-equipo').prop('selectedIndex', 0).change();
+                    document.getElementById("formulario-repuesto").reset();
             }
-
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Agregado',
-                showConfirmButton: false,
-                timer: 1500
-            })
-
-            $(txtContenedorGlobal).attr('data-info', '0');
-            $('#select-equipo').prop('selectedIndex', 0).change();
-            document.getElementById("formulario-repuesto").reset();
         }
 
         function divColorRojo(pos){
@@ -511,83 +529,53 @@
                 return;
             }
 
-            var descripcion = $("input[name='descripcionArray[]']").map(function(){return $(this).val();}).get();
-            var descripcionAtributo = $("input[name='descripcionArray[]']").map(function(){return $(this).attr("data-info");}).get();
-            var cantidad = $("input[name='cantidadArray[]']").map(function(){return $(this).val();}).get();
+            var identradaDetalle = $("input[name='identradadetalleArray[]']").map(function(){return $(this).attr("data-identradadetalle");}).get();
+            var salidaDetalle = $("input[name='salidaArray[]']").map(function(){return $(this).val();}).get();
+            var idequipoDetalle = $("input[name='equipoArray[]']").map(function(){return $(this).attr("data-infoequipo");}).get();
 
-            var equipoNom = $("input[name='equipoArray[]']").map(function(){return $(this).val();}).get();
-            var equipo = $("input[name='equipoArray[]']").map(function(){return $(this).attr("data-info");}).get();
+            // verificar que id entrada detalle exista
+            // verificar que salida array detalle exista
+            for(var a = 0; a < salidaDetalle.length; a++){
 
-            // unicamente no sera verificado con: APORTE PATRONAL (aporte mano de obra)
-
-            for(var a = 0; a < cantidad.length; a++){
-
-                let detalle = descripcionAtributo[a];
-                let datoCantidad = cantidad[a];
+                let detalleS = identradaDetalle[a];
+                let datoCantidad = salidaDetalle[a];
+                let datoIdEquipo = idequipoDetalle[a];
 
                 // identifica si el 0 es tipo number o texto
-                if(detalle == 0){
+                if(detalleS == 0){
                     colorRojoTabla(a);
-                    alertaMensaje('info', 'No encontrado', 'En la Fila #' + (a+1) + " El material no se encuentra. Por favor buscar de nuevo el Material");
+                    alertaMensaje('info', 'Error', 'En la Fila #' + (a+1) + " El identificador del repuesto no se encontró. Borrar la Fila y agregar de nuevo.");
+                    return;
+                }
+
+                // identifica si el 0 es tipo number o texto
+                if(datoIdEquipo == 0){
+                    colorRojoTabla(a);
+                    alertaMensaje('info', 'Error', 'En la Fila #' + (a+1) + " El identificador del Equipo no se encontró. Borrar la Fila y agregar de nuevo.");
                     return;
                 }
 
                 if (datoCantidad === '') {
                     colorRojoTabla(a);
-                    toastr.error('Fila #' + (a + 1) + ' Cantidad es requerida');
+                    toastr.error('Fila #' + (a + 1) + ' Cantidad de salida es requerida');
                     return;
                 }
 
                 if (!datoCantidad.match(reglaNumeroEntero)) {
                     colorRojoTabla(a);
-                    toastr.error('Fila #' + (a + 1) + ' Cantidad debe ser entero y no negativo');
+                    toastr.error('Fila #' + (a + 1) + ' Cantidad de salida debe ser entero y no negativo');
                     return;
                 }
 
                 if (datoCantidad <= 0) {
                     colorRojoTabla(a);
-                    toastr.error('Fila #' + (a + 1) + ' Cantidad no debe ser negativo');
+                    toastr.error('Fila #' + (a + 1) + ' Cantidad de salida no debe ser negativo');
                     return;
                 }
 
                 if (datoCantidad.length > 10) {
                     colorRojoTabla(a);
-                    toastr.error('Fila #' + (a + 1) + ' Cantidad máximo 10 caracteres');
-                    return;
-                }
-            }
-
-            for(var b = 0; b < descripcion.length; b++){
-
-                var datoDescripcion = descripcion[b];
-
-                if(datoDescripcion === ''){
-                    colorRojoTabla(b);
-                    toastr.error('Fila #' + (b+1) + ' la descripción es requerida');
-                    return;
-                }
-
-                if(datoDescripcion.length > 300){
-                    colorRojoTabla(b);
-                    toastr.error('Fila #' + (b+1) + ' la descripción tiene más de 300 caracteres');
-                }
-            }
-
-            for(var z = 0; z < equipoNom.length; z++){
-
-                var datoDescripcion = equipoNom[z];
-                let detalle = equipo[z];
-
-                // identifica si el 0 es tipo number o texto
-                if(detalle == 0){
-                    colorRojoTabla(z);
-                    alertaMensaje('info', 'No encontrado', 'En la Fila #' + (z+1) + " El Equipo no es encontrado");
-                    return;
-                }
-
-                if(datoDescripcion === ''){
-                    colorRojoTabla(z);
-                    toastr.error('Fila #' + (z+1) + ' El equipo es requerido');
+                    toastr.error('Fila #' + (a + 1) + ' Cantidad de salida debe tener máximo 10 caracteres');
                     return;
                 }
             }
@@ -596,11 +584,11 @@
 
             // como tienen la misma cantidad de filas, podemos recorrer
             // todas las filas de una vez
-            for(var p = 0; p < cantidad.length; p++){
+            for(var p = 0; p < salidaDetalle.length; p++){
 
-                formData.append('cantidad[]', cantidad[p]);
-                formData.append('equipo[]', equipo[p]);
-                formData.append('datainfo[]', descripcionAtributo[p]);
+                formData.append('salida[]', salidaDetalle[p]);
+                formData.append('equipo[]', idequipoDetalle[p]);
+                formData.append('identrada[]', identradaDetalle[p]);
             }
 
             openLoading();
@@ -613,6 +601,8 @@
             })
                 .then((response) => {
                     closeLoading();
+                    console.log(response);
+
 
                     if(response.data.success === 1){
                         toastr.success('Registrado correctamente');
@@ -676,6 +666,8 @@
 
             $("#matriz tbody tr").remove();
         }
+
+
 
     </script>
 

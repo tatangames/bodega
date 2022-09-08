@@ -69,6 +69,12 @@ Route::post('/admin/materiales/nuevo', [PrincipalController::class, 'nuevoMateri
 Route::post('/admin/materiales/informacion', [PrincipalController::class, 'informacionMaterial']);
 Route::post('/admin/materiales/editar', [PrincipalController::class, 'editarMaterial']);
 
+Route::get('/admin/detalle/material/cantidad/{id}', [RepuestosController::class,'vistaDetalleMaterial']);
+Route::get('/admin/detalle/materialtabla/cantidad/{id}', [RepuestosController::class,'tablaDetalleMaterial']);
+
+
+
+
 Route::get('/admin/registro/entrada', [PrincipalController::class,'indexRegistroEntrada'])->name('admin.entrada.registro.index');
 Route::post('/admin/buscar/material',  [PrincipalController::class,'buscadorMaterial']);
 Route::post('/admin/entrada/guardar',  [PrincipalController::class,'guardarEntrada']);

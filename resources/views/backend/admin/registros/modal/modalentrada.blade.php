@@ -22,7 +22,7 @@
 
                             <div class="col-sm-4">
                                 <div class="description-block">
-                                    <h5 class="description-header">{{ $dd->cantidad_bloque }}</h5>
+                                    <h5 class="description-header">{{ $dd->cantidad }}</h5>
                                     <span class="description-text">Disponible</span>
                                 </div>
 
@@ -32,7 +32,7 @@
                 </div>
                 <div class="arraycolor">
                     <div class="card-body row">
-                        <input name="arraysalida[]" type="number" onkeyup="this.value=this.value.replace(/[^\d]/,'')" data-idcantidad="{{$dd->id}}" data-maxcantidad="{{$dd->cantidad}}" value="0" min="0" max="{{ $dd->cantidad }}" step="1"/>
+                        <input name="arraysalida[]" type="number" onkeyup="this.value=this.value.replace(/[^\d]/,'')" data-idcantidad="{{$dd->id}}" data-precio="{{$dd->precio}}" data-maxcantidad="{{$dd->cantidad}}" value="0" min="0" max="{{ $dd->cantidad }}" step="1"/>
                     </div>
                 </div>
             </div>

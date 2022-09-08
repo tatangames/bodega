@@ -7,34 +7,30 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 15%">Código</th>
-                                <th style="width: 20%">Nombre</th>
-                                <th style="width: 10%">Medida</th>
-                                <th style="width: 10%">Cantidad</th>
-                                <th style="width: 10%">Dinero</th>
-                                <th style="width: 10%">Opciones</th>
+                                <th style="width: 5%">Fecha Entro</th>
+                                <th style="width: 8%">Factura</th>
+                                <th style="width: 10%">Precio</th>
+                                <th style="width: 12%">Equipo</th>
+                                <th style="width: 12%">Inventario</th>
+                                <th style="width: 12%">Cantidad</th>
                             </tr>
                             </thead>
                             <tbody>
 
                             @foreach($lista as $dato)
                                 <tr>
-                                    <td>{{ $dato->codigo }}</td>
-                                    <td>{{ $dato->nombre }}</td>
-                                    <td>{{ $dato->medida }}</td>
-                                    <td>{{ $dato->total }}</td>
-                                    <td>${{ $dato->dinero }}</td>
+                                    <td>{{ $dato->fecha }}</td>
+                                    <td>{{ $dato->factura }}</td>
+                                    <td>${{ $dato->totalprecio }}</td>
+                                    <td>{{ $dato->equipo }}</td>
                                     <td>
-                                        @can('btn.registros.repuestos.material.editar')
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="informacion({{ $dato->id }})">
-                                            <i class="fas fa-edit" title="Editar"></i>&nbsp; Editar
-                                        </button>
-                                        @endcan
-
-                                        <button type="button" class="btn btn-success btn-xs" onclick="infoDetalle({{ $dato->id }})">
-                                            <i class="fas fa-eye" title="Detalle"></i>&nbsp; Detalle
-                                        </button>
+                                        @if($dato->inventario == 0)
+                                            <span class="badge bg-transparent">Repuesto Nuevo</span>
+                                        @else
+                                            <span class="badge bg-warning">Repuesto en Inventario</span>
+                                        @endif
                                     </td>
+                                    <td>{{ $dato->total }}</td>
                                 </tr>
                             @endforeach
 

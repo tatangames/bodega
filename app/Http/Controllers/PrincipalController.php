@@ -108,10 +108,29 @@ class PrincipalController extends Controller
                 $item->medida = $dataUnidad->medida;
             }
 
-            $cantidadEntrada = EntradaDetalle::where('id_material', $item->id)->sum('cantidad');
-            $cantidadSalida = SalidaDetalle::where('id_material', $item->id)->sum('cantidad');
+            // obtener todas las entradas detalle de este material
 
-            $item->cantidad = $cantidadEntrada - $cantidadSalida;
+            $entradaDetalle = EntradaDetalle::where('id_material', $item->id)->get();
+
+            $valor = 0;
+            $dinero = 0;
+            foreach ($entradaDetalle as $data){
+
+                // buscar la entrada_detalle de cada salida. obtener la suma de salidas
+                $salidaDetalle = SalidaDetalle::where('id_entrada_detalle', $data->id)
+                    ->where('id_material', $item->id)
+                    ->sum('cantidad');
+
+                // restar
+                $total = $data->cantidad - $salidaDetalle;
+                $valor = $valor + $total;
+                if($salidaDetalle > 0){
+                    $dinero = $dinero + ($data->precio * $salidaDetalle);
+                }
+            }
+
+            $item->total = $valor;
+            $item->dinero = number_format((float)$dinero, 2, '.', ',');
         }
 
         return view('backend.admin.materiales.tablacatalogomateriales', compact('lista'));
@@ -291,7 +310,6 @@ class PrincipalController extends Controller
                         $rDetalle->id_entrada = $r->id;
                         $rDetalle->id_material = $request->datainfo[$i];
                         $rDetalle->cantidad = $request->cantidad[$i];
-                        $rDetalle->cantidad_bloque = $request->cantidad[$i];
                         $rDetalle->precio = $request->precio[$i];
                         $rDetalle->id_equipo = $request->equipo[$i];
                         $rDetalle->save();
@@ -319,7 +337,6 @@ class PrincipalController extends Controller
                     $rDetalle->id_entrada = $r->id;
                     $rDetalle->id_material = $request->datainfo[$i];
                     $rDetalle->cantidad = $request->cantidad[$i];
-                    $rDetalle->cantidad_bloque = $request->cantidad[$i];
                     $rDetalle->precio = $request->precio[$i];
                     $rDetalle->id_equipo = $request->equipo[$i];
                     $rDetalle->save();
@@ -1187,9 +1204,6 @@ class PrincipalController extends Controller
             $mpdf->Output();
         }
     }
-
-
-
 
 
 }

@@ -448,6 +448,10 @@
             },10);
         }
 
+        // mostrara que materiales quedan aun
+        function infoDetalle(id){
+            window.location.href="{{ url('/admin/detalle/material/cantidad') }}/" + id;
+        }
 
     </script>
 
