@@ -9,6 +9,8 @@ use App\Http\Controllers\Backend\Roles\PermisoController;
 use App\Http\Controllers\Backend\Perfil\PerfilController;
 use App\Http\Controllers\Backend\Equipos\EquiposController;
 use App\Http\Controllers\Backend\Repuestos\RepuestosController;
+use App\Http\Controllers\Backend\Reportes\ReportesController;
+
 
 Route::get('/', [LoginController::class,'index'])->name('login');
 
@@ -73,8 +75,6 @@ Route::get('/admin/detalle/material/cantidad/{id}', [RepuestosController::class,
 Route::get('/admin/detalle/materialtabla/cantidad/{id}', [RepuestosController::class,'tablaDetalleMaterial']);
 
 
-
-
 Route::get('/admin/registro/entrada', [PrincipalController::class,'indexRegistroEntrada'])->name('admin.entrada.registro.index');
 Route::post('/admin/buscar/material',  [PrincipalController::class,'buscadorMaterial']);
 Route::post('/admin/entrada/guardar',  [PrincipalController::class,'guardarEntrada']);
@@ -110,11 +110,15 @@ Route::get('/admin/salidas/detalle/tabla/{id}', [PrincipalController::class,'ind
 Route::post('/admin/salidas/borrar/registro',  [PrincipalController::class,'borrarRegistroSalida']);
 
 
-Route::get('/admin/entrada/reporte/vista', [PrincipalController::class,'indexEntradaReporte'])->name('admin.entrada.reporte.index');
-Route::get('/admin/reporte/registro/{tipo}/{desde}/{hasta}', [PrincipalController::class,'reportePdf']);
+// Reportes
+// entradas y salidas
+Route::get('/admin/entrada/reporte/vista', [ReportesController::class,'indexEntradaReporte'])->name('admin.entrada.reporte.index');
+Route::get('/admin/reporte/registro/{tipo}/{desde}/{hasta}', [ReportesController::class,'reportePdf']);
+
 
 // reporte por equipos
-Route::get('/admin/reporte/porequipo/{desde}/{hasta}/{tipo}/{unidad}', [PrincipalController::class, 'reportePorEquipo']);
+Route::get('/admin/entrada/reporte/equipos/vista', [ReportesController::class,'indexEntradaReporteEquipos'])->name('admin.entrada.reporte.equipos.index');
+Route::get('/admin/reporte/porequipo/{desde}/{hasta}/{tipo}/{unidad}', [ReportesController::class, 'reportePorEquipo']);
 
 
 

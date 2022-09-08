@@ -54,26 +54,44 @@
                                         </div>
                                     </div>
 
-                                    <h6>Reporte de Entradas y Salidas</h6>
+                                    <h6>Reporte por Equipos Individual</h6>
 
-                                    <div class="form-group row">
-                                        <div class="col-sm-7">
-                                            <div class="info-box shadow">
-                                                <div class="info-box-content">
-                                                    <label>Tipo</label>
-                                                    <select class="form-control" id="select-tipo" style="width: 35%">
+                                    <div class="form-group">
+                                        <div class="col-sm-10">
+                                            <div class="row">
+                                                <div class="info-box shadow">
+                                                    <div class="info-box-content">
+                                                        <label>Tipo</label>
+                                                        <select class="form-control" id="select-tipo-individual" style="width: 35%">
                                                             <option value="1">Entradas</option>
                                                             <option value="2">Salidas</option>
-                                                    </select>
+                                                        </select>
+                                                    </div>
+                                                    <div class="info-box-content" style="margin-top: 4px">
+                                                        <label>Lista de Equipos</label>
+                                                        <select id="select-equipo" class="form-control" multiple="multiple">
+                                                            @foreach($equipos as $item)
+                                                                <option value="{{$item->id}}">{{ $item->nombre }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
                                                 </div>
 
-                                                <button type="button" onclick="generarPdf()" class="btn" style="margin-left: 10px; border-color: black; border-radius: 0.1px;">
-                                                    <img src="{{ asset('images/logopdf.png') }}" width="55px" height="55px">
-                                                    Generar PDF
-                                                </button>
+                                                <div class="info-box shadow">
+                                                    <div class="info-box-content">
+                                                        <button type="button" onclick="generarPdfEquipo()" class="btn" style="margin-left: 10px; width: 200px; border-color: black; border-radius: 0.1px;">
+                                                            <img src="{{ asset('images/logopdf.png') }}" width="55px" height="55px">
+                                                            Generar PDF
+                                                        </button>
+                                                    </div>
+                                                </div>
+
                                             </div>
                                         </div>
                                     </div>
+
+                                    <hr>
+
 
                                 </div>
                             </form>
@@ -119,8 +137,9 @@
 
     <script>
 
-        function generarPdf() {
-            var tipo = document.getElementById('select-tipo').value;
+        function generarPdfEquipo(){
+
+            var tipo = document.getElementById('select-tipo-individual').value;
             var desde = document.getElementById('fecha-desde').value;
             var hasta = document.getElementById('fecha-hasta').value;
 
@@ -134,7 +153,23 @@
                 return;
             }
 
-            window.open("{{ URL::to('admin/reporte/registro') }}/" + tipo + "/" + desde + "/" + hasta);
+            var valores = $('#select-equipo').val();
+            if(valores.length ==  null || valores.length === 0){
+                toastr.error('Seleccionar mínimo 1 Equipo');
+                return;
+            }
+
+            var selected = [];
+            for (var option of document.getElementById('select-equipo').options){
+                if (option.selected) {
+                    selected.push(option.value);
+                }
+            }
+
+            let listado = selected.toString();
+            let reemplazo = listado.replace(/,/g, "-");
+
+            window.open("{{ URL::to('admin/reporte/porequipo') }}/" + desde + "/" + hasta + "/" + tipo + "/" + reemplazo);
         }
 
     </script>

@@ -55,11 +55,13 @@
                                         @endif
 
                                         @can('btn.historial.entrada.btn.borrarregistro')
-                                        <br><br>
-                                        <button type="button" class="btn btn-danger btn-xs" onclick="informacionBorrarRegistro({{ $dato->id }})">
-                                            <i class="fas fa-trash-alt" title="Borrar"></i>&nbsp; Borrar Registro
-                                        </button>
-                                        @endcan
+                                            @if($dato->btnbloqueo)
+                                                <br><br>
+                                                <button type="button" class="btn btn-danger btn-xs" onclick="informacionBorrarRegistro({{ $dato->id }})">
+                                                    <i class="fas fa-trash-alt" title="Borrar"></i>&nbsp; Borrar Registro
+                                                </button>
+                                                @endcan
+                                            @endif
                                     </td>
                                 </tr>
                             @endforeach

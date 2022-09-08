@@ -24,7 +24,7 @@
                                     <td>{{ $dato->cantidad }}</td>
                                     <td>{{ $dato->unidad }}</td>
                                     <td>{{ $dato->equipo }}</td>
-                                    <td>{{ $dato->precio }}</td>
+                                    <td>${{ $dato->precio }}</td>
                                 </tr>
                             @endforeach
 

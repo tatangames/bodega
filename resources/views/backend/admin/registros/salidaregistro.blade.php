@@ -247,7 +247,7 @@
     <script>
 
         function abrirModal(){
-
+            document.getElementById('tablaRepuesto').innerHTML = "";
             document.getElementById("formulario-repuesto").reset();
             $('#select-equipo').prop('selectedIndex', 0).change();
             $('#modalRepuesto').modal('show');

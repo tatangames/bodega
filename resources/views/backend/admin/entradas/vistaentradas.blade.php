@@ -149,7 +149,7 @@
         function informacionBorrarRegistro(id){
             Swal.fire({
                 title: 'Borrar Registro?',
-                text: "Se eliminara el registro y su documento si lo tiene.",
+                text: "Se eliminara el registro y su documento si lo tiene. Y se verificara que no haya ninguna salida con esta Entrada",
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonColor: '#28a745',
@@ -175,6 +175,21 @@
                     if(response.data.success === 1){
                         toastr.success('Borrado correctamente');
                         recargar();
+                    }
+                    // no puede borrar porque ya hay una salida de esta entrada.
+                    else if(response.data.success === 2){
+                        Swal.fire({
+                            title: 'Error al Borrar',
+                            text: "No se puede borrar el Registro porque ya hay una Salida de un repuesto de esta Entrada",
+                            icon: 'warning',
+                            showCancelButton: false,
+                            confirmButtonColor: '#28a745',
+                            confirmButtonText: 'Aceptar'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                recargar();
+                            }
+                        })
                     }
                     else{
                         toastr.error('error al borrar');

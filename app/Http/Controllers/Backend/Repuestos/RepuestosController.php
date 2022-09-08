@@ -31,6 +31,14 @@ class RepuestosController extends Controller
             $infoEntrada = Entradas::where('id', $dd->id_entrada)->first();
             $dd->fecha = date("d-m-Y", strtotime($infoEntrada->fecha));
             $dd->factura = $infoEntrada->factura;
+
+            // buscar la entrada_detalle de cada salida. obtener la suma de salidas
+            $salidaDetalle = SalidaDetalle::where('id_entrada_detalle', $dd->id)
+                ->where('id_material', $id)
+                ->sum('cantidad');
+
+            // total de la cantidad actual
+            $dd->cantidadtotal = $dd->cantidad - $salidaDetalle;
         }
 
         $hayCantidad = false;
@@ -73,8 +81,9 @@ class RepuestosController extends Controller
             $data->equipo = $infoEquipo->nombre;
             $data->inventario = $infoEntrada->inventario;
 
-            // restar
+            // total de la cantidad actual
             $total = $data->cantidad - $salidaDetalle;
+
             $totalprecio = $total * $data->precio;
             $data->totalprecio = number_format((float)$totalprecio, 2, '.', ',');
             $valor = $valor + $total;

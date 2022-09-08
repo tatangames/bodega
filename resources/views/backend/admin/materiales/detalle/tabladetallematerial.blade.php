@@ -9,9 +9,9 @@
                             <tr>
                                 <th style="width: 5%">Fecha Entro</th>
                                 <th style="width: 8%">Factura</th>
-                                <th style="width: 10%">Precio</th>
                                 <th style="width: 12%">Equipo</th>
                                 <th style="width: 12%">Inventario</th>
+                                <th style="width: 10%">Precio</th>
                                 <th style="width: 12%">Cantidad</th>
                             </tr>
                             </thead>
@@ -21,7 +21,6 @@
                                 <tr>
                                     <td>{{ $dato->fecha }}</td>
                                     <td>{{ $dato->factura }}</td>
-                                    <td>${{ $dato->totalprecio }}</td>
                                     <td>{{ $dato->equipo }}</td>
                                     <td>
                                         @if($dato->inventario == 0)
@@ -30,6 +29,7 @@
                                             <span class="badge bg-warning">Repuesto en Inventario</span>
                                         @endif
                                     </td>
+                                    <td>${{ $dato->totalprecio }}</td>
                                     <td>{{ $dato->total }}</td>
                                 </tr>
                             @endforeach

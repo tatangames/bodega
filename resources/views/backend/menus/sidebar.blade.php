@@ -162,6 +162,20 @@
                         </li>
                         @endcan
 
+                            <li class="nav-item">
+                                <a href="{{ route('admin.entrada.reporte.equipos.index') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Por Equipo</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{{ route('admin.entrada.reporte.index') }}" target="frameprincipal" class="nav-link">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Cantidad Actual</p>
+                                </a>
+                            </li>
+
                     </ul>
                 </li>
                     @endcan
