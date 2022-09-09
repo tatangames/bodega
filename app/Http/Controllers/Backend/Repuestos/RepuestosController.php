@@ -56,8 +56,11 @@ class RepuestosController extends Controller
 
         $info = Materiales::where('id', $id)->first();
         $repuesto = $info->nombre;
-        $infoMedida = UnidadMedida::where('id', $info->id_medida)->first();
-        $medida = $infoMedida->medida;
+        $medida = '';
+        if($infoMedida = UnidadMedida::where('id', $info->id_medida)->first()){
+            $medida = $infoMedida->medida;
+        }
+
 
         return view('backend.admin.materiales.detalle.vistadetalle', compact('id', 'repuesto', 'medida'));
     }
