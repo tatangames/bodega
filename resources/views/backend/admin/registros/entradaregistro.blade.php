@@ -93,8 +93,8 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <input type="radio" id="check-inventario"
-                                               name="contact" value="Repuesto en Inventario" style="transform: scale(1.3);">
-                                        <label for="contactChoice2"> Repuesto en Inventario</label>
+                                               name="contact" value="Repuesto de Inventario" style="transform: scale(1.3);">
+                                        <label for="contactChoice2"> Repuesto de Inventario</label>
                                     </div>
                                 </div>
 

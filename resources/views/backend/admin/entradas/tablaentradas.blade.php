@@ -24,7 +24,7 @@
                                     @if($dato->inventario == 0)
                                         <span class="badge bg-transparent">Repuesto Nuevo</span>
                                     @else
-                                        <span class="badge bg-warning">Repuesto en Inventario</span>
+                                        <span class="badge bg-warning">Repuesto de Inventario</span>
                                     @endif
                                     </td>
                                     <td>{{ $dato->descripcion }}</td>

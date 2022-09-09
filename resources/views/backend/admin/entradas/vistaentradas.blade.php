@@ -109,7 +109,7 @@
                                     <div class="form-group">
                                         <select class="form-control" id="select-editar">
                                             <option value="0">Repuesto Nuevo</option>
-                                            <option value="1">Repuesto en Inventario</option>
+                                            <option value="1">Repuesto de Inventario</option>
                                         </select>
                                     </div>
 

@@ -56,7 +56,7 @@ class ReportesController extends Controller
                 if($ll->inventario == 0){
                     $ll->tipo = "Repuesto Nuevo";
                 }else{
-                    $ll->tipo = "Repuesto en Inventario";
+                    $ll->tipo = "Repuesto de Inventario";
                 }
 
                 array_push($resultsBloque,$ll);
@@ -381,7 +381,7 @@ class ReportesController extends Controller
                 if ($ll->inventario == 0) {
                     $ll->tipo = "Repuesto Nuevo";
                 } else {
-                    $ll->tipo = "Repuesto en Inventario";
+                    $ll->tipo = "Repuesto de Inventario";
                 }
 
                 array_push($resultsBloque, $ll);
