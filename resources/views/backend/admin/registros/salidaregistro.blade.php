@@ -379,7 +379,7 @@
                         "</td>" +
 
                         "<td>" +
-                        "<input name='salidaArray[]' disabled value='" + datoNumero + "' class='form-control' type='number'>" +
+                        "<input name='salidaArray[]' disabled value='" + datoNumero + "' class='form-control' type='text'>" +
                         "</td>" +
 
                         "<td>" +

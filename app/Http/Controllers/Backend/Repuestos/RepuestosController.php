@@ -8,8 +8,10 @@ use App\Models\Entradas;
 use App\Models\Equipos;
 use App\Models\Materiales;
 use App\Models\SalidaDetalle;
+use App\Models\Salidas;
 use App\Models\UnidadMedida;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class RepuestosController extends Controller
 {
@@ -84,6 +86,9 @@ class RepuestosController extends Controller
             // total de la cantidad actual
             $total = $data->cantidad - $salidaDetalle;
 
+            $data->precio = number_format((float)$data->precio, 2, '.', ',');
+
+
             $totalprecio = $total * $data->precio;
             $data->totalprecio = number_format((float)$totalprecio, 2, '.', ',');
             $valor = $valor + $total;
@@ -93,6 +98,86 @@ class RepuestosController extends Controller
 
         return view('backend.admin.materiales.detalle.tabladetallematerial', compact('lista'));
     }
+
+    public function informacionEntradaHistorial(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = Entradas::where('id', $request->id)->first()){
+
+            return ['success' => 1, 'info' => $lista];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function editarEntradaHistorial(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+            'fecha' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        Entradas::where('id', $request->id)->update([
+            'fecha' => $request->fecha,
+            'descripcion' => $request->descripcion,
+            'factura' => $request->factura,
+            'inventario' => $request->inventario
+        ]);
+
+        return ['success' => 1];
+    }
+
+    //*********************************************
+
+    public function informacionSalidaHistorial(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = Salidas::where('id', $request->id)->first()){
+
+            return ['success' => 1, 'info' => $lista];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function editarSalidaHistorial(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+            'fecha' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        Salidas::where('id', $request->id)->update([
+            'fecha' => $request->fecha,
+            'descripcion' => $request->descripcion,
+            'talonario' => $request->talonario,
+        ]);
+
+        return ['success' => 1];
+    }
+
 
 
 }

@@ -34,6 +34,13 @@
                                             <i class="fas fa-file" title="Detalle"></i>&nbsp; Detalle
                                         </button>
 
+                                        @can('btn.historial.entrada.btn.editar')
+                                        <br><br>
+                                        <button type="button" class="btn btn-primary btn-xs" onclick="infoEditar({{ $dato->id }})">
+                                            <i class="fas fa-edit" title="Editar"></i>&nbsp; Editar
+                                        </button>
+                                        @endcan
+
                                         @if($dato->documento != null)
                                             <br><br>
                                             <a class="btn btn-primary btn-xs" href="{{ url('/admin/entradas/documento/'.$dato->id) }}">

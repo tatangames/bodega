@@ -162,20 +162,23 @@
                         </li>
                         @endcan
 
+                        @can('reporte.por.equipos')
                             <li class="nav-item">
                                 <a href="{{ route('admin.entrada.reporte.equipos.index') }}" target="frameprincipal" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Por Equipo</p>
                                 </a>
                             </li>
+                        @endcan
 
+                            @can('reporte.por.cantidades')
                             <li class="nav-item">
-                                <a href="{{ route('admin.entrada.reporte.index') }}" target="frameprincipal" class="nav-link">
+                                <a href="{{ route('admin.reporte.cantidad.index') }}" target="frameprincipal" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Cantidad Actual</p>
                                 </a>
                             </li>
-
+                            @endcan
                     </ul>
                 </li>
                     @endcan

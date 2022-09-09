@@ -95,6 +95,11 @@ Route::post('/admin/entradas/borrar/documento',  [PrincipalController::class,'bo
 Route::post('/admin/entradas/borrar/registro',  [PrincipalController::class,'borrarRegistro']);
 Route::post('/admin/entradas/guardar/documento',  [PrincipalController::class,'guardarDocumento']);
 
+Route::post('/admin/historial/entrada/informacion',  [RepuestosController::class,'informacionEntradaHistorial']);
+Route::post('/admin/historial/entrada/editar',  [RepuestosController::class,'editarEntradaHistorial']);
+
+Route::post('/admin/historial/salida/informacion',  [RepuestosController::class,'informacionSalidaHistorial']);
+Route::post('/admin/historial/salida/editar',  [RepuestosController::class,'editarSalidaHistorial']);
 
 
 Route::get('/admin/entradas/detalle/{id}', [PrincipalController::class,'indexEntradasDetalle']);
@@ -120,7 +125,9 @@ Route::get('/admin/reporte/registro/{tipo}/{desde}/{hasta}', [ReportesController
 Route::get('/admin/entrada/reporte/equipos/vista', [ReportesController::class,'indexEntradaReporteEquipos'])->name('admin.entrada.reporte.equipos.index');
 Route::get('/admin/reporte/porequipo/{desde}/{hasta}/{tipo}/{unidad}', [ReportesController::class, 'reportePorEquipo']);
 
-
+// reporte cantidad actual
+Route::get('/admin/reporte/cantidad/vista', [ReportesController::class,'indexEntradaReporteCantidad'])->name('admin.reporte.cantidad.index');
+Route::get('/admin/reporte/cantidades', [ReportesController::class,'reportePdfCantidad']);
 
 
 

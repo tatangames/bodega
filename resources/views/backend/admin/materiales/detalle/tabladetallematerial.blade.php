@@ -11,8 +11,9 @@
                                 <th style="width: 8%">Factura</th>
                                 <th style="width: 12%">Equipo</th>
                                 <th style="width: 12%">Inventario</th>
-                                <th style="width: 10%">Precio</th>
                                 <th style="width: 12%">Cantidad</th>
+                                <th style="width: 10%">Precio</th>
+                                <th style="width: 10%">Total</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -29,8 +30,10 @@
                                             <span class="badge bg-warning">Repuesto en Inventario</span>
                                         @endif
                                     </td>
-                                    <td>${{ $dato->totalprecio }}</td>
                                     <td>{{ $dato->total }}</td>
+                                    <td>${{ $dato->precio }}</td>
+                                    <td>${{ $dato->totalprecio }}</td>
+
                                 </tr>
                             @endforeach
 

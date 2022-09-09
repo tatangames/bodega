@@ -44,13 +44,19 @@ class RolesSeeder extends Seeder
                 Permission::create(['name' => 'btn.historial.entrada.btn.borrarregistro', 'description' => 'borrar historial de entrada'])->syncRoles($roleInventario);
                 Permission::create(['name' => 'btn.historial.entrada.btn.borrardocumento', 'description' => 'borrar documento historial de entrada'])->syncRoles($roleInventario);
                 Permission::create(['name' => 'btn.historial.entrada.btn.agregardocumento', 'description' => 'boton agregar documento historial de entrada'])->syncRoles($roleInventario);
+                Permission::create(['name' => 'btn.historial.entrada.btn.editar', 'description' => 'boton editar historial de entrada'])->syncRoles($roleInventario);
+
 
         Permission::create(['name' => 'historial.salida', 'description' => 'ver historial de salidas'])->syncRoles($roleInventario, $roleAuditora);
 
                 Permission::create(['name' => 'btn.historial.salida.borrarregistro', 'description' => 'borrar historial de salida'])->syncRoles($roleInventario);
+                Permission::create(['name' => 'btn.historial.salida.btn.editar', 'description' => 'boton editar historial de salida'])->syncRoles($roleInventario);
+
 
         Permission::create(['name' => 'sidebar.reporte', 'description' => 'contenedor de reporte'])->syncRoles($roleInventario, $roleAuditora);
             Permission::create(['name' => 'reporte.entradas.y.salidas', 'description' => 'reporte de entradas y salidas'])->syncRoles($roleInventario, $roleAuditora);
+            Permission::create(['name' => 'reporte.por.equipos', 'description' => 'reporte de entradas y salidas por equipo'])->syncRoles($roleInventario, $roleAuditora);
+            Permission::create(['name' => 'reporte.por.cantidades', 'description' => 'reporte de cantidades y efectivo'])->syncRoles($roleInventario, $roleAuditora);
 
     }
 }

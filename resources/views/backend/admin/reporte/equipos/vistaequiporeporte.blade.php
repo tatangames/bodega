@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="callout callout-info">
-                        <h5><i class="fas fa-info"></i> Generar Reporte</h5>
+                        <h5><i class="fas fa-info"></i> Generar Reporte por Equipos</h5>
                         <div class="card">
                             <form class="form-horizontal">
                                 <div class="card-body">
@@ -54,7 +54,7 @@
                                         </div>
                                     </div>
 
-                                    <h6>Reporte por Equipos Individual</h6>
+                                    <h6>Reporte</h6>
 
                                     <div class="form-group">
                                         <div class="col-sm-10">

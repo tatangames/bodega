@@ -121,12 +121,14 @@ class PrincipalController extends Controller
                     ->where('id_material', $item->id)
                     ->sum('cantidad');
 
-                // restar
+                // total: es la cantidad actual
                 $total = $data->cantidad - $salidaDetalle;
+
+                // valor: es la suma de cantidad actual
                 $valor = $valor + $total;
-                if($salidaDetalle > 0){
-                    $dinero = $dinero + ($data->precio * $total);
-                }
+
+                // dinero: es la suma del precio del repuesto
+                $dinero = $dinero + ($data->precio * $total);
             }
 
             $item->total = $valor;

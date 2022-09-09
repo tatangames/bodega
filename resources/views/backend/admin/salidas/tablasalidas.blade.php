@@ -25,6 +25,13 @@
                                             <i class="fas fa-eye" title="Detalle"></i>&nbsp; Detalle
                                         </button>
 
+                                        @can('btn.historial.salida.btn.editar')
+                                            <br><br>
+                                            <button type="button" class="btn btn-primary btn-xs" onclick="infoEditar({{ $dato->id }})">
+                                                <i class="fas fa-edit" title="Editar"></i>&nbsp; Editar
+                                            </button>
+                                        @endcan
+
                                         @can('btn.historial.salida.borrarregistro')
                                             <br><br>
                                             <button type="button" class="btn btn-danger btn-xs" onclick="informacionBorrarRegistro({{ $dato->id }})">
