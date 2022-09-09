@@ -42,7 +42,7 @@ class ReportesController extends Controller
             $listaEntrada = Entradas::whereBetween('fecha', [$start, $end])
                 ->orderBy('fecha', 'ASC')
                 ->get();
-
+            $totalSumado = 0;
             foreach ($listaEntrada as $ll){
 
                 $ll->fecha = date("d-m-Y", strtotime($ll->fecha));
@@ -50,7 +50,6 @@ class ReportesController extends Controller
                 $totaldinero = 0;
                 $totalcantidad = 0;
                 $multiplicado = 0;
-                $totalSumado = 0;
 
                 // 0: el repuesto es nuevo
                 // 1: el repuesto ya estaba en bodega
