@@ -19,6 +19,7 @@
                             <tbody>
 
                             @foreach($lista as $dato)
+                                @if($dato->total > 0)
                                 <tr>
                                     <td>{{ $dato->fecha }}</td>
                                     <td>{{ $dato->factura }}</td>
@@ -33,8 +34,8 @@
                                     <td>{{ $dato->total }}</td>
                                     <td>${{ $dato->precio }}</td>
                                     <td>${{ $dato->totalprecio }}</td>
-
                                 </tr>
+                                @endif
                             @endforeach
 
                             </tbody>
