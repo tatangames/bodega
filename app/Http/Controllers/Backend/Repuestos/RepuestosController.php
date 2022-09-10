@@ -99,6 +99,8 @@ class RepuestosController extends Controller
             $valor = 0;
         }
 
+        return [$lista];
+
         return view('backend.admin.materiales.detalle.tabladetallematerial', compact('lista'));
     }
 
