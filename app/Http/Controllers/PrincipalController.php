@@ -481,8 +481,11 @@ class PrincipalController extends Controller
             $ll->equipo = $infoEquipo->nombre;
 
             $infoMaterial = Materiales::where('id', $ll->idmaterial)->first();
-            $infoUnidad = UnidadMedida::where('id', $infoMaterial->id_medida)->first();
-            $ll->unidad = $infoUnidad->medida;
+            $medida = '';
+            if($infoUnidad = UnidadMedida::where('id', $infoMaterial->id_medida)->first()){
+                $medida = $infoUnidad->medida;
+            }
+            $ll->unidad = $medida;
 
         }
 
@@ -530,9 +533,11 @@ class PrincipalController extends Controller
             $ll->equipo = $infoEquipo->nombre;
 
             $infoMaterial = Materiales::where('id', $ll->idmaterial)->first();
-            $infoUnidad = UnidadMedida::where('id', $infoMaterial->id_medida)->first();
-            $ll->unidad = $infoUnidad->medida;
-
+            $medida = '';
+            if($infoUnidad = UnidadMedida::where('id', $infoMaterial->id_medida)->first()){
+                $medida = $infoUnidad->medida;
+            }
+            $ll->unidad = $medida;
         }
 
         return view('backend.admin.salidas.detalle.tablasalidadetalle', compact('lista'));
