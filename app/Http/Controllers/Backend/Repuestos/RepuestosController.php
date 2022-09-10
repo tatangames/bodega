@@ -91,15 +91,12 @@ class RepuestosController extends Controller
 
             $data->precio = number_format((float)$data->precio, 2, '.', ',');
 
-
             $totalprecio = $total * $data->precio;
             $data->totalprecio = number_format((float)$totalprecio, 2, '.', ',');
             $valor = $valor + $total;
             $data->total = $valor;
             $valor = 0;
         }
-
-        return [$lista];
 
         return view('backend.admin.materiales.detalle.tabladetallematerial', compact('lista'));
     }
