@@ -42,7 +42,7 @@ class ReportesController extends Controller
             $listaEntrada = Entradas::whereBetween('fecha', [$start, $end])
                 ->orderBy('fecha', 'ASC')
                 ->get();
-            $totalSumado = 0;
+
             foreach ($listaEntrada as $ll){
 
                 $ll->fecha = date("d-m-Y", strtotime($ll->fecha));
@@ -50,6 +50,7 @@ class ReportesController extends Controller
                 $totaldinero = 0;
                 $totalcantidad = 0;
                 $multiplicado = 0;
+                $totalSumado = 0;
 
                 // 0: el repuesto es nuevo
                 // 1: el repuesto ya estaba en bodega
@@ -91,12 +92,13 @@ class ReportesController extends Controller
 
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
+                $ll->totalsumado = number_format((float)$totalSumado, 2, '.', ',');
 
                 $resultsBloque[$index]->detalle = $listaDetalle;
                 $index++;
             }
 
-            $totalSumado = number_format((float)$totalSumado, 2, '.', ',');
+
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
@@ -182,7 +184,7 @@ class ReportesController extends Controller
                     <td width='8%'></td>
                     <td width='8%'></td>
                     <td width='8%'></td>
-                    <td width='8%'>$$totalSumado</td>
+                    <td width='8%'>$$listaEntrada->totalSumado</td>
                 </tr>";
 
                 $tabla .= "</tbody></table>";
@@ -300,7 +302,6 @@ class ReportesController extends Controller
 
                 $tabla .= "<table width='100%' id='tablaFor' style='margin-top: 20px'>
             <tbody>";
-
 
                 $tabla .= "<tr>
                     <td width='25%'>Repuesto</td>
