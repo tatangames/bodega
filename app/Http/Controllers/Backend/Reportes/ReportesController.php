@@ -50,7 +50,7 @@ class ReportesController extends Controller
                 $totaldinero = 0;
                 $totalcantidad = 0;
                 $multiplicado = 0;
-                $totalSumado = 0;
+                $totalsumado = 0;
 
                 // 0: el repuesto es nuevo
                 // 1: el repuesto ya estaba en bodega
@@ -81,7 +81,7 @@ class ReportesController extends Controller
                     $totalcantidad = $totalcantidad + $dd->cantidad;
 
                     $multiplicado = $multiplicado + ($dd->precio * $dd->cantidad);
-                    $totalSumado = $totalSumado + $multiplicado;
+                    $totalsumado = $totalsumado + $multiplicado;
                     $dd->multiplicado = number_format((float)$multiplicado, 2, '.', ',');
 
                     $dd->precio = number_format((float)$dd->precio, 2, '.', ',');
@@ -92,7 +92,7 @@ class ReportesController extends Controller
 
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
-                $ll->totalsumado = number_format((float)$totalSumado, 2, '.', ',');
+                $ll->totalsumado = number_format((float)$totalsumado, 2, '.', ',');
 
                 $resultsBloque[$index]->detalle = $listaDetalle;
                 $index++;
@@ -184,7 +184,7 @@ class ReportesController extends Controller
                     <td width='8%'></td>
                     <td width='8%'></td>
                     <td width='8%'></td>
-                    <td width='8%'>$$listaEntrada->totalsumado</td>
+                    <td width='8%'>$$dd->totalsumado</td>
                 </tr>";
 
                 $tabla .= "</tbody></table>";
