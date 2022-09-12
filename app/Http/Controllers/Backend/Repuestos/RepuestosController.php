@@ -46,12 +46,14 @@ class RepuestosController extends Controller
             // total de la cantidad actual
             $cantidadtotal = $dd->cantidad - $salidaDetalle;
 
-            $dataArray[] = [
-                'id' => $dd->id,
-                'fecha' => date("d-m-Y", strtotime($infoEntrada->fecha)),
-                'precio' => number_format((float)$dd->precio, 2, '.', ','),
-                'cantidadtotal' => $cantidadtotal,
-            ];
+            if($cantidadtotal > 0){
+                $dataArray[] = [
+                    'id' => $dd->id,
+                    'fecha' => date("d-m-Y", strtotime($infoEntrada->fecha)),
+                    'precio' => number_format((float)$dd->precio, 2, '.', ','),
+                    'cantidadtotal' => $cantidadtotal,
+                ];
+            }
         }
 
         if(sizeof($dataArray) > 0){
