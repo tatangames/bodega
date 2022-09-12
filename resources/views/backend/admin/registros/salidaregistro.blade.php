@@ -341,11 +341,15 @@
                     return;
                 }
 
-                // no superar la maxima cantidad
-                if(datoNumero.length > detalleMaxCantidad){
-                    divColorRojo(a);
-                    toastr.error('La cantidad a Retirar no puede ser mayor a: ' + detalleMaxCantidad);
-                    return;
+                // ignorar si la cantidad actual es 0
+
+                if(detalleMaxCantidad != 0){
+                    // no superar la maxima cantidad
+                    if(datoNumero.length > detalleMaxCantidad){
+                        divColorRojo(a);
+                        toastr.error('La cantidad a Retirar no puede ser mayor a: ' + detalleMaxCantidad);
+                        return;
+                    }
                 }
             }
 
