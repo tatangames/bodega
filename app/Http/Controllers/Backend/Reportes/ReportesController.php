@@ -80,7 +80,7 @@ class ReportesController extends Controller
                     $totaldinero = $totaldinero + $dd->precio;
                     $totalcantidad = $totalcantidad + $dd->cantidad;
 
-                    $multiplicado = $multiplicado + ($dd->precio * $dd->cantidad);
+                    $multiplicado = $dd->precio * $dd->cantidad;
                     $totalsumado = $totalsumado + $multiplicado;
                     $dd->multiplicado = number_format((float)$multiplicado, 2, '.', ',');
 
