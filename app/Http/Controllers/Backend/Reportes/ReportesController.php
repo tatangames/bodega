@@ -404,7 +404,7 @@ class ReportesController extends Controller
                     $totaldinero = $totaldinero + $dd->precio;
                     $totalcantidad = $totalcantidad + $dd->cantidad;
 
-                    $multiplicado = $multiplicado + ($dd->precio * $dd->cantidad);
+                    $multiplicado = $dd->precio * $dd->cantidad;
                     $totalsumado = $totalsumado + $multiplicado;
                     $dd->multiplicado = number_format((float)$multiplicado, 2, '.', ',');
 
@@ -572,7 +572,7 @@ class ReportesController extends Controller
                     $totaldinero = $totaldinero + $infoEntradaDetalle->precio;
                     $totalcantidad = $totalcantidad + $dd->cantidad;
 
-                    $multiplicado = $multiplicado + ($infoEntradaDetalle->precio * $dd->cantidad);
+                    $multiplicado = $infoEntradaDetalle->precio * $dd->cantidad;
                     $totaldinero = $totaldinero + $multiplicado;
                     $dd->multiplicado = number_format((float)$multiplicado, 2, '.', ',');
 
