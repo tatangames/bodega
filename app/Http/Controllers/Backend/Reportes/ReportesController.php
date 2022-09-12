@@ -569,7 +569,6 @@ class ReportesController extends Controller
 
                     $infoEntradaDetalle = EntradaDetalle::where('id', $dd->id_entrada_detalle)->first();
 
-                    $totaldinero = $totaldinero + $infoEntradaDetalle->precio;
                     $totalcantidad = $totalcantidad + $dd->cantidad;
 
                     $multiplicado = $infoEntradaDetalle->precio * $dd->cantidad;
@@ -588,6 +587,8 @@ class ReportesController extends Controller
                 $resultsBloque[$index]->detalle = $listaDetalle;
                 $index++;
             }
+
+
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
