@@ -98,8 +98,6 @@ class ReportesController extends Controller
                 $index++;
             }
 
-
-
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
             $mpdf->SetTitle('Entradas');
@@ -236,7 +234,7 @@ class ReportesController extends Controller
 
                     $totalcantidad = $totalcantidad + $dd->cantidad;
 
-                    $multiplicado = $multiplicado + ($infoEntradaDetalle->precio * $dd->cantidad);
+                    $multiplicado = $infoEntradaDetalle->precio * $dd->cantidad;
 
                     $totaldinero = $totaldinero + $multiplicado;
 
