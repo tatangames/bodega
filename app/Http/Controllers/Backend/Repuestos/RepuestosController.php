@@ -28,10 +28,14 @@ class RepuestosController extends Controller
             ->where('cantidad', '>', 0)
             ->get();
 
+        $dataArray = array();
+
+        $hayCantidad = false;
+
         foreach ($lista as $dd){
 
             $infoEntrada = Entradas::where('id', $dd->id_entrada)->first();
-            $dd->fecha = date("d-m-Y", strtotime($infoEntrada->fecha));
+            $dd->fecha =
             $dd->factura = $infoEntrada->factura;
 
             // buscar la entrada_detalle de cada salida. obtener la suma de salidas
@@ -40,17 +44,21 @@ class RepuestosController extends Controller
                 ->sum('cantidad');
 
             // total de la cantidad actual
-            $dd->cantidadtotal = $dd->cantidad - $salidaDetalle;
+            $cantidadtotal = $dd->cantidad - $salidaDetalle;
+
+            $dataArray[] = [
+                'id' => $dd->id,
+                'fecha' => date("d-m-Y", strtotime($infoEntrada->fecha)),
+                'precio' => number_format((float)$dd->precio, 2, '.', ','),
+                'cantidadtotal' => $cantidadtotal,
+            ];
         }
 
-        $hayCantidad = false;
-        if(sizeof($lista) > 0){
+        if(sizeof($dataArray) > 0){
             $hayCantidad = true;
         }
 
-        return [$lista];
-
-        return view('backend.admin.registros.modal.modalentrada', compact('lista', 'hayCantidad'));
+        return view('backend.admin.registros.modal.modalentrada', compact('dataArray', 'hayCantidad'));
     }
 
     // id material
