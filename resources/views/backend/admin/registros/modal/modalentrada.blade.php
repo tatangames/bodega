@@ -1,5 +1,7 @@
     @foreach($lista as $dd)
 
+        @if($dd->cantidadtotal > 0)
+
         <div class="col-md-6">
             <div class="card card-primary">
                 <div class="card-header">
@@ -37,6 +39,7 @@
                 </div>
             </div>
         </div>
+        @endif
 
     @endforeach
 
