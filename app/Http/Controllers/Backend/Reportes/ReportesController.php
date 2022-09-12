@@ -184,7 +184,7 @@ class ReportesController extends Controller
                     <td width='8%'></td>
                     <td width='8%'></td>
                     <td width='8%'></td>
-                    <td width='8%'>$$listaEntrada->totalSumado</td>
+                    <td width='8%'>$$listaEntrada->totalsumado</td>
                 </tr>";
 
                 $tabla .= "</tbody></table>";
