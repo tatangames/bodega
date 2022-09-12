@@ -375,7 +375,7 @@ class ReportesController extends Controller
                 $totaldinero = 0;
                 $totalcantidad = 0;
                 $multiplicado = 0;
-                $totalSumado = 0;
+                $totalsumado = 0;
 
                 // 0: el repuesto es nuevo
                 // 1: el repuesto ya estaba en bodega
@@ -407,7 +407,7 @@ class ReportesController extends Controller
                     $totalcantidad = $totalcantidad + $dd->cantidad;
 
                     $multiplicado = $multiplicado + ($dd->precio * $dd->cantidad);
-                    $totalSumado = $totalSumado + $multiplicado;
+                    $totalsumado = $totalsumado + $multiplicado;
                     $dd->multiplicado = number_format((float)$multiplicado, 2, '.', ',');
 
                     $dd->precio = number_format((float)$dd->precio, 2, '.', ',');
@@ -416,6 +416,8 @@ class ReportesController extends Controller
                     $dd->equipo = $infoEquipo->nombre;
                 }
 
+                $ll->totalsumado = number_format((float)$totalsumado, 2, '.', ',');
+
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
 
@@ -423,7 +425,6 @@ class ReportesController extends Controller
                 $index++;
             }
 
-            $totalSumado = number_format((float)$totalSumado, 2, '.', ',');
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
@@ -519,7 +520,7 @@ class ReportesController extends Controller
                     <td width='8%'></td>
                     <td width='8%'></td>
                     <td width='8%'></td>
-                    <td width='8%'>$$totalSumado</td>
+                    <td width='8%'>$$dd->totalsumado</td>
                 </tr>";
 
                     $tabla .= "</tbody></table>";
