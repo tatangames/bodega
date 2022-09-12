@@ -48,6 +48,8 @@ class RepuestosController extends Controller
             $hayCantidad = true;
         }
 
+        return [$lista];
+
         return view('backend.admin.registros.modal.modalentrada', compact('lista', 'hayCantidad'));
     }
 
