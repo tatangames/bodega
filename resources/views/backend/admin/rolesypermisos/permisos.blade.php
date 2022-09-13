@@ -256,7 +256,7 @@
             formData.append('password', password);
             formData.append('rol', idrol);
 
-            axios.post('/admin/permisos/nuevo-usuario', formData, {
+            axios.post(url+'/permisos/nuevo-usuario', formData, {
             })
                 .then((response) => {
                     closeLoading()
@@ -283,7 +283,7 @@
             openLoading();
             document.getElementById("formulario-editar").reset();
 
-            axios.post('/admin/permisos/info-usuario',{
+            axios.post(url+'//permisos/info-usuario',{
                 'id': id
             })
                 .then((response) => {
@@ -377,7 +377,7 @@
             formData.append('toggle', toggle);
             formData.append('rol', idrol);
 
-            axios.post('/admin/permisos/editar-usuario', formData, {
+            axios.post(url+'/permisos/editar-usuario', formData, {
             })
                 .then((response) => {
                     closeLoading()

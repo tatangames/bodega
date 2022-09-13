@@ -164,7 +164,7 @@
             formData.append('idpermiso', idpermiso);
             formData.append('idrol', idrol);
 
-            axios.post('/admin/roles/permiso/borrar', formData, {
+            axios.post(url+'/roles/permiso/borrar', formData, {
             })
                 .then((response) => {
                     closeLoading()
@@ -196,7 +196,7 @@
             formData.append('idpermiso', idpermiso);
             formData.append('idrol', idrol);
 
-            axios.post('/admin/roles/permiso/agregar', formData, {
+            axios.post(url+'/roles/permiso/agregar', formData, {
             })
                 .then((response) => {
                     closeLoading()
