@@ -50,14 +50,14 @@ class PermisoController extends Controller
     public function infoUsuario(Request $request){
         if($info = Usuario::where('id', $request->id)->first()){
 
-            $roles = Role::all()->pluck('name', 'id');
 
-            $idrol = $info->roles->pluck('id');
+
+
 
             return ['success' => 1,
-                'info' => $info,
-                'roles' => $roles,
-                'idrol' => $idrol];
+                'info' => $info];
+
+
 
         }else{
             return ['success' => 2];
