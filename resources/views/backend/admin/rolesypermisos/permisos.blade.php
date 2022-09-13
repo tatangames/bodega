@@ -288,13 +288,24 @@
             })
                 .then((response) => {
                     closeLoading();
+                    console.log(response);
+
                     if(response.data.success === 1){
                         $('#modalEditar').modal('show');
                         $('#id-editar').val(response.data.info.id);
                         $('#nombre-editar').val(response.data.info.nombre);
                         $('#usuario-editar').val(response.data.info.usuario);
 
+                        document.getElementById("rol-editar").options.length = 0;
 
+                        $.each(response.data.roles, function( key, val ){
+
+                            if(response.data.idrol[0] == key){
+                                $('#rol-editar').append('<option value="' +key +'" selected="selected">'+val+'</option>');
+                            }else{
+                                $('#rol-editar').append('<option value="' +key +'">'+val+'</option>');
+                            }
+                        });
 
 
                         if(response.data.info.activo === 0){
