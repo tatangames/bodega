@@ -3,11 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\EntradaDetalle;
+use App\Models\EntradaLLantas;
+use App\Models\EntradaLLantasDeta;
 use App\Models\Entradas;
 use App\Models\Equipos;
+use App\Models\Llantas;
 use App\Models\Materiales;
 use App\Models\SalidaDetalle;
+use App\Models\SalidaLLantas;
+use App\Models\SalidaLLantasDeta;
 use App\Models\Salidas;
+use App\Models\UbicacionBodega;
 use App\Models\UnidadMedida;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -104,9 +110,11 @@ class PrincipalController extends Controller
         $lista = Materiales::orderBy('nombre', 'ASC')->get();
 
         foreach ($lista as $item) {
+            $medida = '';
             if($dataUnidad = UnidadMedida::where('id', $item->id_medida)->first()){
-                $item->medida = $dataUnidad->medida;
+                $medida = $dataUnidad->medida;
             }
+            $item->medida = $medida;
 
             // obtener todas las entradas detalle de este material
 
@@ -199,6 +207,7 @@ class PrincipalController extends Controller
         if(Materiales::where('id', '!=', $request->id)
             ->where('nombre', $request->nombre)
             ->where('id_medida', $request->unidad)
+            ->where('codigo', $request->codigo)
             ->first()){
             return ['success' => 3];
         }
@@ -510,6 +519,21 @@ class PrincipalController extends Controller
         return view('backend.admin.salidas.tablasalidas', compact('lista'));
     }
 
+    public function indexSalidasLlantas(){
+        return view('backend.admin.historial.llantas.salida.vistahistosalidallanta');
+    }
+
+    public function indexTablaSalidasLlantas(){
+
+        $lista = SalidaLLantas::orderBy('fecha', 'ASC')->get();
+
+        foreach ($lista as $dd){
+            $dd->fecha = date("d-m-Y", strtotime($dd->fecha));
+        }
+
+        return view('backend.admin.historial.llantas.salida.tablahistosalidallanta', compact('lista'));
+    }
+
     //*****************************************************************************
 
     public function indexSalidasDetalle($id){
@@ -543,11 +567,53 @@ class PrincipalController extends Controller
         return view('backend.admin.salidas.detalle.tablasalidadetalle', compact('lista'));
     }
 
+    public function indexSalidasDetalleLlanta($id){
+        $dato = SalidaLLantas::where('id', $id)->first();
+        $fecha = date("d-m-Y", strtotime($dato->fecha));
 
+        return view('backend.admin.historial.llantas.salida.detalle.vistadetallantahistorialsalida', compact('id', 'fecha'));
+    }
+
+    public function indexSalidasDetalleTablaLlanta($id){
+        $lista = DB::table('salida_llanta_deta AS ed')
+            ->join('llantas AS m', 'ed.id_llanta', '=', 'm.id')
+            ->select('ed.cantidad', 'm.nombre', 'ed.id_equipo', 'ed.id_l_entrada_detalle', 'm.id as idllanta')
+            ->where('ed.id_salida_llanta', $id)
+            ->orderBy('m.nombre', 'ASC')
+            ->get();
+
+        foreach ($lista as $ll){
+
+            $infoEquipo = Equipos::where('id', $ll->id_equipo)->first();
+            $ll->equipo = $infoEquipo->nombre;
+
+            $infoMaterial = Llantas::where('id', $ll->idllanta)->first();
+            $medida = '';
+            if($infoUnidad = UnidadMedida::where('id', $infoMaterial->id_medida)->first()){
+                $medida = $infoUnidad->medida;
+            }
+
+            $info = EntradaLLantasDeta::where('id', $ll->id_l_entrada_detalle)->first();
+            $ll->precio = number_format((float)$info->precio, 2, '.', ',');
+
+            $ll->unidad = $medida;
+        }
+
+        return view('backend.admin.historial.llantas.salida.detalle.tabladetallantahistorialsalida', compact('lista'));
+    }
 
     public function documentoEntrada($id){
 
         $url = Entradas::where('id', $id)->pluck('documento')->first();
+        $pathToFile = "storage/archivos/".$url;
+        $extension = pathinfo(($pathToFile), PATHINFO_EXTENSION);
+        $nombre = "Documento." . $extension;
+        return response()->download($pathToFile, $nombre);
+    }
+
+    public function documentoEntradaLlanta($id){
+
+        $url = EntradaLLantas::where('id', $id)->pluck('documento')->first();
         $pathToFile = "storage/archivos/".$url;
         $extension = pathinfo(($pathToFile), PATHINFO_EXTENSION);
         $nombre = "Documento." . $extension;
@@ -678,7 +744,7 @@ class PrincipalController extends Controller
 
         if ($validar->fails()){ return ['success' => 0];}
 
-        if($lista = Salidas::where('id', $request->id)->first()){
+        if(Salidas::where('id', $request->id)->first()){
 
             SalidaDetalle::where('id_salida', $request->id)->delete();
             Salidas::where('id', $request->id)->delete();
@@ -687,6 +753,204 @@ class PrincipalController extends Controller
         }else{
             return ['success' => 2];
         }
+    }
+
+    public function borrarRegistroSalidaLlanta(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if(SalidaLLantas::where('id', $request->id)->first()){
+
+            SalidaLLantasDeta::where('id_salida_llanta', $request->id)->delete();
+            SalidaLLantas::where('id', $request->id)->delete();
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function indexHistorialEntradasLlanta(){
+        return view('backend.admin.historial.llantas.entrada.vistahistoentradallanta');
+    }
+
+    public function indexTablaHistorialEntradasLlantas(){
+        $lista = EntradaLLantas::orderBy('fecha', 'ASC')->get();
+
+        // verificar cada entrada_detalle para ver si ya tiene salidas
+
+        foreach ($lista as $dd){
+            $dd->fecha = date("d-m-Y", strtotime($dd->fecha));
+            $btnBloqueo = true;
+            $detalle = EntradaLLantasDeta::where('id_entrada_llanta', $dd->id)->get();
+            foreach ($detalle as $ll){
+                if(SalidaLLantasDeta::where('id_l_entrada_detalle', $ll->id)->first()){
+                    $btnBloqueo = false;
+                    break;
+                }
+            }
+
+            $dd->btnbloqueo = $btnBloqueo;
+        }
+
+        return view('backend.admin.historial.llantas.entrada.tablahistoentradallanta', compact('lista'));
+    }
+
+    public function borrarDocumentoLlanta(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = EntradaLLantas::where('id', $request->id)->first()){
+
+            if(Storage::disk('archivos')->exists($lista->documento)){
+                Storage::disk('archivos')->delete($lista->documento);
+            }
+
+            EntradaLLantas::where('id', $request->id)->update([
+                'documento' => null
+            ]);
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function borrarRegistroLlanta(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = EntradaLLantas::where('id', $request->id)->first()){
+
+            // verificar que no haya salidas de esta entrada
+            $detalle = EntradaLLantasDeta::where('id_entrada_llanta', $lista->id)->get();
+            foreach ($detalle as $ll){
+                if(SalidaLLantasDeta::where('id_l_entrada_detalle', $ll->id)->first()){
+                    return ['success' => 2];
+                }
+            }
+
+            if(Storage::disk('archivos')->exists($lista->documento)){
+                Storage::disk('archivos')->delete($lista->documento);
+            }
+
+            EntradaLLantasDeta::where('id_entrada_llanta', $request->id)->delete();
+            EntradaLLantas::where('id', $request->id)->delete();
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 3];
+        }
+    }
+
+    public function guardarDocumentoLlanta(Request $request){
+
+        $rules = array(
+            'id' => 'required',
+        );
+
+        $validator = Validator::make($request->all(), $rules);
+        if ( $validator->fails()){
+            return ['success' => 0];
+        }
+
+        DB::beginTransaction();
+
+        try {
+
+            if ($request->hasFile('documento')) {
+
+                $cadena = Str::random(15);
+                $tiempo = microtime();
+                $union = $cadena . $tiempo;
+                $nombre = str_replace(' ', '_', $union);
+
+                $extension = '.' . $request->documento->getClientOriginalExtension();
+                $nomDocumento = $nombre . strtolower($extension);
+                $avatar = $request->file('documento');
+                $archivo = Storage::disk('archivos')->put($nomDocumento, \File::get($avatar));
+
+                if($archivo){
+
+                    $info = EntradaLLantas::where('id', $request->id)->first();
+
+                    if(Storage::disk('archivos')->exists($info->documento)){
+                        Storage::disk('archivos')->delete($info->documento);
+                    }
+
+                    EntradaLLantas::where('id', $request->id)->update([
+                        'documento' => $nomDocumento
+                    ]);
+
+                    DB::commit();
+                    return ['success' => 1];
+                }else{
+                    return ['success' => 2];
+                }
+            }
+            else{
+                return ['success' => 2];
+            }
+        }catch(\Throwable $e){
+
+            DB::rollback();
+            return ['success' => 2];
+        }
+    }
+
+
+    public function indexEntradasDetalleLlanta($id){
+        $dato = EntradaLLantas::where('id', $id)->first();
+        $fecha = date("d-m-Y", strtotime($dato->fecha));
+
+        return view('backend.admin.historial.llantas.entrada.detalle.vistadetallantahistorialentrada', compact('id', 'fecha'));
+    }
+
+
+    public function indexEntradasDetalleTablaLlanta($id){
+
+        $lista = DB::table('entrada_llanta_deta AS ed')
+            ->join('llantas AS m', 'ed.id_llanta', '=', 'm.id')
+            ->select('ed.cantidad', 'm.nombre', 'ed.id_ubicacion', 'ed.precio', 'm.id as idllanta')
+            ->where('ed.id_entrada_llanta', $id)
+            ->orderBy('m.nombre', 'ASC')
+            ->get();
+
+        foreach ($lista as $ll){
+
+            $ll->precio = number_format((float)$ll->precio, 2, '.', ',');
+
+            $infoBodega = UbicacionBodega::where('id', $ll->id_ubicacion)->first();
+            $ll->ubicacion = $infoBodega->nombre;
+
+            $infoMaterial = Llantas::where('id', $ll->idllanta)->first();
+            $medida = '';
+            if($infoUnidad = UnidadMedida::where('id', $infoMaterial->id_medida)->first()){
+                $medida = $infoUnidad->medida;
+            }
+            $ll->unidad = $medida;
+
+        }
+
+        return view('backend.admin.historial.llantas.entrada.detalle.tabladetallantahistorialentrada', compact('lista'));
     }
 
 

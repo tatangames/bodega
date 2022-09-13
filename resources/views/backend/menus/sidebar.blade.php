@@ -41,146 +41,308 @@
                     </li>
                 @endcan
 
-                    @can('sidebar.registros')
-                <li class="nav-item">
-
-                    <a href="#" class="nav-link nav-">
-                        <i class="far fa-edit"></i>
-                        <p>
-                            Registros
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
-
-                    <ul class="nav nav-treeview">
-
-                        @can('registros.repuestos')
+                    @can('sidebar.catalogo')
                         <li class="nav-item">
-                            <a href="{{ route('admin.materiales.index') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Repuestos</p>
-                            </a>
-                        </li>
-                        @endcan
 
-                        @can('registros.entradas')
-                        <li class="nav-item">
-                            <a href="{{ route('admin.entrada.registro.index') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Registrar Entrada</p>
+                            <a href="#" class="nav-link nav-">
+                                <i class="far fa-edit"></i>
+                                <p>
+                                    Catálogo
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
                             </a>
-                        </li>
-                            @endcan
 
-                            @can('registros.salidas')
-                        <li class="nav-item">
-                            <a href="{{ route('admin.salida.registro.index') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Registrar Salida</p>
-                            </a>
-                        </li>
-                            @endcan
+                            <ul class="nav nav-treeview">
 
-                            @can('registros.unidadmedida')
-                        <li class="nav-item">
-                            <a href="{{ route('admin.unidadmedida.index') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Unidad de Medida</p>
-                            </a>
-                        </li>
-                            @endcan
 
-                            @can('registros.equipo')
-                        <li class="nav-item">
-                            <a href="{{ route('admin.equipos.index') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Registrar Equipos</p>
-                            </a>
-                        </li>
-                            @endcan
+                                @can('sidebar.registrar.repuestos')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.materiales.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Repuestos</p>
+                                        </a>
+                                    </li>
+                                @endcan
 
-                    </ul>
-                </li>
+
+                                @can('sidebar.registrar.llantas')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.llantas.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Llantas</p>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                            </ul>
+                        </li>
                     @endcan
 
 
-                    @can('sidebar.historial')
-                <li class="nav-item">
+                    @can('sidebar.registros.repuestos')
+                        <li class="nav-item">
 
-                    <a href="#" class="nav-link nav-">
-                        <i class="far fa-edit"></i>
-                        <p>
-                            Historial
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
+                            <a href="#" class="nav-link nav-">
+                                <i class="far fa-edit"></i>
+                                <p>
+                                    Registro Repuestos
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
 
-                    <ul class="nav nav-treeview">
+                            <ul class="nav nav-treeview">
+                                @can('registros.entradas.repuestos')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.entrada.registro.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Registrar Entrada</p>
+                                        </a>
+                                    </li>
+                                @endcan
 
-                        @can('historial.entrada')
-                            <li class="nav-item">
-                                <a href="{{ route('admin.entrada.vista.index') }}" target="frameprincipal" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Entradas</p>
-                                </a>
-                            </li>
-                        @endcan
+                                @can('registros.salidas.repuestos')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.salida.registro.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Registrar Salida</p>
+                                        </a>
+                                    </li>
+                                @endcan
 
-                        @can('historial.salida')
-                            <li class="nav-item">
-                                <a href="{{ route('admin.salida.vista.index') }}" target="frameprincipal" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Salidas</p>
-                                </a>
-                            </li>
-                        @endcan
+                            </ul>
+                        </li>
+                    @endcan
 
-                    </ul>
-                </li>
+                    @can('sidebar.registros.llantas')
+                        <li class="nav-item">
+
+                            <a href="#" class="nav-link nav-">
+                                <i class="far fa-edit"></i>
+                                <p>
+                                    Registro LLantas
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+                                @can('registros.entradas.llantas')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.entrada.llantas.registro.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Registrar Entrada</p>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @can('registros.salidas.llantas')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.salida.llantas.registro.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Registrar Salida</p>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                            </ul>
+                        </li>
+                    @endcan
+
+                    @can('sidebar.configuracion')
+                        <li class="nav-item">
+
+                            <a href="#" class="nav-link nav-">
+                                <i class="far fa-edit"></i>
+                                <p>
+                                    Configuración
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+
+
+                                @can('registro.proveedores')
+
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.proveedor.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Proveedores</p>
+                                        </a>
+                                    </li>
+
+                                @endcan
+
+                                @can('registro.ubicacion.llanta')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.ubicacion.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Ubicación LLanta</p>
+                                    </a>
+                                </li>
+                                @endcan
+
+                                @can('registros.unidadmedida')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.unidadmedida.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Unidad de Medida</p>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @can('registros.equipo')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.equipos.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Registrar Equipos</p>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                            </ul>
+                        </li>
                     @endcan
 
 
-                    @can('sidebar.reporte')
-                <li class="nav-item">
 
-                    <a href="#" class="nav-link nav-">
-                        <i class="far fa-edit"></i>
-                        <p>
-                            Reporte
-                            <i class="fas fa-angle-left right"></i>
-                        </p>
-                    </a>
+                    @can('sidebar.historial.repuestos')
+                    <li class="nav-item">
 
-                    <ul class="nav nav-treeview">
+                        <a href="#" class="nav-link nav-">
+                            <i class="far fa-edit"></i>
+                            <p>
+                                Historial
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
 
-                        @can('reporte.entradas.y.salidas')
+                        <ul class="nav nav-treeview">
+
+                            @can('historial.entrada.repuesto')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.historial.entrada.repuesto.vista.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Repuesto Entradas</p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            @can('historial.salida.repuesto')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.historial.salida.repuesto.vista.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Repuesto Salidas</p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                                @can('historial.salida.llanta')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.historial.entrada.llanta.vista.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Entrada Llanta</p>
+                                    </a>
+                                </li>
+                                @endcan
+
+                                @can('historial.entrada.llanta')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.historial.salida.llanta.vista.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Salida Llanta</p>
+                                    </a>
+                                </li>
+                                @endcan
+                        </ul>
+                    </li>
+                    @endcan
+
+
+                    @can('sidebar.reporte.repuesto')
                         <li class="nav-item">
-                            <a href="{{ route('admin.entrada.reporte.index') }}" target="frameprincipal" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Entradas y Salidas</p>
-                            </a>
-                        </li>
-                        @endcan
 
-                        @can('reporte.por.equipos')
-                            <li class="nav-item">
-                                <a href="{{ route('admin.entrada.reporte.equipos.index') }}" target="frameprincipal" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Por Equipo</p>
-                                </a>
-                            </li>
-                        @endcan
+                        <a href="#" class="nav-link nav-">
+                            <i class="far fa-edit"></i>
+                            <p>
+                                Reporte Repuesto
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
 
-                            @can('reporte.por.cantidades')
+                        <ul class="nav nav-treeview">
+
+                            @can('reporte.entradasalida.repuesto')
                             <li class="nav-item">
-                                <a href="{{ route('admin.reporte.cantidad.index') }}" target="frameprincipal" class="nav-link">
+                                <a href="{{ route('admin.entrada.reporte.index') }}" target="frameprincipal" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Cantidad Actual</p>
+                                    <p>Entradas y Salidas</p>
                                 </a>
                             </li>
                             @endcan
-                    </ul>
-                </li>
+
+                            @can('reporte.repuesto.equipos')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.entrada.reporte.equipos.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Por Equipo</p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                                @can('reporte.repuesto.cantidades')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.reporte.cantidad.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Cantidad Actual</p>
+                                    </a>
+                                </li>
+                                @endcan
+                            </ul>
+                        </li>
+                    @endcan
+
+                    @can('sidebar.reporte.llantas')
+                        <li class="nav-item">
+
+                            <a href="#" class="nav-link nav-">
+                                <i class="far fa-edit"></i>
+                                <p>
+                                    Reporte Llantas
+                                    <i class="fas fa-angle-left right"></i>
+                                </p>
+                            </a>
+
+                            <ul class="nav nav-treeview">
+                                @can('reporte.entradasalida.llantas')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.entrada.reporte.llanta.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Entradas y Salidas</p>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                    @can('reporte.llantas.equipos')
+                                        <li class="nav-item">
+                                            <a href="{{ route('admin.entrada.reporte.llanta.equipos.index') }}" target="frameprincipal" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Por Equipo</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+
+                                    @can('reporte.llantas.cantidades')
+                                        <li class="nav-item">
+                                            <a href="{{ route('admin.reporte.llanta.cantidad.index') }}" target="frameprincipal" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Cantidad Actual</p>
+                                            </a>
+                                        </li>
+
+                                    @endcan
+
+                            </ul>
+                        </li>
                     @endcan
 
             </ul>

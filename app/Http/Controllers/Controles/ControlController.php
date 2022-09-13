@@ -31,6 +31,11 @@ class ControlController extends Controller
             $ruta = 'admin.entrada.reporte.index';
         }
 
+        // Llantas
+        else  if($user->hasRole('llantas')){
+            $ruta = 'admin.llantas.index';
+        }
+
         return view('backend.index', compact( 'ruta', 'user'));
     }
 

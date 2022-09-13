@@ -1,4 +1,3 @@
-
 @extends('backend.menus.superior')
 
 @section('content-admin-css')
@@ -18,15 +17,14 @@
 <div id="divcontenedor" style="display: none">
 
     <section class="content-header">
-        <label>Repuesto.</label> <p>{{ $repuesto }}</p>
-        <label>medida.</label> <p>{{ $medida }}</p>
+
     </section>
 
     <section class="content">
         <div class="container-fluid">
             <div class="card card-success">
                 <div class="card-header">
-                    <h3 class="card-title">Detalle</h3>
+                    <h3 class="card-title">Salidas Detalle para Fecha {{ $fecha }}</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -57,18 +55,11 @@
     <script type="text/javascript">
         $(document).ready(function(){
             let id = {{ $id }};
-            var ruta = "{{ URL::to('/admin/detalle/materialtabla/cantidad') }}/" + id;
+            var ruta = "{{ URL::to('/admin/historialdeta/salida/llanta/tabla') }}/" + id;
             $('#tablaDatatable').load(ruta);
+
             document.getElementById("divcontenedor").style.display = "block";
         });
-
-    </script>
-
-    <script>
-
-
-
-
     </script>
 
 

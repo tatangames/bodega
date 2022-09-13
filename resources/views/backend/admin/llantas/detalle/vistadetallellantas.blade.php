@@ -18,7 +18,7 @@
 <div id="divcontenedor" style="display: none">
 
     <section class="content-header">
-        <label>Repuesto.</label> <p>{{ $repuesto }}</p>
+        <label>Llanta.</label> <p>{{ $repuesto }}</p>
         <label>medida.</label> <p>{{ $medida }}</p>
     </section>
 
@@ -57,7 +57,7 @@
     <script type="text/javascript">
         $(document).ready(function(){
             let id = {{ $id }};
-            var ruta = "{{ URL::to('/admin/detalle/materialtabla/cantidad') }}/" + id;
+            var ruta = "{{ URL::to('/admin/detalle/llantastabla/cantidad') }}/" + id;
             $('#tablaDatatable').load(ruta);
             document.getElementById("divcontenedor").style.display = "block";
         });
