@@ -283,7 +283,7 @@
             openLoading();
             document.getElementById("formulario-editar").reset();
 
-            axios.post(url+'//permisos/info-usuario',{
+            axios.post(url+'/permisos/info-usuario',{
                 'id': id
             })
                 .then((response) => {
