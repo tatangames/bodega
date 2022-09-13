@@ -8,9 +8,11 @@ use App\Models\EntradaLLantas;
 use App\Models\EntradaLLantasDeta;
 use App\Models\Entradas;
 use App\Models\Equipos;
+use App\Models\Llantas;
 use App\Models\Materiales;
 use App\Models\SalidaDetalle;
 use App\Models\SalidaLLantas;
+use App\Models\SalidaLLantasDeta;
 use App\Models\Salidas;
 use App\Models\UbicacionBodega;
 use App\Models\UnidadMedida;
@@ -1390,20 +1392,27 @@ class ReportesController extends Controller
 
         $totalDinero = 0;
         $totalCantidad = 0;
+        $totalarticulos = 0;
+
+        $resultsBloque = array();
+        $index = 0;
 
         foreach ($lista as $item) {
+            array_push($resultsBloque, $item);
+
+            $sumadinerobloque = 0;
+            $medida = '';
             if($dataUnidad = UnidadMedida::where('id', $item->id_medida)->first()){
-                $item->medida = $dataUnidad->medida;
+                $medida = $dataUnidad->medida;
             }
 
             // obtener todas las entradas detalle de este material
 
             $entradaDetalle = EntradaDetalle::where('id_material', $item->id)->get();
-
             $valor = 0;
-            $dinero = 0;
-            foreach ($entradaDetalle as $data){
 
+            foreach ($entradaDetalle as $data){
+                $dinerobloque = 0;
                 // buscar la entrada_detalle de cada salida. obtener la suma de salidas
                 $salidaDetalle = SalidaDetalle::where('id_entrada_detalle', $data->id)
                     ->where('id_material', $item->id)
@@ -1412,22 +1421,33 @@ class ReportesController extends Controller
                 // restar
                 $total = $data->cantidad - $salidaDetalle;
                 $valor = $valor + $total;
-                if($salidaDetalle > 0){
-                    $dinero = $dinero + ($data->precio * $total);
+
+                if($total > 0){
+                    $dinerobloque = $dinerobloque + ($data->precio * $total);
+                    $sumadinerobloque = $sumadinerobloque + $dinerobloque;
+                    $data->dinerobloque = number_format((float)$dinerobloque, 2, '.', ',');
+                    $totalarticulos = $totalarticulos + $total;
+                }else{
+                    $data->dinerobloque = 0;
                 }
+
+                $data->totalactual = $total;
             }
 
-            $totalDinero = $totalDinero + $dinero;
             $totalCantidad = $totalCantidad + $valor;
-
+            $item->medida = $medida;
             $item->total = $valor;
-            $item->dinero = number_format((float)$dinero, 2, '.', ',');
+            $totalDinero = $totalDinero + $sumadinerobloque;
+            $item->sumadinerobloque = number_format((float)$sumadinerobloque, 2, '.', ',');
+
+            $resultsBloque[$index]->detalle = $entradaDetalle;
+            $index++;
         }
 
         $totalDinero = number_format((float)$totalDinero, 2, '.', ',');
 
-        //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
-        $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
+        $mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+        //$mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
         $mpdf->SetTitle('Entradas');
 
         // mostrar errores
@@ -1442,33 +1462,76 @@ class ReportesController extends Controller
         Fecha: $fechaFormat
         </div>";
 
-        $tabla .= "<table width='100%' id='tablaFor'>
-            <tbody>";
 
-        $tabla .= "<tr>
-                <td width='25%'>Repuesto</td>
-                <td width='8%'>Medida</td>
-                <td width='8%'>Cantidad</td>
-                <td width='8%'>Precio</td>
-            </tr>";
+        foreach ($lista as $ll) {
 
-        foreach ($lista as $dd) {
-            if ($dd->total > 0){
+            if ($ll->sumadinerobloque > 0) {
+
+                $tabla .= "<table width='100%' id='tablaFor'>
+                <tbody>";
+
                 $tabla .= "<tr>
-                <td width='25%'>$dd->nombre</td>
-                <td  width='8%'>$dd->medida</td>
-                <td  width='8%'>$dd->total</td>
-                <td  width='8%'>$$dd->dinero</td>
-                ";
+                    <td width='25%'>Repuesto</td>
+                    <td width='8%'>Código</td>
+                    <td width='8%'>Medida</td>
+                </tr>";
+
+                $tabla .= "<tr>
+                    <td width='25%'>$ll->nombre</td>
+                    <td width='8%'>$ll->codigo</td>
+                    <td width='8%'>$ll->medida</td>
+                </tr>";
+
+                $tabla .= "</tbody></table>";
+
+                $tabla .= "<table width='100%' id='tablaFor'>
+                <tbody>";
+
+                $unavuelta = true;
+
+                foreach ($ll->detalle as $dd) {
+
+                    if ($dd->dinerobloque > 0) {
+
+                        if ($unavuelta) {
+                            $unavuelta = false;
+                            $tabla .= "<tr>
+                            <td width='10%'>Cantidad</td>
+                            <td width='10%'>Precio</td>
+                            <td width='10%'>Total</td>
+                            </tr>";
+                        }
+
+                                $tabla .= "<tr>
+                        <td width='10%'>$dd->totalactual</td>
+                        <td width='10%'>$$dd->precio</td>
+                        <td width='10%'>$$dd->dinerobloque</td>
+                        </tr>";
+                    }
+                }
+
+                $tabla .= "<tr>
+                        <td width='10%'></td>
+                        <td width='10%'></td>
+                        <td width='10%'>$$ll->sumadinerobloque</td>
+                        </tr>";
+
+                $tabla .= "</tbody></table>";
             }
         }
 
+        $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='10%'>Total Repuestos</td>
+                    <td  width='10%'>Total Dinero</td>
+                    ";
+
         $tabla .= "<tr>
-                <td width='25%'>Total</td>
-                <td  width='8%'></td>
-                <td  width='8%'>$totalCantidad</td>
-                <td  width='8%'>$$totalDinero</td>
-                ";
+                    <td  width='10%'>$totalCantidad</td>
+                    <td  width='10%'>$$totalDinero</td>
+                    ";
 
         $tabla .= "</tbody></table>";
 
@@ -1483,7 +1546,169 @@ class ReportesController extends Controller
 
 
     public function reportePdfCantidadLlanta(){
-        return "falta";
+        $lista = Llantas::orderBy('nombre', 'ASC')->get();
+
+        $dt = Carbon::now();
+        $fechaFormat = date("d-m-Y", strtotime($dt));
+
+        $totalDinero = 0;
+        $totalCantidad = 0;
+        $totalarticulos = 0;
+
+        $resultsBloque = array();
+        $index = 0;
+
+        foreach ($lista as $item) {
+            array_push($resultsBloque, $item);
+
+            $sumadinerobloque = 0;
+            $medida = '';
+            if($dataUnidad = UnidadMedida::where('id', $item->id_medida)->first()){
+                $medida = $dataUnidad->medida;
+            }
+
+            // obtener todas las entradas detalle de este material
+
+            $entradaDetalle = EntradaLLantasDeta::where('id_llanta', $item->id)->get();
+            $valor = 0;
+
+            foreach ($entradaDetalle as $data){
+                $dinerobloque = 0;
+                // buscar la entrada_detalle de cada salida. obtener la suma de salidas
+                $salidaDetalle = SalidaLLantasDeta::where('id_l_entrada_detalle', $data->id)
+                    ->where('id_llanta', $item->id)
+                    ->sum('cantidad');
+
+                $infoBodega = UbicacionBodega::where('id', $data->id_ubicacion)->first();
+
+                // restar
+                $total = $data->cantidad - $salidaDetalle;
+                $valor = $valor + $total;
+
+                if($total > 0){
+                    $dinerobloque = $dinerobloque + ($data->precio * $total);
+                    $sumadinerobloque = $sumadinerobloque + $dinerobloque;
+                    $data->dinerobloque = number_format((float)$dinerobloque, 2, '.', ',');
+                    $totalarticulos = $totalarticulos + $total;
+                }else{
+                    $data->dinerobloque = 0;
+                }
+
+                $data->ubicacion = $infoBodega->nombre;
+                $data->totalactual = $total;
+            }
+
+            $totalCantidad = $totalCantidad + $valor;
+            $item->medida = $medida;
+            $item->total = $valor;
+            $totalDinero = $totalDinero + $sumadinerobloque;
+            $item->sumadinerobloque = number_format((float)$sumadinerobloque, 2, '.', ',');
+
+            $resultsBloque[$index]->detalle = $entradaDetalle;
+            $index++;
+        }
+
+        $totalDinero = number_format((float)$totalDinero, 2, '.', ',');
+
+        $mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+        //$mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
+        $mpdf->SetTitle('Entradas');
+
+        // mostrar errores
+        $mpdf->showImageErrors = false;
+
+        $logoalcaldia = 'images/logo2.png';
+
+        $tabla = "<div class='content'>
+        <img id='logo' src='$logoalcaldia'>
+        <p id='titulo'>ALCALDÍA MUNICIPAL DE METAPÁN <br>
+        Reporte de Llantas Actuales <br>
+        Fecha: $fechaFormat
+        </div>";
+
+
+        foreach ($lista as $ll){
+
+            if($ll->sumadinerobloque > 0){
+
+                $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+                $tabla .= "<tr>
+                <td width='15%' >LLanta</td>
+                <td width='8%'>Medida</td>
+            </tr>";
+
+                $tabla .= "<tr>
+                <td width='15%' >$ll->nombre</td>
+                <td width='8%'>$ll->medida</td>
+            </tr>";
+
+                $tabla .= "</tbody></table>";
+
+                $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+                $unavuelta = true;
+
+                foreach ($ll->detalle as $dd){
+
+                    if($dd->dinerobloque > 0){
+
+                        if($unavuelta){
+                            $unavuelta = false;
+                            $tabla .= "<tr>
+                        <td width='10%'>Ubicación</td>
+                        <td width='10%'>Cantidad</td>
+                        <td width='10%'>Precio</td>
+                        <td width='10%'>Total</td>
+                        </tr>";
+                            }
+
+                                $tabla .= "<tr>
+                        <td width='10%'>$dd->ubicacion</td>
+                        <td width='10%'>$dd->totalactual</td>
+                        <td width='10%'>$$dd->precio</td>
+                        <td width='10%'>$$dd->dinerobloque</td>
+                        </tr>";
+
+                        $tabla .= "<tr>
+                        <td width='10%'>Total</td>
+                        <td width='10%'></td>
+                        <td width='10%'></td>
+                        <td width='10%'>$$ll->sumadinerobloque</td>
+                        </tr>";
+                    }
+
+
+                }
+                            $tabla .= "</tbody></table>";
+
+            }
+        }
+
+        $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+        $tabla .= "<tr>
+                    <td width='10%'>Total LLantas</td>
+                    <td  width='10%'>Total Dinero</td>
+                    ";
+
+        $tabla .= "<tr>
+                    <td  width='10%'>$totalCantidad</td>
+                    <td  width='10%'>$$totalDinero</td>
+                    ";
+
+        $tabla .= "</tbody></table>";
+
+        $stylesheet = file_get_contents('css/cssregistro.css');
+        $mpdf->WriteHTML($stylesheet,1);
+
+        $mpdf->setFooter("Página: " . '{PAGENO}' . "/" . '{nb}');
+        $mpdf->WriteHTML($tabla, 2);
+
+        $mpdf->Output();
     }
 
 
