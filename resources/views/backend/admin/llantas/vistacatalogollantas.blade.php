@@ -114,7 +114,6 @@
                                         <input type="hidden" id="id-editar">
                                     </div>
 
-
                                     <div class="form-group">
                                         <label>Nombre *:</label>
                                         <input type="text" class="form-control" autocomplete="off" onpaste="contarcaracteresEditar();" onkeyup="contarcaracteresEditar();" maxlength="300" id="nombre-editar" placeholder="Nombre de la llanta">
@@ -166,7 +165,7 @@
                 theme: "bootstrap-5",
                 "language": {
                     "noResults": function(){
-                        return "Busqueda no encontrada";
+                        return "Búsqueda no encontrada";
                     }
                 },
             });
@@ -175,7 +174,7 @@
                 theme: "bootstrap-5",
                 "language": {
                     "noResults": function(){
-                        return "Busqueda no encontrada";
+                        return "Búsqueda no encontrada";
                     }
                 },
             });
