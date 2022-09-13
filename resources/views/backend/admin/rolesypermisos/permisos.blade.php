@@ -321,6 +321,7 @@
                 })
                 .catch((error) => {
                     closeLoading()
+                    console.log(error);
                     toastr.error('Información no encontrado..');
                 });
         }
