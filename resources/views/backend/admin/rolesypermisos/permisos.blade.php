@@ -315,13 +315,13 @@
                         }
 
                     }else{
-                        toastr.error('Información no encontrado');
+                        toastr.error('Información no encontrado.');
                     }
 
                 })
                 .catch((error) => {
                     closeLoading()
-                    toastr.error('Información no encontrado');
+                    toastr.error('Información no encontrado..');
                 });
         }
 
