@@ -55,24 +55,24 @@ class RolesSeeder extends Seeder
         Permission::create(['name' => 'historial.salida.llanta', 'description' => 'contenedor de historiales salida llanta'])->syncRoles($roleLlantas);
         Permission::create(['name' => 'historial.entrada.llanta', 'description' => 'contenedor de historiales entrada llanta'])->syncRoles($roleLlantas);
 
-        Permission::create(['name' => 'sidebar.reporte.repuesto', 'description' => 'contenedor de reporte repuesto'])->syncRoles($roleInventario);
-        Permission::create(['name' => 'reporte.entradasalida.repuesto', 'description' => 'contenedor reporte entrada y salida para repuesto'])->syncRoles($roleInventario);
-        Permission::create(['name' => 'reporte.repuesto.equipos', 'description' => 'contenedor reporte repuesto por equipos'])->syncRoles($roleInventario);
-        Permission::create(['name' => 'reporte.repuesto.cantidades', 'description' => 'contenedor reporte cantidades repuesto'])->syncRoles($roleInventario);
+        Permission::create(['name' => 'sidebar.reporte.repuesto', 'description' => 'contenedor de reporte repuesto'])->syncRoles($roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.entradasalida.repuesto', 'description' => 'contenedor reporte entrada y salida para repuesto'])->syncRoles($roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.repuesto.equipos', 'description' => 'contenedor reporte repuesto por equipos'])->syncRoles($roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.repuesto.cantidades', 'description' => 'contenedor reporte cantidades repuesto'])->syncRoles($roleInventario, $roleAuditora);
 
-        Permission::create(['name' => 'sidebar.reporte.llantas', 'description' => 'contenedor de reporte llantas'])->syncRoles($roleLlantas, $roleInventario);
-        Permission::create(['name' => 'reporte.entradasalida.llantas', 'description' => 'contenedor reporte entrada y salida para llantas'])->syncRoles($roleLlantas, $roleInventario);
-        Permission::create(['name' => 'reporte.llantas.equipos', 'description' => 'contenedor reporte llantas por equipos'])->syncRoles($roleLlantas, $roleInventario);
-        Permission::create(['name' => 'reporte.llantas.cantidades', 'description' => 'contenedor reporte cantidades llantas'])->syncRoles($roleLlantas, $roleInventario);
+        Permission::create(['name' => 'sidebar.reporte.llantas', 'description' => 'contenedor de reporte llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.entradasalida.llantas', 'description' => 'contenedor reporte entrada y salida para llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.llantas.equipos', 'description' => 'contenedor reporte llantas por equipos'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.llantas.cantidades', 'description' => 'contenedor reporte cantidades llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
 
         //**********************************
+        //REPORTES
 
         Permission::create(['name' => 'btn.registros.repuestos.material.nuevo', 'description' => 'boton agregar repuesto'])->syncRoles($roleInventario);
         Permission::create(['name' => 'btn.registros.llantas.nuevo', 'description' => 'boton agregar llantas'])->syncRoles($roleLlantas);
 
         Permission::create(['name' => 'btn.registros.repuestos.material.editar', 'description' => 'boton editar repuesto'])->syncRoles($roleInventario);
         Permission::create(['name' => 'btn.registros.llantas.material.editar', 'description' => 'boton editar llanta'])->syncRoles($roleLlantas);
-
 
         Permission::create(['name' => 'btn.historial.entrada.btn.borrarregistro', 'description' => 'borrar historial de entrada'])->syncRoles($roleInventario);
         Permission::create(['name' => 'btn.historial.llanta.entrada.btn.borrarregistro', 'description' => 'borrar historial de entrada llanta'])->syncRoles($roleLlantas);
