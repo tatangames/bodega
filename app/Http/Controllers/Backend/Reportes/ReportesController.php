@@ -1446,8 +1446,8 @@ class ReportesController extends Controller
 
         $totalDinero = number_format((float)$totalDinero, 2, '.', ',');
 
-        $mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
-        //$mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
+        //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
         $mpdf->SetTitle('Entradas');
 
         // mostrar errores
@@ -1610,8 +1610,8 @@ class ReportesController extends Controller
 
         $totalDinero = number_format((float)$totalDinero, 2, '.', ',');
 
-        $mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
-        //$mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
+        //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
         $mpdf->SetTitle('Entradas');
 
         // mostrar errores
