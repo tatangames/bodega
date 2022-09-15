@@ -7,8 +7,8 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 20%">Nombre</th>
-                                <th style="width: 10%">Medida</th>
+                                <th style="width: 20%">Marca</th>
+                                <th style="width: 10%"># de RIN</th>
                                 <th style="width: 10%">Cantidad</th>
                                 <th style="width: 10%">Dinero</th>
                                 <th style="width: 10%">Opciones</th>

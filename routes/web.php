@@ -63,12 +63,27 @@ Route::post('/admin/unidadmedida/nuevo', [PrincipalController::class, 'nuevaUnid
 Route::post('/admin/unidadmedida/informacion', [PrincipalController::class, 'informacionUnidadMedida']);
 Route::post('/admin/unidadmedida/editar', [PrincipalController::class, 'editarUnidadMedida']);
 
+// # de rin llanta
+Route::get('/admin/rinllanta/index', [PrincipalController::class,'indexRinllanta'])->name('admin.rin.llantas.index');
+Route::get('/admin/rinllanta/tabla/index', [PrincipalController::class,'tablaRinllanta']);
+Route::post('/admin/rinllanta/nuevo', [PrincipalController::class, 'nuevaRinllanta']);
+Route::post('/admin/rinllanta/informacion', [PrincipalController::class, 'informacionRinllanta']);
+Route::post('/admin/rinllanta/editar', [PrincipalController::class, 'editarRinllanta']);
+
+
 // proveedores
 Route::get('/admin/proveedor/index', [RepuestosController::class,'indexProveedor'])->name('admin.proveedor.index');
 Route::get('/admin/proveedor/tabla/index', [RepuestosController::class,'tablaProveedor']);
 Route::post('/admin/proveedor/nuevo', [RepuestosController::class, 'nuevaProveedor']);
 Route::post('/admin/proveedor/informacion', [RepuestosController::class, 'informacionProveedor']);
 Route::post('/admin/proveedor/editar', [RepuestosController::class, 'editarProveedor']);
+
+// marca de llantas
+Route::get('/admin/marcallanta/index', [RepuestosController::class,'indexMarca'])->name('admin.marcas.llantas.index');
+Route::get('/admin/marcallanta/tabla/index', [RepuestosController::class,'tablaMarca']);
+Route::post('/admin/marcallanta/nuevo', [RepuestosController::class, 'nuevaMarca']);
+Route::post('/admin/marcallanta/informacion', [RepuestosController::class, 'informacionMarca']);
+Route::post('/admin/marcallanta/editar', [RepuestosController::class, 'editarMarca']);
 
 // ubicación llanta
 Route::get('/admin/ubicacion/index', [RepuestosController::class,'indexUbicacion'])->name('admin.ubicacion.index');
@@ -197,7 +212,7 @@ Route::get('/admin/reporte/porequipo/{desde}/{hasta}/{tipo}/{unidad}', [Reportes
 
 // llanta
 Route::get('/admin/entrada/reporte/llantas/equipos/vista', [ReportesController::class,'indexEntradaReporteEquiposLlantas'])->name('admin.entrada.reporte.llanta.equipos.index');
-Route::get('/admin/reporte/porequipo/llantas/{desde}/{hasta}/{tipo}/{unidad}', [ReportesController::class, 'reportePorEquipoLLanta']);
+Route::get('/admin/reporte/porequipo/llantas/{desde}/{hasta}/{tipo}/{unidad}', [ReportesController::class, 'reportePorMarcaLLanta']);
 
 // reporte cantidad actual
 Route::get('/admin/reporte/cantidad/vista', [ReportesController::class,'indexEntradaReporteCantidad'])->name('admin.reporte.cantidad.index');

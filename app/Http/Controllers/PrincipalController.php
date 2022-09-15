@@ -9,6 +9,7 @@ use App\Models\Entradas;
 use App\Models\Equipos;
 use App\Models\Llantas;
 use App\Models\Materiales;
+use App\Models\MedidaRin;
 use App\Models\SalidaDetalle;
 use App\Models\SalidaLLantas;
 use App\Models\SalidaLLantasDeta;
@@ -90,6 +91,77 @@ class PrincipalController extends Controller
         if(UnidadMedida::where('id', $request->id)->first()){
 
             UnidadMedida::where('id', $request->id)->update([
+                'medida' => $request->medida
+            ]);
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    // **********************************************************************
+
+
+    public function indexRinllanta(){
+        return view('backend.admin.llantas.medidarin.vistamedidarin');
+    }
+
+    public function tablaRinllanta(){
+        $lista = MedidaRin::orderBy('medida', 'ASC')->get();
+        return view('backend.admin.llantas.medidarin.tablamedidarin', compact('lista'));
+    }
+
+    public function nuevaRinllanta(Request $request){
+        $regla = array(
+            'medida' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        $dato = new MedidaRin();
+        $dato->medida = $request->medida;
+
+        if($dato->save()){
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function informacionRinllanta(Request $request){
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = MedidaRin::where('id', $request->id)->first()){
+
+            return ['success' => 1, 'medida' => $lista];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function editarRinllanta(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+            'medida' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if(MedidaRin::where('id', $request->id)->first()){
+
+            MedidaRin::where('id', $request->id)->update([
                 'medida' => $request->medida
             ]);
 
@@ -577,9 +649,10 @@ class PrincipalController extends Controller
     public function indexSalidasDetalleTablaLlanta($id){
         $lista = DB::table('salida_llanta_deta AS ed')
             ->join('llantas AS m', 'ed.id_llanta', '=', 'm.id')
-            ->select('ed.cantidad', 'm.nombre', 'ed.id_equipo', 'ed.id_l_entrada_detalle', 'm.id as idllanta')
+            ->join('marca_llanta AS marca', 'm.id_marca', '=', 'marca.id')
+            ->select('ed.cantidad', 'marca.nombre', 'ed.id_equipo', 'ed.id_l_entrada_detalle', 'm.id as idllanta')
             ->where('ed.id_salida_llanta', $id)
-            ->orderBy('m.nombre', 'ASC')
+            ->orderBy('marca.nombre', 'ASC')
             ->get();
 
         foreach ($lista as $ll){
@@ -588,15 +661,12 @@ class PrincipalController extends Controller
             $ll->equipo = $infoEquipo->nombre;
 
             $infoMaterial = Llantas::where('id', $ll->idllanta)->first();
-            $medida = '';
-            if($infoUnidad = UnidadMedida::where('id', $infoMaterial->id_medida)->first()){
-                $medida = $infoUnidad->medida;
-            }
+
+            $infoUnidad = MedidaRin::where('id', $infoMaterial->id_medida)->first();
+            $ll->unidad = $infoUnidad->medida;
 
             $info = EntradaLLantasDeta::where('id', $ll->id_l_entrada_detalle)->first();
             $ll->precio = number_format((float)$info->precio, 2, '.', ',');
-
-            $ll->unidad = $medida;
         }
 
         return view('backend.admin.historial.llantas.salida.detalle.tabladetallantahistorialsalida', compact('lista'));
@@ -929,9 +999,10 @@ class PrincipalController extends Controller
 
         $lista = DB::table('entrada_llanta_deta AS ed')
             ->join('llantas AS m', 'ed.id_llanta', '=', 'm.id')
-            ->select('ed.cantidad', 'm.nombre', 'ed.id_ubicacion', 'ed.precio', 'm.id as idllanta')
+            ->join('marca_llanta AS marca', 'm.id_marca', '=', 'marca.id')
+            ->select('ed.cantidad', 'marca.nombre', 'ed.id_ubicacion', 'm.id_medida', 'ed.precio', 'm.id as idllanta')
             ->where('ed.id_entrada_llanta', $id)
-            ->orderBy('m.nombre', 'ASC')
+            ->orderBy('marca.nombre', 'ASC')
             ->get();
 
         foreach ($lista as $ll){
@@ -942,12 +1013,9 @@ class PrincipalController extends Controller
             $ll->ubicacion = $infoBodega->nombre;
 
             $infoMaterial = Llantas::where('id', $ll->idllanta)->first();
-            $medida = '';
-            if($infoUnidad = UnidadMedida::where('id', $infoMaterial->id_medida)->first()){
-                $medida = $infoUnidad->medida;
-            }
-            $ll->unidad = $medida;
 
+            $infoUnidad = MedidaRin::where('id', $infoMaterial->id_medida)->first();
+            $ll->unidad = $infoUnidad->medida;
         }
 
         return view('backend.admin.historial.llantas.entrada.detalle.tabladetallantahistorialentrada', compact('lista'));

@@ -56,7 +56,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Nuevo Llanta</h4>
+                    <h4 class="modal-title">Nueva Llanta</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -65,15 +65,22 @@
                     <form id="formulario-nuevo">
                         <div class="card-body">
 
-                            <div class="form-group">
-                                <label>Nombre *:</label>
-                                <input type="text" class="form-control" autocomplete="off" onpaste="contarcaracteresIngreso();" onkeyup="contarcaracteresIngreso();" maxlength="300" id="nombre-nuevo" placeholder="Nombre de la llanta">
-                                <div id="res-caracter-nuevo" style="float: right">0/300</div>
+                            <div class="col-md-5">
+                                <div class="form-group">
+                                    <label>Marca de llanta:</label>
+                                    <br>
+                                    <select width="60%"  class="form-control" id="select-marca-nuevo">
+                                        @foreach($marcas as $sel)
+                                            <option value="{{ $sel->id }}">{{ $sel->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
+
 
                             <div class="col-md-5">
                                 <div class="form-group">
-                                    <label>Unidad de Medida:</label>
+                                    <label># de RIN:</label>
                                     <br>
                                     <select width="60%"  class="form-control" id="select-unidad-nuevo">
                                         @foreach($lUnidad as $sel)
@@ -114,15 +121,18 @@
                                         <input type="hidden" id="id-editar">
                                     </div>
 
-                                    <div class="form-group">
-                                        <label>Nombre *:</label>
-                                        <input type="text" class="form-control" autocomplete="off" onpaste="contarcaracteresEditar();" onkeyup="contarcaracteresEditar();" maxlength="300" id="nombre-editar" placeholder="Nombre de la llanta">
-                                        <div id="res-caracter-editar" style="float: right">0/300</div>
+                                    <div class="col-md-5">
+                                        <div class="form-group">
+                                            <label>Marca de llanta:</label>
+                                            <br>
+                                            <select style="width: 70%; height: 45px"  class="form-control" id="select-marca-editar">
+                                            </select>
+                                        </div>
                                     </div>
 
                                     <div class="col-md-5">
                                         <div class="form-group">
-                                            <label>Unidad de Medida:</label>
+                                            <label># de RIN:</label>
                                             <br>
                                             <select style="width: 70%; height: 45px"  class="form-control" id="select-unidad-editar">
                                             </select>
@@ -179,6 +189,25 @@
                 },
             });
 
+
+            $('#select-marca-nuevo').select2({
+                theme: "bootstrap-5",
+                "language": {
+                    "noResults": function(){
+                        return "Búsqueda no encontrada";
+                    }
+                },
+            });
+
+            $('#select-marca-editar').select2({
+                theme: "bootstrap-5",
+                "language": {
+                    "noResults": function(){
+                        return "Búsqueda no encontrada";
+                    }
+                },
+            });
+
             document.getElementById("divcontenedor").style.display = "block";
         });
     </script>
@@ -192,10 +221,9 @@
 
         function modalAgregar(){
             document.getElementById("formulario-nuevo").reset();
-            document.getElementById('res-caracter-nuevo').innerHTML = '0/300 ';
 
             $('#select-unidad-nuevo').prop('selectedIndex', 0).change();
-            $('#select-clasi-nuevo').prop('selectedIndex', 0).change();
+            $('#select-marca-nuevo').prop('selectedIndex', 0).change();
 
             $('#modalAgregar').modal({backdrop: 'static', keyboard: false})
         }
@@ -236,27 +264,22 @@
 
         function nuevo(){
 
-            var nombre = document.getElementById('nombre-nuevo').value;
-            var unidad = document.getElementById('select-unidad-nuevo').value; // nullable
+            var marca = document.getElementById('select-marca-nuevo').value;
+            var unidad = document.getElementById('select-unidad-nuevo').value;
 
-            if(nombre === ''){
-                toastr.error('Nombre es requerido');
-                return;
-            }
-
-            if(nombre.length > 300){
-                toastr.error('Nombre máximo 300 caracteres');
+            if(marca === ''){
+                toastr.error('Marca es requerido');
                 return;
             }
 
             if(unidad === ''){
-                toastr.error('Unidad de medida es requerido');
+                toastr.error('# de RIN es requerido');
                 return;
             }
 
             openLoading();
             var formData = new FormData();
-            formData.append('nombre', nombre);
+            formData.append('marca', marca);
             formData.append('unidad', unidad);
 
             axios.post(url+'/llantas/nuevo', formData, {
@@ -271,8 +294,8 @@
                     else if(response.data.success === 3){
 
                         Swal.fire({
-                            title: 'Llanta Repetido',
-                            text: "La nueva llanta, con la unidad de medida ya se encuentra registrado",
+                            title: 'Llanta Repetida',
+                            text: "La nueva llanta, con la marca y # de RIN ya se encuentra registrado",
                             icon: 'question',
                             showCancelButton: false,
                             confirmButtonColor: '#28a745',
@@ -308,11 +331,18 @@
                         $('#modalEditar').modal({backdrop: 'static', keyboard: false})
 
                         $('#id-editar').val(id);
-                        $('#nombre-editar').val(response.data.material.nombre);
 
-                        contarcaracteresEditar();
-
+                        document.getElementById("select-marca-editar").options.length = 0;
                         document.getElementById("select-unidad-editar").options.length = 0;
+
+                        // marca
+                        $.each(response.data.marca, function( key, val ){
+                            if(response.data.material.id_marca == val.id){
+                                $('#select-marca-editar').append('<option value="' +val.id +'" selected="selected">'+ val.nombre +'</option>');
+                            }else{
+                                $('#select-marca-editar').append('<option value="' +val.id +'">'+ val.nombre +'</option>');
+                            }
+                        });
 
                         // unidad de medida
                         $.each(response.data.unidad, function( key, val ){
@@ -336,28 +366,23 @@
         function editar(){
 
             var id = document.getElementById('id-editar').value;
-            var nombre = document.getElementById('nombre-editar').value;
-            var unidad = document.getElementById('select-unidad-editar').value; // nullable
-
-            if(nombre === ''){
-                toastr.error('Nombre es requerido');
-                return;
-            }
-
-            if(nombre.length > 300){
-                toastr.error('Nombre máximo 300 caracteres');
-                return;
-            }
+            var marca = document.getElementById('select-marca-editar').value;
+            var unidad = document.getElementById('select-unidad-editar').value;
 
             if(unidad === ''){
-                toastr.error('Unidad de medida es requerido');
+                toastr.error('# de RIN es requerido');
+                return;
+            }
+
+            if(marca === ''){
+                toastr.error('Marca es requerido');
                 return;
             }
 
             openLoading();
             var formData = new FormData();
             formData.append('id', id);
-            formData.append('nombre', nombre);
+            formData.append('marca', marca);
             formData.append('unidad', unidad);
 
             axios.post(url+'/llantas/editar', formData, {
@@ -372,8 +397,8 @@
                     else if(response.data.success === 3){
 
                         Swal.fire({
-                            title: 'Material Repetido',
-                            text: "El material a editar, con el código y su unidad de medida ya se encuentra registrado",
+                            title: 'LLanta Repetida',
+                            text: "La llanta a editar, con la marca y # de RIN ya se encuentra registrado",
                             icon: 'question',
                             showCancelButton: false,
                             confirmButtonColor: '#28a745',
@@ -396,7 +421,7 @@
                 });
         }
 
-        function contarcaracteresIngreso(){
+       /* function contarcaracteresIngreso(){
             setTimeout(function(){
                 var valor = document.getElementById('nombre-nuevo');
                 var cantidad = valor.value.length;
@@ -410,7 +435,7 @@
                 var cantidad = valor.value.length;
                 document.getElementById('res-caracter-editar').innerHTML = cantidad + '/300 ';
             },10);
-        }
+        }*/
 
         // mostrara que materiales quedan aun
         function infoDetalle(id){

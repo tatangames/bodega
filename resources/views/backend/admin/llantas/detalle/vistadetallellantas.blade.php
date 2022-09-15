@@ -18,8 +18,8 @@
 <div id="divcontenedor" style="display: none">
 
     <section class="content-header">
-        <label>Llanta.</label> <p>{{ $repuesto }}</p>
-        <label>medida.</label> <p>{{ $medida }}</p>
+        <label>Llanta.</label> <p>{{ $data->nombre }}</p>
+        <label>medida.</label> <p>{{ $data->medida }}</p>
     </section>
 
     <section class="content">

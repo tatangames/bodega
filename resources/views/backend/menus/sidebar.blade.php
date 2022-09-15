@@ -181,6 +181,24 @@
                                 </li>
                                 @endcan
 
+                                @can('registro.marca.llanta')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.marcas.llantas.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Marca de LLantas</p>
+                                        </a>
+                                    </li>
+                                @endcan
+
+                                @can('registro.medidarin.llanta')
+                                    <li class="nav-item">
+                                        <a href="{{ route('admin.rin.llantas.index') }}" target="frameprincipal" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>RIN de Llanta</p>
+                                        </a>
+                                    </li>
+                                @endcan
+
                                 @can('registros.unidadmedida')
                                     <li class="nav-item">
                                         <a href="{{ route('admin.unidadmedida.index') }}" target="frameprincipal" class="nav-link">
@@ -326,7 +344,7 @@
                                         <li class="nav-item">
                                             <a href="{{ route('admin.entrada.reporte.llanta.equipos.index') }}" target="frameprincipal" class="nav-link">
                                                 <i class="far fa-circle nav-icon"></i>
-                                                <p>Por Equipo</p>
+                                                <p>Por Marcas</p>
                                             </a>
                                         </li>
                                     @endcan

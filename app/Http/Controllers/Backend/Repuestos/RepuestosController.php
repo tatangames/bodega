@@ -9,7 +9,9 @@ use App\Models\EntradaLLantasDeta;
 use App\Models\Entradas;
 use App\Models\Equipos;
 use App\Models\Llantas;
+use App\Models\Marca;
 use App\Models\Materiales;
+use App\Models\MedidaRin;
 use App\Models\Proveedor;
 use App\Models\SalidaDetalle;
 use App\Models\SalidaLLantas;
@@ -353,6 +355,76 @@ class RepuestosController extends Controller
     }
 
 
+    ///******* MARCA DE LLANTAS *****************
+
+    public function indexMarca(){
+        return view('backend.admin.llantas.marcallanta.vistamarcallanta');
+    }
+
+    public function tablaMarca(){
+        $lista = Marca::orderBy('nombre', 'ASC')->get();
+        return view('backend.admin.llantas.marcallanta.tablamarcallanta', compact('lista'));
+    }
+
+    public function nuevaMarca(Request $request){
+        $regla = array(
+            'nombre' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        $dato = new Marca();
+        $dato->nombre = $request->nombre;
+
+        if($dato->save()){
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function informacionMarca(Request $request){
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = Marca::where('id', $request->id)->first()){
+
+            return ['success' => 1, 'info' => $lista];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function editarMarca(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+            'nombre' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if(Marca::where('id', $request->id)->first()){
+
+            Marca::where('id', $request->id)->update([
+                'nombre' => $request->nombre
+            ]);
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
 
     ///****** UBICACION LLANTAS ****************
 
@@ -436,16 +508,14 @@ class RepuestosController extends Controller
 
         if($request->get('query')){
             $query = $request->get('query');
-            $data = Llantas::where('nombre', 'LIKE', "%{$query}%")
-                ->get();
 
-            foreach ($data as $dd){
-                if($info = UnidadMedida::where('id', $dd->id_medida)->first()){
-                    $dd->medida = "- " . $info->medida;
-                }else{
-                    $dd->medida = "";
-                }
-            }
+            $data = DB::table('llantas AS lla')
+                ->join('marca_llanta AS ma', 'lla.id_marca', '=', 'ma.id')
+                ->join('medida_rin AS medi', 'lla.id_medida', '=', 'medi.id')
+                ->select('ma.nombre', 'lla.id', 'medi.medida')
+                ->where('ma.nombre', 'LIKE', "%{$query}%")
+                ->orderBy('ma.nombre', 'ASC')
+                ->get();
 
             $output = '<ul class="dropdown-menu" style="display:block; position:relative;">';
             $tiene = true;
@@ -456,7 +526,7 @@ class RepuestosController extends Controller
                     if(!empty($row)){
                         $tiene = false;
                         $output .= '
-                 <li onclick="modificarValor(this)" id="'.$row->id.'"><a href="#" style="margin-left: 3px">'.$row->nombre . ' ' .$row->medida .'</a></li>
+                 <li onclick="modificarValor(this)" id="'.$row->id.'"><a href="#" style="margin-left: 3px">'.$row->nombre . ' - ' .$row->medida .'</a></li>
                 ';
                     }
                 }
@@ -465,7 +535,7 @@ class RepuestosController extends Controller
                     if(!empty($row)){
                         $tiene = false;
                         $output .= '
-                 <li onclick="modificarValor(this)" id="'.$row->id.'"><a href="#" style="margin-left: 3px">'.$row->nombre . ' ' .$row->medida .'</a></li>
+                 <li onclick="modificarValor(this)" id="'.$row->id.'"><a href="#" style="margin-left: 3px">'.$row->nombre . ' - ' .$row->medida .'</a></li>
                    <hr>
                 ';
                     }
@@ -569,20 +639,20 @@ class RepuestosController extends Controller
     // **********************************************************************
 
     public function indexLlantas(){
-        $lUnidad = UnidadMedida::orderBy('medida', 'ASC')->get();
-        return view('backend.admin.llantas.vistacatalogollantas', compact('lUnidad'));
+        $lUnidad = MedidaRin::orderBy('medida', 'ASC')->get();
+        $marcas = Marca::orderBy('nombre', 'ASC')->get();
+        return view('backend.admin.llantas.vistacatalogollantas', compact('lUnidad', 'marcas'));
     }
 
     public function tablaLlantas(){
-        $lista = Llantas::orderBy('nombre', 'ASC')->get();
+        $lista = DB::table('llantas AS lla')
+            ->join('marca_llanta AS ma', 'lla.id_marca', '=', 'ma.id')
+            ->join('medida_rin AS medi', 'lla.id_medida', '=', 'medi.id')
+            ->select('lla.id', 'medi.medida', 'ma.nombre')
+            ->orderBy('ma.nombre', 'ASC')
+            ->get();
 
         foreach ($lista as $item) {
-
-            $medida = '';
-            if($dataUnidad = UnidadMedida::where('id', $item->id_medida)->first()){
-                $medida = $dataUnidad->medida;
-            }
-            $item->medida = $medida;
 
             $entradaDetalle = EntradaLLantasDeta::where('id_llanta', $item->id)->get();
 
@@ -601,7 +671,7 @@ class RepuestosController extends Controller
                 // valor: es la suma de cantidad actual
                 $valor = $valor + $total;
 
-                // dinero: es la suma del precio del repuesto
+                // dinero: es la suma del precio de la llanta
                 $dinero = $dinero + ($data->precio * $total);
             }
 
@@ -615,14 +685,15 @@ class RepuestosController extends Controller
     public function nuevoLlantas(Request $request){
 
         $regla = array(
-            'nombre' => 'required',
+            'marca' => 'required',
+            'unidad' => 'required',
         );
 
         $validar = Validator::make($request->all(), $regla);
 
         if ($validar->fails()){ return ['success' => 0];}
 
-        if(Llantas::where('nombre', $request->nombre)
+        if(Llantas::where('id_marca', $request->marca)
             ->where('id_medida', $request->unidad)
             ->first()){
             return ['success' => 3];
@@ -630,7 +701,7 @@ class RepuestosController extends Controller
 
         $dato = new Llantas();
         $dato->id_medida = $request->unidad;
-        $dato->nombre = $request->nombre;
+        $dato->id_marca = $request->marca;
 
         if($dato->save()){
             return ['success' => 1];
@@ -650,9 +721,11 @@ class RepuestosController extends Controller
 
         if($lista = Llantas::where('id', $request->id)->first()){
 
-            $arrayUnidad = UnidadMedida::orderBy('medida', 'ASC')->get();
+            $arrayUnidad = MedidaRin::orderBy('medida', 'ASC')->get();
 
-            return ['success' => 1, 'material' => $lista, 'unidad' => $arrayUnidad];
+            $arrayMarca = Marca::orderBy('nombre', 'ASC')->get();
+
+            return ['success' => 1, 'material' => $lista, 'unidad' => $arrayUnidad, 'marca' => $arrayMarca];
         }else{
             return ['success' => 2];
         }
@@ -661,7 +734,8 @@ class RepuestosController extends Controller
     public function editarLlantas(Request $request){
 
         $regla = array(
-            'nombre' => 'required',
+            'marca' => 'required',
+            'unidad' => 'required',
         );
 
         $validar = Validator::make($request->all(), $regla);
@@ -669,7 +743,7 @@ class RepuestosController extends Controller
         if ($validar->fails()){ return ['success' => 0];}
 
         if(Llantas::where('id', '!=', $request->id)
-            ->where('nombre', $request->nombre)
+            ->where('id_marca', $request->marca)
             ->where('id_medida', $request->unidad)
             ->first()){
             return ['success' => 3];
@@ -677,7 +751,7 @@ class RepuestosController extends Controller
 
         Llantas::where('id', $request->id)->update([
             'id_medida' => $request->unidad,
-            'nombre' => $request->nombre,
+            'id_marca' => $request->marca,
         ]);
 
         return ['success' => 1];
@@ -803,14 +877,14 @@ class RepuestosController extends Controller
     // id material
     public function vistaDetalleLlanta($id){
 
-        $info = Llantas::where('id', $id)->first();
-        $repuesto = $info->nombre;
-        $medida = '';
-        if($infoMedida = UnidadMedida::where('id', $info->id_medida)->first()){
-            $medida = $infoMedida->medida;
-        }
+        $data = DB::table('llantas AS lla')
+            ->join('marca_llanta AS ma', 'lla.id_marca', '=', 'ma.id')
+            ->join('medida_rin AS medi', 'lla.id_medida', '=', 'medi.id')
+            ->select('lla.id', 'medi.medida', 'ma.nombre')
+            ->where('lla.id', $id)
+            ->first();
 
-        return view('backend.admin.llantas.detalle.vistadetallellantas', compact('id', 'repuesto', 'medida'));
+        return view('backend.admin.llantas.detalle.vistadetallellantas', compact('id', 'data'));
     }
 
     // id material

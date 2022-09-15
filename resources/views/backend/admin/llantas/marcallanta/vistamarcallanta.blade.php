@@ -21,14 +21,14 @@
             <div class="col-sm-6">
                 <button type="button" onclick="modalAgregar()" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus-square"></i>
-                    Nuevo Proveedor
+                    Nueva Marca de llantas
                 </button>
             </div>
 
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">Proveedores</li>
-                    <li class="breadcrumb-item active">Lista Proveedores</li>
+                    <li class="breadcrumb-item">Llantas</li>
+                    <li class="breadcrumb-item active">Lista de Marcas</li>
                 </ol>
             </div>
         </div>
@@ -38,7 +38,7 @@
         <div class="container-fluid">
             <div class="card card-success">
                 <div class="card-header">
-                    <h3 class="card-title">Listado de Proveedor</h3>
+                    <h3 class="card-title">Listado de Marcas</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -56,7 +56,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Nuevo Proveedor</h4>
+                    <h4 class="modal-title">Nueva Marca</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -69,7 +69,7 @@
 
                                     <div class="form-group">
                                         <label>Nombre</label>
-                                        <input type="text" maxlength="200" class="form-control" id="prove-nuevo" autocomplete="off">
+                                        <input type="text" maxlength="100" class="form-control" id="prove-nuevo" autocomplete="off">
                                     </div>
 
                                 </div>
@@ -90,7 +90,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Editar Proveedor</h4>
+                    <h4 class="modal-title">Editar Marca</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -108,7 +108,7 @@
 
                                     <div class="form-group">
                                         <label>Nombre</label>
-                                        <input type="text" maxlength="200" class="form-control" id="prove-editar" autocomplete="off">
+                                        <input type="text" maxlength="100" class="form-control" id="prove-editar" autocomplete="off">
                                     </div>
 
                                 </div>
@@ -139,7 +139,7 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            var ruta = "{{ URL::to('/admin/proveedor/tabla/index') }}";
+            var ruta = "{{ URL::to('/admin/marcallanta/tabla/index') }}";
             $('#tablaDatatable').load(ruta);
 
             document.getElementById("divcontenedor").style.display = "block";
@@ -150,7 +150,7 @@
     <script>
 
         function recargar(){
-            var ruta = "{{ url('/admin/proveedor/tabla/index') }}";
+            var ruta = "{{ url('/admin/marcallanta/tabla/index') }}";
             $('#tablaDatatable').load(ruta);
         }
 
@@ -167,8 +167,8 @@
                 return;
             }
 
-            if(nombre.length > 200){
-                toastr.error('Nombre máximo 200 caracteres');
+            if(nombre.length > 100){
+                toastr.error('Nombre máximo 100 caracteres');
                 return;
             }
 
@@ -176,7 +176,7 @@
             var formData = new FormData();
             formData.append('nombre', nombre);
 
-            axios.post(url+'/proveedor/nuevo', formData, {
+            axios.post(url+'/marcallanta/nuevo', formData, {
             })
                 .then((response) => {
                     closeLoading();
@@ -199,7 +199,7 @@
             openLoading();
             document.getElementById("formulario-editar").reset();
 
-            axios.post(url+'/proveedor/informacion',{
+            axios.post(url+'/marcallanta/informacion',{
                 'id': id
             })
                 .then((response) => {
@@ -228,8 +228,8 @@
                 return;
             }
 
-            if(nombre.length > 200){
-                toastr.error('Nombre máximo 200 caracteres');
+            if(nombre.length > 100){
+                toastr.error('Nombre máximo 100 caracteres');
                 return;
             }
 
@@ -238,7 +238,7 @@
             formData.append('id', id);
             formData.append('nombre', nombre);
 
-            axios.post(url+'/proveedor/editar', formData, {
+            axios.post(url+'/marcallanta/editar', formData, {
             })
                 .then((response) => {
                     closeLoading();

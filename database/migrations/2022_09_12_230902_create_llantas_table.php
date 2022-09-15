@@ -16,10 +16,10 @@ class CreateLlantasTable extends Migration
         Schema::create('llantas', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_medida')->unsigned();
+            $table->bigInteger('id_marca')->unsigned();
 
-            $table->string('nombre', 300);
-
-            $table->foreign('id_medida')->references('id')->on('unidad_medida');
+            $table->foreign('id_medida')->references('id')->on('medida_rin');
+            $table->foreign('id_marca')->references('id')->on('marca_llanta');
         });
     }
 

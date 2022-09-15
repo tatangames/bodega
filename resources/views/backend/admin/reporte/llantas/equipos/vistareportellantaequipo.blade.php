@@ -25,7 +25,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="callout callout-info">
-                        <h5><i class="fas fa-info"></i> Generar Reporte por Equipos</h5>
+                        <h5><i class="fas fa-info"></i> Generar Reporte por Marcas</h5>
                         <div class="card">
                             <form class="form-horizontal">
                                 <div class="card-body">
@@ -68,9 +68,9 @@
                                                         </select>
                                                     </div>
                                                     <div class="info-box-content" style="margin-top: 4px">
-                                                        <label>Lista de Equipos</label>
+                                                        <label>Lista de Marcas</label>
                                                         <select id="select-equipo" class="form-control" multiple="multiple">
-                                                            @foreach($equipos as $item)
+                                                            @foreach($marcas as $item)
                                                                 <option value="{{$item->id}}">{{ $item->nombre }}</option>
                                                             @endforeach
                                                         </select>

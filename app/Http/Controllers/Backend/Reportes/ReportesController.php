@@ -9,6 +9,7 @@ use App\Models\EntradaLLantasDeta;
 use App\Models\Entradas;
 use App\Models\Equipos;
 use App\Models\Llantas;
+use App\Models\Marca;
 use App\Models\Materiales;
 use App\Models\SalidaDetalle;
 use App\Models\SalidaLLantas;
@@ -372,6 +373,7 @@ class ReportesController extends Controller
                 ->orderBy('fecha', 'ASC')
                 ->get();
 
+            $totalFinalEntrada = 0;
             foreach ($listaEntrada as $ll){
 
                 $ll->fecha = date("d-m-Y", strtotime($ll->fecha));
@@ -393,22 +395,21 @@ class ReportesController extends Controller
                 // obtener detalle
                 $listaDetalle = DB::table('entrada_llanta_deta AS ed')
                     ->join('llantas AS m', 'ed.id_llanta', '=', 'm.id')
-                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_ubicacion', 'ed.precio')
+                    ->join('marca_llanta AS marca', 'm.id_marca', '=', 'marca.id')
+                    ->join('medida_rin AS medi', 'm.id_medida', '=', 'medi.id')
+                    ->select('marca.nombre', 'medi.medida', 'ed.cantidad', 'm.id_medida', 'ed.id_ubicacion', 'ed.precio')
                     ->where('ed.id_entrada_llanta', $ll->id)
                     ->orderBy('m.id', 'ASC')
                     ->get();
 
                 foreach ($listaDetalle as $dd){
-                    if($info = UnidadMedida::where('id', $dd->id_medida)->first()){
-                        $dd->medida = $info->medida;
-                    }else{
-                        $dd->medida = "";
-                    }
 
                     $totaldinero = $totaldinero + $dd->precio;
                     $totalcantidad = $totalcantidad + $dd->cantidad;
 
+                    // por fila
                     $multiplicado = $dd->precio * $dd->cantidad;
+                    // poor bloque
                     $totalsumado = $totalsumado + $multiplicado;
                     $dd->multiplicado = number_format((float)$multiplicado, 2, '.', ',');
 
@@ -418,6 +419,7 @@ class ReportesController extends Controller
                     $dd->ubicacion = $infoBodega->nombre;
                 }
 
+                $totalFinalEntrada = $totalFinalEntrada + $totalsumado;
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
                 $ll->totalsumado = number_format((float)$totalsumado, 2, '.', ',');
@@ -425,6 +427,8 @@ class ReportesController extends Controller
                 $resultsBloque[$index]->detalle = $listaDetalle;
                 $index++;
             }
+
+            $totalFinalEntrada = number_format((float)$totalFinalEntrada, 2, '.', ',');
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
@@ -485,8 +489,8 @@ class ReportesController extends Controller
             <tbody>";
 
                 $tabla .= "<tr>
-                    <td width='25%'>Repuesto</td>
-                    <td width='8%'>Medida</td>
+                    <td width='25%'>Marca</td>
+                    <td width='8%'># de RIN</td>
                     <td width='8%'>Ubicación</td>
                     <td width='8%'>Cantidad</td>
                     <td width='8%'>Precio</td>
@@ -516,6 +520,17 @@ class ReportesController extends Controller
                 $tabla .= "</tbody></table>";
             }
 
+            $tabla .= "<table width='100%' id='tablaFor' style='margin-top: 20px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>Total de Entradas</td>
+                    <td width='8%' style='font-weight: bold'>$$totalFinalEntrada</td>
+                </tr>";
+
+            $tabla .= "</tbody></table>";
+
+
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet,1);
 
@@ -533,6 +548,8 @@ class ReportesController extends Controller
                 ->orderBy('fecha', 'ASC')
                 ->get();
 
+            $totalFinalSalida = 0;
+
             foreach ($listaSalida as $ll){
 
                 $ll->fecha = date("d-m-Y", strtotime($ll->fecha));
@@ -545,22 +562,20 @@ class ReportesController extends Controller
                 // obtener detalle
                 $listaDetalle = DB::table('salida_llanta_deta AS ed')
                     ->join('llantas AS m', 'ed.id_llanta', '=', 'm.id')
-                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo', 'ed.id_l_entrada_detalle')
+                    ->join('marca_llanta AS marca', 'm.id_marca', '=', 'marca.id')
+                    ->join('medida_rin AS medi', 'm.id_medida', '=', 'medi.id')
+                    ->select('marca.nombre', 'medi.medida', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo', 'ed.id_l_entrada_detalle')
                     ->where('ed.id_salida_llanta', $ll->id)
-                    ->orderBy('m.id', 'ASC')
+                    ->orderBy('marca.nombre', 'ASC')
                     ->get();
 
                 foreach ($listaDetalle as $dd){
-                    if($info = UnidadMedida::where('id', $dd->id_medida)->first()){
-                        $dd->medida = $info->medida;
-                    }else{
-                        $dd->medida = "";
-                    }
 
                     $infoEntradaDetalle = EntradaLLantasDeta::where('id', $dd->id_l_entrada_detalle)->first();
 
                     $totalcantidad = $totalcantidad + $dd->cantidad;
 
+                    // por fila
                     $multiplicado = $infoEntradaDetalle->precio * $dd->cantidad;
 
                     $totaldinero = $totaldinero + $multiplicado;
@@ -573,6 +588,7 @@ class ReportesController extends Controller
                     $dd->equipo = $infoEquipo->nombre;
                 }
 
+                $totalFinalSalida = $totalFinalSalida + $totaldinero;
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
 
@@ -580,6 +596,7 @@ class ReportesController extends Controller
                 $index++;
             }
 
+            $totalFinalSalida = number_format((float)$totalFinalSalida, 2, '.', ',');
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
@@ -629,8 +646,8 @@ class ReportesController extends Controller
             <tbody>";
 
                 $tabla .= "<tr>
-                    <td width='25%'>Repuesto</td>
-                    <td width='8%'>Medida</td>
+                    <td width='25%'>Marca</td>
+                    <td width='8%'># de RIN</td>
                     <td width='8%'>Equipo</td>
                     <td width='20px'>Cantidad</td>
                     <td width='8%'>Precio</td>
@@ -659,6 +676,16 @@ class ReportesController extends Controller
 
                 $tabla .= "</tbody></table>";
             }
+
+            $tabla .= "<table width='100%' id='tablaFor' style='margin-top: 20px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>Total de Salida</td>
+                    <td width='8%' style='font-weight: bold'>$$totalFinalSalida</td>
+                </tr>";
+
+            $tabla .= "</tbody></table>";
 
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet,1);
@@ -914,8 +941,6 @@ class ReportesController extends Controller
                 $index++;
             }
 
-
-
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
             $mpdf->SetTitle('Salidas');
@@ -1019,7 +1044,7 @@ class ReportesController extends Controller
         }
     }
 
-    public function reportePorEquipoLLanta($desde, $hasta, $tipo, $unidad){
+    public function reportePorMarcaLLanta($desde, $hasta, $tipo, $unidad){
 
         $porciones = explode("-", $unidad);
 
@@ -1032,7 +1057,7 @@ class ReportesController extends Controller
         $resultsBloque = array();
         $index = 0;
 
-        $listaEquipos = Equipos::whereIn('id', $porciones)->orderBy('nombre')->get();
+        $listaMarcas = Marca::whereIn('id', $porciones)->orderBy('nombre')->get();
 
         // entrada
         if ($tipo == 1) {
@@ -1041,6 +1066,8 @@ class ReportesController extends Controller
             $listaEntrada = EntradaLLantas::whereBetween('fecha', [$start, $end])
                 ->orderBy('fecha', 'ASC')
                 ->get();
+
+            $totalFinalEntrada = 0;
 
             foreach ($listaEntrada as $ll) {
 
@@ -1062,18 +1089,15 @@ class ReportesController extends Controller
                 // obtener detalle
                 $listaDetalle = DB::table('entrada_llanta_deta AS ed')
                     ->join('llantas AS m', 'ed.id_llanta', '=', 'm.id')
-                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo', 'ed.precio')
+                    ->join('marca_llanta AS marca', 'm.id_marca', '=', 'marca.id')
+                    ->join('medida_rin AS medi', 'm.id_medida', '=', 'medi.id')
+                    ->select('marca.nombre', 'medi.medida', 'ed.cantidad', 'm.id_medida', 'ed.id_ubicacion', 'ed.precio')
                     ->where('ed.id_entrada_llanta', $ll->id)
-                    ->whereIn('ed.id_equipo', $porciones)
-                    ->orderBy('m.id', 'ASC')
+                    ->whereIn('marca.id', $porciones)
+                    ->orderBy('marca.nombre', 'ASC')
                     ->get();
 
                 foreach ($listaDetalle as $dd) {
-                    if ($info = UnidadMedida::where('id', $dd->id_medida)->first()) {
-                        $dd->medida = $info->medida;
-                    } else {
-                        $dd->medida = "";
-                    }
 
                     $totaldinero = $totaldinero + $dd->precio;
                     $totalcantidad = $totalcantidad + $dd->cantidad;
@@ -1084,10 +1108,11 @@ class ReportesController extends Controller
 
                     $dd->precio = number_format((float)$dd->precio, 2, '.', ',');
 
-                    $infoEquipo = Equipos::where('id', $dd->id_equipo)->first();
-                    $dd->equipo = $infoEquipo->nombre;
+                    $infoBodega = UbicacionBodega::where('id', $dd->id_ubicacion)->first();
+                    $dd->ubicacion = $infoBodega->nombre;
                 }
 
+                $totalFinalEntrada = $totalFinalEntrada + $totalsumado;
                 $ll->totalsumado = number_format((float)$totalsumado, 2, '.', ',');
 
                 $ll->totalcantidad = $totalcantidad;
@@ -1116,9 +1141,9 @@ class ReportesController extends Controller
             </div>";
 
             $tabla .= "
-                <p>Equipos Seleccionados</p>";
+                <p>Marcas Seleccionadas</p>";
 
-            foreach ($listaEquipos as $dd) {
+            foreach ($listaMarcas as $dd) {
                 $tabla .= "<label><strong>$dd->nombre, </strong></label>";
             }
 
@@ -1167,9 +1192,9 @@ class ReportesController extends Controller
             <tbody>";
 
                     $tabla .= "<tr>
-                    <td width='25%'>Repuesto</td>
-                    <td width='8%'>Medida</td>
-                    <td width='8%'>Equipo</td>
+                    <td width='25%'>Marca</td>
+                    <td width='8%'># de RIN</td>
+                    <td width='8%'>Ubicación</td>
                     <td width='8%'>Cantidad</td>
                     <td width='8%'>Precio</td>
                     <td width='8%'>Total</td>
@@ -1179,7 +1204,7 @@ class ReportesController extends Controller
                         $tabla .= "<tr>
                     <td width='25%'>$gg->nombre</td>
                     <td width='8%'>$gg->medida</td>
-                    <td width='8%'>$gg->equipo</td>
+                    <td width='8%'>$gg->ubicacion</td>
                     <td width='8%'>$gg->cantidad</td>
                     <td width='8%'>$$gg->precio</td>
                     <td width='8%'>$$gg->multiplicado</td>
@@ -1199,6 +1224,16 @@ class ReportesController extends Controller
                 }
             }
 
+            $tabla .= "<table width='100%' id='tablaFor' style='margin-top: 20px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>Total de Entradas</td>
+                    <td width='8%' style='font-weight: bold'>$$totalFinalEntrada</td>
+                </tr>";
+
+            $tabla .= "</tbody></table>";
+
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet, 1);
 
@@ -1211,9 +1246,11 @@ class ReportesController extends Controller
             // salida
 
             // lista de salidas
-            $listaSalida = Salidas::whereBetween('fecha', [$start, $end])
+            $listaSalida = SalidaLLantas::whereBetween('fecha', [$start, $end])
                 ->orderBy('fecha', 'ASC')
                 ->get();
+
+            $totalFinalSalida = 0;
 
             foreach ($listaSalida as $ll) {
 
@@ -1227,20 +1264,16 @@ class ReportesController extends Controller
                 // obtener detalle
                 $listaDetalle = DB::table('salida_llanta_deta AS ed')
                     ->join('llantas AS m', 'ed.id_llanta', '=', 'm.id')
-                    ->select('m.nombre', 'ed.cantidad', 'm.id_medida', 'ed.id_equipo', 'ed.id_l_entrada_detalle')
+                    ->join('marca_llanta AS marca', 'm.id_marca', '=', 'marca.id')
+                    ->join('medida_rin AS medi', 'm.id_medida', '=', 'medi.id')
+                    ->select('marca.nombre', 'ed.cantidad', 'medi.medida', 'ed.id_equipo', 'ed.id_l_entrada_detalle')
                     ->where('ed.id_salida_llanta', $ll->id)
-                    ->whereIn('ed.id_equipo', $porciones)
-                    ->orderBy('m.id', 'ASC')
+                    ->whereIn('m.id_marca', $porciones)
+                    ->orderBy('marca.nombre', 'ASC')
                     ->get();
 
                 foreach ($listaDetalle as $dd) {
-                    if ($info = UnidadMedida::where('id', $dd->id_medida)->first()) {
-                        $dd->medida = $info->medida;
-                    } else {
-                        $dd->medida = "";
-                    }
-
-                    $infoEntradaDetalle = EntradaDetalle::where('id', $dd->id_entrada_detalle)->first();
+                    $infoEntradaDetalle = EntradaLLantasDeta::where('id', $dd->id_l_entrada_detalle)->first();
 
                     $totalcantidad = $totalcantidad + $dd->cantidad;
 
@@ -1254,12 +1287,15 @@ class ReportesController extends Controller
                     $dd->equipo = $infoEquipo->nombre;
                 }
 
+                $totalFinalSalida = $totalFinalSalida + $totaldinero;
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
 
                 $resultsBloque[$index]->detalle = $listaDetalle;
                 $index++;
             }
+
+            $totalFinalSalida = number_format((float)$totalFinalSalida, 2, '.', ',');
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
@@ -1279,9 +1315,9 @@ class ReportesController extends Controller
             </div>";
 
             $tabla .= "
-                <p>Equipos Seleccionados</p>";
+                <p>Marcas Seleccionados</p>";
 
-            foreach ($listaEquipos as $dd) {
+            foreach ($listaMarcas as $dd) {
                 $tabla .= "<label><strong>$dd->nombre, </strong></label>";
             }
 
@@ -1291,7 +1327,6 @@ class ReportesController extends Controller
 
                     $tabla .= "<table width='100%' id='tablaFor'>
                     <tbody>";
-
 
                     $tabla .= "<tr>
                     <td  width='17%'>Fecha</td>
@@ -1354,6 +1389,16 @@ class ReportesController extends Controller
                 }
             }
 
+            $tabla .= "<table width='100%' id='tablaFor' style='margin-top: 20px'>
+                    <tbody>";
+
+            $tabla .= "<tr>
+                        <td width='25%' style='font-weight: bold'>Total de Salida</td>
+                        <td width='8%' style='font-weight: bold'>$$totalFinalSalida</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet, 1);
 
@@ -1371,8 +1416,8 @@ class ReportesController extends Controller
     }
 
     public function indexEntradaReporteEquiposLlantas(){
-        $equipos = Equipos::orderBy('nombre')->get();
-        return view('backend.admin.reporte.llantas.equipos.vistareportellantaequipo', compact('equipos'));
+        $marcas = Marca::orderBy('nombre')->get();
+        return view('backend.admin.reporte.llantas.equipos.vistareportellantaequipo', compact('marcas'));
     }
 
     public function indexEntradaReporteCantidad(){
@@ -1546,7 +1591,14 @@ class ReportesController extends Controller
 
 
     public function reportePdfCantidadLlanta(){
-        $lista = Llantas::orderBy('nombre', 'ASC')->get();
+        //$lista = Llantas::orderBy('nombre', 'ASC')->get();
+
+        $lista = DB::table('llantas AS lla')
+            ->join('marca_llanta AS marca', 'lla.id_marca', '=', 'marca.id')
+            ->join('medida_rin AS medi', 'lla.id_medida', '=', 'medi.id')
+            ->select('marca.nombre', 'medi.medida', 'lla.id')
+            ->orderBy('marca.nombre', 'ASC')
+            ->get();
 
         $dt = Carbon::now();
         $fechaFormat = date("d-m-Y", strtotime($dt));
@@ -1562,10 +1614,6 @@ class ReportesController extends Controller
             array_push($resultsBloque, $item);
 
             $sumadinerobloque = 0;
-            $medida = '';
-            if($dataUnidad = UnidadMedida::where('id', $item->id_medida)->first()){
-                $medida = $dataUnidad->medida;
-            }
 
             // obtener todas las entradas detalle de este material
 
@@ -1599,7 +1647,6 @@ class ReportesController extends Controller
             }
 
             $totalCantidad = $totalCantidad + $valor;
-            $item->medida = $medida;
             $item->total = $valor;
             $totalDinero = $totalDinero + $sumadinerobloque;
             $item->sumadinerobloque = number_format((float)$sumadinerobloque, 2, '.', ',');
@@ -1658,11 +1705,11 @@ class ReportesController extends Controller
                         if($unavuelta){
                             $unavuelta = false;
                             $tabla .= "<tr>
-                        <td width='10%'>Ubicación</td>
-                        <td width='10%'>Cantidad</td>
-                        <td width='10%'>Precio</td>
-                        <td width='10%'>Total</td>
-                        </tr>";
+                                <td width='10%'>Ubicación</td>
+                                <td width='10%'>Cantidad</td>
+                                <td width='10%'>Precio</td>
+                                <td width='10%'>Total</td>
+                                </tr>";
                             }
 
                                 $tabla .= "<tr>
@@ -1671,19 +1718,17 @@ class ReportesController extends Controller
                         <td width='10%'>$$dd->precio</td>
                         <td width='10%'>$$dd->dinerobloque</td>
                         </tr>";
-
-                        $tabla .= "<tr>
-                        <td width='10%'>Total</td>
-                        <td width='10%'></td>
-                        <td width='10%'></td>
-                        <td width='10%'>$$ll->sumadinerobloque</td>
-                        </tr>";
                     }
-
-
                 }
-                            $tabla .= "</tbody></table>";
 
+                $tabla .= "<tr>
+                        <td width='10%' style='font-weight: bold'>Total</td>
+                        <td width='10%' style='font-weight: bold'>$ll->total</td>
+                        <td width='10%'></td>
+                        <td width='10%' style='font-weight: bold'>$$ll->sumadinerobloque</td>
+                        </tr>";
+
+                $tabla .= "</tbody></table>";
             }
         }
 
@@ -1691,13 +1736,13 @@ class ReportesController extends Controller
             <tbody>";
 
         $tabla .= "<tr>
-                    <td width='10%'>Total LLantas</td>
-                    <td  width='10%'>Total Dinero</td>
+                    <td width='10%' style='font-weight: bold'>Total LLantas</td>
+                    <td  width='10%' style='font-weight: bold'>Total Dinero</td>
                     ";
 
         $tabla .= "<tr>
-                    <td  width='10%'>$totalCantidad</td>
-                    <td  width='10%'>$$totalDinero</td>
+                    <td  width='10%' style='font-weight: bold'>$totalCantidad</td>
+                    <td  width='10%' style='font-weight: bold'>$$totalDinero</td>
                     ";
 
         $tabla .= "</tbody></table>";
