@@ -50,7 +50,7 @@ class RolesSeeder extends Seeder
         Permission::create(['name' => 'registros.equipo', 'description' => 'contenedor de registro equipos'])->syncRoles($roleInventario, $roleLlantas);
         Permission::create(['name' => 'registro.marca.llanta', 'description' => 'contenedor registro de marcas de llantas'])->syncRoles($roleLlantas);
         Permission::create(['name' => 'registro.medidarin.llanta', 'description' => 'contenedor registro de medida de rin para llantas'])->syncRoles($roleLlantas);
-        Permission::create(['name' => 'registro.firmas.llantas', 'description' => 'contenedor registro de firmas para llantas'])->syncRoles($roleLlantas);
+        Permission::create(['name' => 'registro.firmas.llantas', 'description' => 'contenedor registro de firmas para llantas'])->syncRoles($roleInventario, $roleLlantas, $roleAuditora);
 
         Permission::create(['name' => 'sidebar.historial.repuestos', 'description' => 'contenedor de historiales'])->syncRoles($roleInventario, $roleLlantas);
         Permission::create(['name' => 'historial.entrada.repuesto', 'description' => 'contenedor de historiales entrada repuesto'])->syncRoles($roleInventario);

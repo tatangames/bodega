@@ -49,16 +49,18 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="text" maxlength="100" class="form-control" value="{{ $lista->nombre_3 }}" id="nombre3" placeholder="Nombre">
+                                    <input type="text" maxlength="100" class="form-control" value="{{ $lista->nombre_2 }}" id="nombre2" placeholder="Nombre">
                                 </div>
+
 
                                 <hr>
 
                                 <labe>Firma 2</labe>
 
                                 <div class="form-group">
-                                    <input type="text" maxlength="100" class="form-control" value="{{ $lista->nombre_2 }}" id="nombre2" placeholder="Nombre">
+                                    <input type="text" maxlength="100" class="form-control" value="{{ $lista->nombre_3 }}" id="nombre3" placeholder="Nombre">
                                 </div>
+
 
                                 <div class="form-group">
                                     <input type="text" maxlength="100" class="form-control" value="{{ $lista->nombre_4 }}" id="nombre4" placeholder="Nombre">
@@ -136,9 +138,9 @@
         function actualizar(){
 
             var nombre1 = document.getElementById('nombre1').value;
-            var nombre3 = document.getElementById('nombre3').value;
-
             var nombre2 = document.getElementById('nombre2').value;
+
+            var nombre3 = document.getElementById('nombre3').value;
             var nombre4 = document.getElementById('nombre4').value;
 
             var nombre5 = document.getElementById('nombre5').value;
@@ -151,12 +153,12 @@
                 return;
             }
 
-            if(nombre3 === ''){
+            if(nombre2 === ''){
                 toastr.error('Firma 1: nombre es requerido');
                 return;
             }
 
-            if(nombre2 === ''){
+            if(nombre3 === ''){
                 toastr.error('Firma 2: nombre es requerido');
                 return;
             }
