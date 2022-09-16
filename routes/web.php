@@ -85,6 +85,11 @@ Route::post('/admin/marcallanta/nuevo', [RepuestosController::class, 'nuevaMarca
 Route::post('/admin/marcallanta/informacion', [RepuestosController::class, 'informacionMarca']);
 Route::post('/admin/marcallanta/editar', [RepuestosController::class, 'editarMarca']);
 
+// ajustes de firma para llanta
+Route::get('/admin/ajuste/firmallanta/index', [RepuestosController::class,'indexFirmaLlanta'])->name('admin.registro.firmas.llanta.index');
+Route::post('/admin/ajuste/firmallanta/editar', [RepuestosController::class, 'editarFirmaLlanta']);
+
+
 // ubicación llanta
 Route::get('/admin/ubicacion/index', [RepuestosController::class,'indexUbicacion'])->name('admin.ubicacion.index');
 Route::get('/admin/ubicacion/tabla/index', [RepuestosController::class,'tablaUbicacion']);

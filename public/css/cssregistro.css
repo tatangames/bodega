@@ -56,4 +56,38 @@ br[style] {
 }
 
 
+/* TRANSPARENTE TABLA*/
+
+#tablaForTranspa {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 25px;
+    border: hidden; !important;
+    text-align: center;
+}
+
+#tablaForTranspa td{
+    border: hidden;
+    padding: 5px;
+    text-align: center;
+    font-size: 14px;
+}
+
+#tablaForTranspa th {
+    border: hidden;
+    padding: 8px;
+    text-align: center;
+}
+
+#tablaForTranspa th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    color: #1E1E1E;
+    text-align: left;
+    font-size: 14px;
+}
+
 

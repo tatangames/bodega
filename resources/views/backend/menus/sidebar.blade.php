@@ -356,8 +356,17 @@
                                                 <p>Cantidad Actual</p>
                                             </a>
                                         </li>
-
                                     @endcan
+
+                                    @can('registro.firmas.llantas')
+                                        <li class="nav-item">
+                                            <a href="{{ route('admin.registro.firmas.llanta.index') }}" target="frameprincipal" class="nav-link">
+                                                <i class="far fa-circle nav-icon"></i>
+                                                <p>Ajuste de Firma</p>
+                                            </a>
+                                        </li>
+                                    @endcan
+
 
                             </ul>
                         </li>

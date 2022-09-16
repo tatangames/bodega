@@ -8,6 +8,7 @@ use App\Models\EntradaLLantas;
 use App\Models\EntradaLLantasDeta;
 use App\Models\Entradas;
 use App\Models\Equipos;
+use App\Models\FirmasLlantas;
 use App\Models\Llantas;
 use App\Models\Marca;
 use App\Models\Materiales;
@@ -423,6 +424,43 @@ class RepuestosController extends Controller
         }else{
             return ['success' => 2];
         }
+    }
+
+
+    ///******* AJUSTE DE FIRMA PARA LLANTAS *****************
+
+    public function indexFirmaLlanta(){
+        $lista = FirmasLlantas::where('id', 1)->first();
+        return view('backend.admin.llantas.reportes.firmas.vistafirmasllantas', compact('lista'));
+    }
+
+    public function editarFirmaLlanta(Request $request){
+
+        $regla = array(
+            'nombre1' => 'required',
+            'nombre2' => 'required',
+            'nombre3' => 'required',
+            'nombre4' => 'required',
+            'nombre5' => 'required',
+            'nombre6' => 'required',
+            'distancia' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        FirmasLlantas::where('id', 1)->update([
+            'nombre_1' => $request->nombre1,
+            'nombre_2' => $request->nombre2,
+            'nombre_3' => $request->nombre3,
+            'nombre_4' => $request->nombre4,
+            'nombre_5' => $request->nombre5,
+            'nombre_6' => $request->nombre6,
+            'distancia' => $request->distancia,
+        ]);
+
+        return ['success' => 1];
     }
 
 

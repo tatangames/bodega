@@ -8,6 +8,7 @@ use App\Models\EntradaLLantas;
 use App\Models\EntradaLLantasDeta;
 use App\Models\Entradas;
 use App\Models\Equipos;
+use App\Models\FirmasLlantas;
 use App\Models\Llantas;
 use App\Models\Marca;
 use App\Models\Materiales;
@@ -54,13 +55,14 @@ class ReportesController extends Controller
                 ->orderBy('fecha', 'ASC')
                 ->get();
 
+            $totalFinalEntrada = 0;
+
             foreach ($listaEntrada as $ll){
 
                 $ll->fecha = date("d-m-Y", strtotime($ll->fecha));
 
                 $totaldinero = 0;
                 $totalcantidad = 0;
-                $multiplicado = 0;
                 $totalsumado = 0;
 
                 // 0: el repuesto es nuevo
@@ -101,6 +103,7 @@ class ReportesController extends Controller
                     $dd->equipo = $infoEquipo->nombre;
                 }
 
+                $totalFinalEntrada = $totalFinalEntrada + $totalsumado;
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
                 $ll->totalsumado = number_format((float)$totalsumado, 2, '.', ',');
@@ -108,6 +111,8 @@ class ReportesController extends Controller
                 $resultsBloque[$index]->detalle = $listaDetalle;
                 $index++;
             }
+
+            $totalFinalEntrada = number_format((float)$totalFinalEntrada, 2, '.', ',');
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
@@ -199,6 +204,17 @@ class ReportesController extends Controller
                 $tabla .= "</tbody></table>";
             }
 
+
+            $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='10%' style='font-weight: bold'>Total Dinero</td>
+                   <td  width='10%' style='font-weight: bold'>$$totalFinalEntrada</td>
+                    ";
+
+            $tabla .= "</tbody></table>";
+
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet,1);
 
@@ -215,6 +231,8 @@ class ReportesController extends Controller
             $listaSalida = Salidas::whereBetween('fecha', [$start, $end])
                 ->orderBy('fecha', 'ASC')
                 ->get();
+
+            $totalFinalSalida = 0;
 
             foreach ($listaSalida as $ll){
 
@@ -256,6 +274,7 @@ class ReportesController extends Controller
                     $dd->equipo = $infoEquipo->nombre;
                 }
 
+                $totalFinalSalida = $totalFinalSalida + $totaldinero;
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
 
@@ -263,6 +282,7 @@ class ReportesController extends Controller
                 $index++;
             }
 
+            $totalFinalSalida = number_format((float)$totalFinalSalida, 2, '.', ',');
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
@@ -343,6 +363,19 @@ class ReportesController extends Controller
                 $tabla .= "</tbody></table>";
             }
 
+
+            $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='10%' style='font-weight: bold'>Total Dinero</td>
+                   <td  width='10%' style='font-weight: bold'>$$totalFinalSalida</td>
+                    ";
+
+            $tabla .= "</tbody></table>";
+
+
+
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet,1);
 
@@ -364,6 +397,8 @@ class ReportesController extends Controller
 
         $desdeFormat = date("d-m-Y", strtotime($desde));
         $hastaFormat = date("d-m-Y", strtotime($hasta));
+
+        $firmas = FirmasLlantas::where('id', 1)->first();
 
         // entrada
         if($tipo == 1) {
@@ -531,6 +566,45 @@ class ReportesController extends Controller
             $tabla .= "</tbody></table>";
 
 
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_1</td>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_3</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_2</td>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_4</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%'  style='margin-top: 100px'  id='tablaForTranspa'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_5</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_6</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+
+
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet,1);
 
@@ -687,6 +761,45 @@ class ReportesController extends Controller
 
             $tabla .= "</tbody></table>";
 
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_1</td>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_3</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_2</td>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_4</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%'  style='margin-top: 100px'  id='tablaForTranspa'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_5</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_6</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+
+
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet,1);
 
@@ -721,6 +834,8 @@ class ReportesController extends Controller
             $listaEntrada = Entradas::whereBetween('fecha', [$start, $end])
                 ->orderBy('fecha', 'ASC')
                 ->get();
+
+            $totalFinalEntrada = 0;
 
             foreach ($listaEntrada as $ll) {
 
@@ -768,6 +883,7 @@ class ReportesController extends Controller
                     $dd->equipo = $infoEquipo->nombre;
                 }
 
+                $totalFinalEntrada = $totalFinalEntrada + $totalsumado;
                 $ll->totalsumado = number_format((float)$totalsumado, 2, '.', ',');
 
                 $ll->totalcantidad = $totalcantidad;
@@ -777,6 +893,7 @@ class ReportesController extends Controller
                 $index++;
             }
 
+            $totalFinalEntrada = number_format((float)$totalFinalEntrada, 2, '.', ',');
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
@@ -879,6 +996,16 @@ class ReportesController extends Controller
                 }
             }
 
+            $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='10%' style='font-weight: bold'>Total Dinero</td>
+                   <td  width='10%' style='font-weight: bold'>$$totalFinalEntrada</td>
+                    ";
+
+            $tabla .= "</tbody></table>";
+
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet, 1);
 
@@ -894,6 +1021,8 @@ class ReportesController extends Controller
             $listaSalida = Salidas::whereBetween('fecha', [$start, $end])
                 ->orderBy('fecha', 'ASC')
                 ->get();
+
+            $totalFinalSalida = 0;
 
             foreach ($listaSalida as $ll) {
 
@@ -934,12 +1063,15 @@ class ReportesController extends Controller
                     $dd->equipo = $infoEquipo->nombre;
                 }
 
+                $totalFinalSalida = $totalFinalSalida + $totaldinero;
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
 
                 $resultsBloque[$index]->detalle = $listaDetalle;
                 $index++;
             }
+
+            $totalFinalSalida = number_format((float)$totalFinalSalida, 2, '.', ',');
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
@@ -1016,7 +1148,7 @@ class ReportesController extends Controller
                         <td width='8%'>$gg->medida</td>
                         <td width='8%'>$gg->equipo</td>
                         <td width='8%'>$gg->cantidad</td>
-                        <td width='8%'>$gg->precio</td>
+                        <td width='8%'>$$gg->precio</td>
                         <td width='8%'>$$gg->multiplicado</td>
                     </tr>";
                     }
@@ -1033,6 +1165,16 @@ class ReportesController extends Controller
                     $tabla .= "</tbody></table>";
                 }
             }
+
+            $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='10%' style='font-weight: bold'>Total Dinero</td>
+                   <td  width='10%' style='font-weight: bold'>$$totalFinalSalida</td>
+                    ";
+
+            $tabla .= "</tbody></table>";
 
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet, 1);
@@ -1053,6 +1195,8 @@ class ReportesController extends Controller
 
         $start = Carbon::parse($desde)->startOfDay();
         $end = Carbon::parse($hasta)->endOfDay();
+
+        $firmas = FirmasLlantas::where('id', 1)->first();
 
         $resultsBloque = array();
         $index = 0;
@@ -1234,6 +1378,46 @@ class ReportesController extends Controller
 
             $tabla .= "</tbody></table>";
 
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_1</td>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_3</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_2</td>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_4</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%'  style='margin-top: 100px'  id='tablaForTranspa'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_5</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_6</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+
+
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet, 1);
 
@@ -1398,6 +1582,45 @@ class ReportesController extends Controller
                     </tr>";
 
             $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_1</td>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_3</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_2</td>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_4</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%'  style='margin-top: 100px'  id='tablaForTranspa'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_5</td>
+                    </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_6</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+
 
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet, 1);
@@ -1569,13 +1792,13 @@ class ReportesController extends Controller
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='10%'>Total Repuestos</td>
-                    <td  width='10%'>Total Dinero</td>
+                    <td width='10%' style='font-weight: bold'>Total Repuestos</td>
+                    <td  width='10%' style='font-weight: bold'>Total Dinero</td>
                     ";
 
         $tabla .= "<tr>
-                    <td  width='10%'>$totalCantidad</td>
-                    <td  width='10%'>$$totalDinero</td>
+                    <td  width='10%' style='font-weight: bold'>$totalCantidad</td>
+                    <td  width='10%' style='font-weight: bold'>$$totalDinero</td>
                     ";
 
         $tabla .= "</tbody></table>";
@@ -1599,6 +1822,8 @@ class ReportesController extends Controller
             ->select('marca.nombre', 'medi.medida', 'lla.id')
             ->orderBy('marca.nombre', 'ASC')
             ->get();
+
+        $firmas = FirmasLlantas::where('id', 1)->first();
 
         $dt = Carbon::now();
         $fechaFormat = date("d-m-Y", strtotime($dt));
@@ -1673,7 +1898,6 @@ class ReportesController extends Controller
         Fecha: $fechaFormat
         </div>";
 
-
         foreach ($lista as $ll){
 
             if($ll->sumadinerobloque > 0){
@@ -1746,6 +1970,45 @@ class ReportesController extends Controller
                     ";
 
         $tabla .= "</tbody></table>";
+
+
+        $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia'>
+            <tbody>";
+
+        $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    </tr>";
+
+        $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_1</td>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_3</td>
+                    </tr>";
+
+        $tabla .= "<tr>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_2</td>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_4</td>
+                    </tr>";
+
+        $tabla .= "</tbody></table>";
+
+        $tabla .= "<table width='100%'  style='margin-top: 100px'  id='tablaForTranspa'>
+            <tbody>";
+
+        $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    </tr>";
+
+        $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$firmas->nombre_5</td>
+                    </tr>";
+
+        $tabla .= "<tr>
+                    <td width='25%' style='font-size: 16px'>$firmas->nombre_6</td>
+                    </tr>";
+
+        $tabla .= "</tbody></table>";
+
 
         $stylesheet = file_get_contents('css/cssregistro.css');
         $mpdf->WriteHTML($stylesheet,1);
