@@ -74,7 +74,7 @@ class RepuestosController extends Controller
             $hayCantidad = true;
         }
 
-        return view('backend.admin.registros.modal.modalentrada', compact('dataArray', 'hayCantidad'));
+        return view('backend.admin.repuestos.registros.modal.modalentrada', compact('dataArray', 'hayCantidad'));
     }
 
     // id material
@@ -88,7 +88,7 @@ class RepuestosController extends Controller
         }
 
 
-        return view('backend.admin.materiales.detalle.vistadetalle', compact('id', 'repuesto', 'medida'));
+        return view('backend.admin.repuestos.materiales.detalle.vistadetalle', compact('id', 'repuesto', 'medida'));
     }
 
     // id material
@@ -124,7 +124,7 @@ class RepuestosController extends Controller
             $valor = 0;
         }
 
-        return view('backend.admin.materiales.detalle.tabladetallematerial', compact('lista'));
+        return view('backend.admin.repuestos.materiales.detalle.tabladetallematerial', compact('lista'));
     }
 
     public function informacionEntradaHistorial(Request $request){
@@ -288,12 +288,12 @@ class RepuestosController extends Controller
 
 
     public function indexProveedor(){
-        return view('backend.admin.proveedor.vistaproveedor');
+        return view('backend.admin.llantas.proveedor.vistaproveedor');
     }
 
     public function tablaProveedor(){
         $lista = Proveedor::orderBy('nombre', 'ASC')->get();
-        return view('backend.admin.proveedor.tablaproveedor', compact('lista'));
+        return view('backend.admin.llantas.proveedor.tablaproveedor', compact('lista'));
     }
 
     public function nuevaProveedor(Request $request){
@@ -468,12 +468,12 @@ class RepuestosController extends Controller
 
 
     public function indexUbicacion(){
-        return view('backend.admin.ubicacion.vistaubicacion');
+        return view('backend.admin.llantas.ubicacion.vistaubicacion');
     }
 
     public function tablaUbicacion(){
         $lista = UbicacionBodega::orderBy('nombre', 'ASC')->get();
-        return view('backend.admin.ubicacion.tablaubicacion', compact('lista'));
+        return view('backend.admin.llantas.ubicacion.tablaubicacion', compact('lista'));
     }
 
     public function nuevaUbicacion(Request $request){
@@ -539,7 +539,8 @@ class RepuestosController extends Controller
 
     public function indexRegistroEntradaLlanta(){
         $ubicacion = UbicacionBodega::orderBy('nombre')->get();
-        return view('backend.admin.registros.llantas.vistaregistrollanta', compact('ubicacion'));
+        $proveedores = Proveedor::orderBy('nombre')->get();
+        return view('backend.admin.llantas.registro.vistaregistrollanta', compact('ubicacion', 'proveedores'));
     }
 
     public function buscadorLlantas(Request $request){
@@ -622,6 +623,7 @@ class RepuestosController extends Controller
                     $r->documento = $nomDocumento;
                     $r->inventario = $request->entrada;
                     $r->factura = $request->factura;
+                    $r->id_proveedor = $request->proveedor;
                     $r->save();
 
                     for ($i = 0; $i < count($request->cantidad); $i++) {
@@ -649,6 +651,7 @@ class RepuestosController extends Controller
                 $r->documento = null;
                 $r->inventario = $request->entrada;
                 $r->factura = $request->factura;
+                $r->id_proveedor = $request->proveedor;
                 $r->save();
 
                 for ($i = 0; $i < count($request->cantidad); $i++) {
@@ -679,7 +682,7 @@ class RepuestosController extends Controller
     public function indexLlantas(){
         $lUnidad = MedidaRin::orderBy('medida', 'ASC')->get();
         $marcas = Marca::orderBy('nombre', 'ASC')->get();
-        return view('backend.admin.llantas.vistacatalogollantas', compact('lUnidad', 'marcas'));
+        return view('backend.admin.llantas.catalogo.vistacatalogollantas', compact('lUnidad', 'marcas'));
     }
 
     public function tablaLlantas(){
@@ -717,7 +720,7 @@ class RepuestosController extends Controller
             $item->dinero = number_format((float)$dinero, 2, '.', ',');
         }
 
-        return view('backend.admin.llantas.tablacatalogollantas', compact('lista'));
+        return view('backend.admin.llantas.catalogo.tablacatalogollantas', compact('lista'));
     }
 
     public function nuevoLlantas(Request $request){
@@ -799,7 +802,7 @@ class RepuestosController extends Controller
 
     public function indexRegistroSalidaLlantas(){
         $equipos = Equipos::orderBy('nombre')->get();
-        return view('backend.admin.registros.llantas.vistasalidallanta', compact('equipos'));
+        return view('backend.admin.llantas.registro.vistasalidallanta', compact('equipos'));
     }
 
     public function guardarSalidaLlantas(Request $request){
@@ -908,7 +911,7 @@ class RepuestosController extends Controller
             $hayCantidad = true;
         }
 
-        return view('backend.admin.registros.modal.modalsalidallanta', compact('dataArray', 'hayCantidad'));
+        return view('backend.admin.llantas.registro.modal.modalsalidallanta', compact('dataArray', 'hayCantidad'));
     }
 
 

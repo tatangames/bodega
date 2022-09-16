@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateUbicacionLlantaTable extends Migration
 {
     /**
-     * Run the migrations.
+     * ubicacion para llantas
      *
      * @return void
      */

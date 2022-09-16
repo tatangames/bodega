@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateSalidaLlantaTable extends Migration
 {
     /**
-     * Run the migrations.
+     * salida de llantas
      *
      * @return void
      */

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateMarcaLlantaTable extends Migration
 {
     /**
-     * Run the migrations.
+     * marca de llantas
      *
      * @return void
      */

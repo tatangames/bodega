@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateProveedorTable extends Migration
 {
     /**
-     * Run the migrations.
+     * lista de proveedores
      *
      * @return void
      */

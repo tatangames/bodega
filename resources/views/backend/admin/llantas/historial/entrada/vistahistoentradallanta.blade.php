@@ -142,7 +142,7 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            var ruta = "{{ URL::to('/admin/historial/entradasllanta/tabla') }}";
+            var ruta = "{{ URL::to('/admin/historial/llantas/tabla') }}";
             $('#tablaDatatable').load(ruta);
 
             document.getElementById("divcontenedor").style.display = "block";
@@ -152,7 +152,7 @@
     <script>
 
         function recargar(){
-            var ruta = "{{ URL::to('/admin/historial/entradasllanta/tabla') }}";
+            var ruta = "{{ URL::to('/admin/historial/llantas/tabla') }}";
             $('#tablaDatatable').load(ruta);
         }
 

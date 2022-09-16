@@ -9,6 +9,7 @@
                             <tr>
                                 <th style="width: 5%">Fecha</th>
                                 <th style="width: 10%">Factura</th>
+                                <th style="width: 12%">Proveedor</th>
                                 <th style="width: 12%">Tipo Ingreso</th>
                                 <th style="width: 20%">Descripción</th>
                                 <th style="width: 5%">Opciones</th>
@@ -20,6 +21,7 @@
                                 <tr>
                                     <td>{{ $dato->fecha }}</td>
                                     <td>{{ $dato->factura }}</td>
+                                    <td>{{ $dato->proveedor }}</td>
                                     <td>
                                         @if($dato->inventario == 0)
                                             <span class="badge bg-transparent">Llanta Nueva</span>

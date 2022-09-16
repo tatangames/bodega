@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateEntradaLlantaTable extends Migration
 {
     /**
-     * Run the migrations.
+     * entrada de llantas
      *
      * @return void
      */
@@ -16,7 +16,7 @@ class CreateEntradaLlantaTable extends Migration
         Schema::create('entrada_llanta', function (Blueprint $table) {
             $table->id();
 
-
+            $table->bigInteger('id_proveedor')->unsigned();
             $table->date('fecha');
             $table->string('descripcion', 800)->nullable();
 
@@ -27,9 +27,7 @@ class CreateEntradaLlantaTable extends Migration
             $table->boolean('inventario');
 
             $table->string('factura', 50)->nullable();
-
-
-
+            $table->foreign('id_proveedor')->references('id')->on('proveedor');
         });
     }
 

@@ -10,6 +10,7 @@ use App\Models\Equipos;
 use App\Models\Llantas;
 use App\Models\Materiales;
 use App\Models\MedidaRin;
+use App\Models\Proveedor;
 use App\Models\SalidaDetalle;
 use App\Models\SalidaLLantas;
 use App\Models\SalidaLLantasDeta;
@@ -33,12 +34,12 @@ class PrincipalController extends Controller
     }
 
     public function indexUnidadMedida(){
-        return view('backend.admin.medida.vistaunidadmedida');
+        return view('backend.admin.repuestos.medida.vistaunidadmedida');
     }
 
     public function tablaUnidadMedida(){
         $lista = UnidadMedida::orderBy('medida', 'ASC')->get();
-        return view('backend.admin.medida.tablaunidadmedida', compact('lista'));
+        return view('backend.admin.repuestos.medida.tablaunidadmedida', compact('lista'));
     }
 
     public function nuevaUnidadMedida(Request $request){
@@ -175,7 +176,7 @@ class PrincipalController extends Controller
 
     public function indexMateriales(){
         $lUnidad = UnidadMedida::orderBy('medida', 'ASC')->get();
-        return view('backend.admin.materiales.vistacatalogomateriales', compact('lUnidad'));
+        return view('backend.admin.repuestos.materiales.vistacatalogomateriales', compact('lUnidad'));
     }
 
     public function tablaMateriales(){
@@ -215,7 +216,7 @@ class PrincipalController extends Controller
             $item->dinero = number_format((float)$dinero, 2, '.', ',');
         }
 
-        return view('backend.admin.materiales.tablacatalogomateriales', compact('lista'));
+        return view('backend.admin.repuestos.materiales.tablacatalogomateriales', compact('lista'));
     }
 
     public function nuevoMaterial(Request $request){
@@ -299,7 +300,7 @@ class PrincipalController extends Controller
 
         $equipos = Equipos::orderBy('nombre')->get();
 
-        return view('backend.admin.registros.entradaregistro', compact('equipos'));
+        return view('backend.admin.repuestos.registros.entradaregistro', compact('equipos'));
     }
 
     public function buscadorMaterial(Request $request){
@@ -440,7 +441,7 @@ class PrincipalController extends Controller
 
     public function indexRegistroSalida(){
         $equipos = Equipos::orderBy('nombre')->get();
-        return view('backend.admin.registros.salidaregistro', compact('equipos'));
+        return view('backend.admin.repuestos.registros.salidaregistro', compact('equipos'));
     }
 
     public function guardarSalida(Request $request){
@@ -511,7 +512,7 @@ class PrincipalController extends Controller
     //***************************************************************************
 
     public function indexEntradas(){
-        return view('backend.admin.entradas.vistaentradas');
+        return view('backend.admin.repuestos.entradas.vistaentradas');
     }
 
     public function indexTablaEntradas(){
@@ -534,7 +535,7 @@ class PrincipalController extends Controller
             $dd->btnbloqueo = $btnBloqueo;
         }
 
-        return view('backend.admin.entradas.tablaentradas', compact('lista'));
+        return view('backend.admin.repuestos.entradas.tablaentradas', compact('lista'));
     }
 
     //*****************************************************************************
@@ -543,7 +544,7 @@ class PrincipalController extends Controller
         $dato = Entradas::where('id', $id)->first();
         $fecha = date("d-m-Y", strtotime($dato->fecha));
 
-        return view('backend.admin.entradas.detalle.vistaentradadetalle', compact('id', 'fecha'));
+        return view('backend.admin.repuestos.entradas.detalle.vistaentradadetalle', compact('id', 'fecha'));
     }
 
     public function indexEntradasDetalleTabla($id){
@@ -570,14 +571,14 @@ class PrincipalController extends Controller
 
         }
 
-        return view('backend.admin.entradas.detalle.tablaentradadetalle', compact('lista'));
+        return view('backend.admin.repuestos.entradas.detalle.tablaentradadetalle', compact('lista'));
     }
 
 
     //****************************************************************************
 
     public function indexSalidas(){
-        return view('backend.admin.salidas.vistasalidas');
+        return view('backend.admin.repuestos.historial.salidas.vistasalidas');
     }
 
     public function indexTablaSalidas(){
@@ -588,11 +589,11 @@ class PrincipalController extends Controller
             $dd->fecha = date("d-m-Y", strtotime($dd->fecha));
         }
 
-        return view('backend.admin.salidas.tablasalidas', compact('lista'));
+        return view('backend.admin.repuestos.historial.salidas.tablasalidas', compact('lista'));
     }
 
     public function indexSalidasLlantas(){
-        return view('backend.admin.historial.llantas.salida.vistahistosalidallanta');
+        return view('backend.admin.llantas.historial.salida.vistahistosalidallanta');
     }
 
     public function indexTablaSalidasLlantas(){
@@ -603,7 +604,7 @@ class PrincipalController extends Controller
             $dd->fecha = date("d-m-Y", strtotime($dd->fecha));
         }
 
-        return view('backend.admin.historial.llantas.salida.tablahistosalidallanta', compact('lista'));
+        return view('backend.admin.llantas.historial.salida.tablahistosalidallanta', compact('lista'));
     }
 
     //*****************************************************************************
@@ -612,7 +613,7 @@ class PrincipalController extends Controller
         $dato = Salidas::where('id', $id)->first();
         $fecha = date("d-m-Y", strtotime($dato->fecha));
 
-        return view('backend.admin.salidas.detalle.vistasalidadetalle', compact('id', 'fecha'));
+        return view('backend.admin.repuestos.historial.salidas.detalle.vistasalidadetalle', compact('id', 'fecha'));
     }
 
     public function indexSalidasDetalleTabla($id){
@@ -636,14 +637,14 @@ class PrincipalController extends Controller
             $ll->unidad = $medida;
         }
 
-        return view('backend.admin.salidas.detalle.tablasalidadetalle', compact('lista'));
+        return view('backend.admin.repuestos.historial.salidas.detalle.tablasalidadetalle', compact('lista'));
     }
 
     public function indexSalidasDetalleLlanta($id){
         $dato = SalidaLLantas::where('id', $id)->first();
         $fecha = date("d-m-Y", strtotime($dato->fecha));
 
-        return view('backend.admin.historial.llantas.salida.detalle.vistadetallantahistorialsalida', compact('id', 'fecha'));
+        return view('backend.admin.llantas.historial.salida.detalle.vistadetallantahistorialsalida', compact('id', 'fecha'));
     }
 
     public function indexSalidasDetalleTablaLlanta($id){
@@ -669,7 +670,7 @@ class PrincipalController extends Controller
             $ll->precio = number_format((float)$info->precio, 2, '.', ',');
         }
 
-        return view('backend.admin.historial.llantas.salida.detalle.tabladetallantahistorialsalida', compact('lista'));
+        return view('backend.admin.llantas.historial.salida.detalle.tabladetallantahistorialsalida', compact('lista'));
     }
 
     public function documentoEntrada($id){
@@ -847,7 +848,7 @@ class PrincipalController extends Controller
     }
 
     public function indexHistorialEntradasLlanta(){
-        return view('backend.admin.historial.llantas.entrada.vistahistoentradallanta');
+        return view('backend.admin.llantas.historial.entrada.vistahistoentradallanta');
     }
 
     public function indexTablaHistorialEntradasLlantas(){
@@ -856,6 +857,10 @@ class PrincipalController extends Controller
         // verificar cada entrada_detalle para ver si ya tiene salidas
 
         foreach ($lista as $dd){
+
+            $infoProve = Proveedor::where('id', $dd->id_proveedor)->first();
+            $dd->proveedor = $infoProve->nombre;
+
             $dd->fecha = date("d-m-Y", strtotime($dd->fecha));
             $btnBloqueo = true;
             $detalle = EntradaLLantasDeta::where('id_entrada_llanta', $dd->id)->get();
@@ -869,7 +874,8 @@ class PrincipalController extends Controller
             $dd->btnbloqueo = $btnBloqueo;
         }
 
-        return view('backend.admin.historial.llantas.entrada.tablahistoentradallanta', compact('lista'));
+
+        return view('backend.admin.llantas.historial.entrada.tablahistoentradallanta', compact('lista'));
     }
 
     public function borrarDocumentoLlanta(Request $request){
@@ -991,7 +997,7 @@ class PrincipalController extends Controller
         $dato = EntradaLLantas::where('id', $id)->first();
         $fecha = date("d-m-Y", strtotime($dato->fecha));
 
-        return view('backend.admin.historial.llantas.entrada.detalle.vistadetallantahistorialentrada', compact('id', 'fecha'));
+        return view('backend.admin.llantas.historial.entrada.detalle.vistadetallantahistorialentrada', compact('id', 'fecha'));
     }
 
 
@@ -1018,7 +1024,7 @@ class PrincipalController extends Controller
             $ll->unidad = $infoUnidad->medida;
         }
 
-        return view('backend.admin.historial.llantas.entrada.detalle.tabladetallantahistorialentrada', compact('lista'));
+        return view('backend.admin.llantas.historial.entrada.detalle.tabladetallantahistorialentrada', compact('lista'));
     }
 
 

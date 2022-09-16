@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateEntradasTable extends Migration
 {
     /**
-     * Run the migrations.
+     * entradas de repuesto
      *
      * @return void
      */

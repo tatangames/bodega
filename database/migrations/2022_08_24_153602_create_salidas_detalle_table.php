@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateSalidasDetalleTable extends Migration
 {
     /**
-     * Run the migrations.
+     * detalle para salida de repuestos
      *
      * @return void
      */

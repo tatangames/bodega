@@ -47,6 +47,15 @@
                             </div>
 
                             <div style="margin-left: 15px; margin-right: 15px; margin-top: 15px;">
+                                <label class="control-label">Proveedor</label>
+                                    <select id="select-proveedor" class="form-control">
+                                        @foreach($proveedores as $item)
+                                            <option value="{{$item->id}}">{{ $item->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                            </div>
+
+                            <div style="margin-left: 15px; margin-right: 15px; margin-top: 15px;">
                                 <div class="form-group">
                                     <label>Factura u Orden de Compra:</label>
                                     <input type="text" class="form-control" autocomplete="off" maxlength="50" id="factura">
@@ -475,6 +484,7 @@
         function guardarEntrada(){
 
             var fecha = document.getElementById('fecha').value;
+            var proveedor = document.getElementById('select-proveedor').value;
             var descripc = document.getElementById('descripcion').value; // max 800
             var factura = document.getElementById('factura').value; // max 50
             var checkNuevo = document.getElementById('check-nuevo').checked;
@@ -662,6 +672,7 @@
             formData.append('descripcion', descripc);
             formData.append('entrada', entrada);
             formData.append('factura', factura);
+            formData.append('proveedor', proveedor);
             formData.append('documento', documento.files[0]);
 
             axios.post(url+'/entrada/llanta/guardar', formData, {

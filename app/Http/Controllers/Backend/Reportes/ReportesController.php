@@ -29,11 +29,11 @@ class ReportesController extends Controller
     }
 
     public function indexEntradaReporte(){
-        return view('backend.admin.reporte.vistaentradareporte');
+        return view('backend.admin.repuestos.reporte.vistaentradareporte');
     }
 
     public function indexEntradaReporteLlanta(){
-        return view('backend.admin.reporte.llantas.vistaentradallantareporte');
+        return view('backend.admin.llantas.reportes.vistaentradallantareporte');
     }
 
     public function reportePdf($tipo, $desde, $hasta){
@@ -1266,6 +1266,7 @@ class ReportesController extends Controller
                 $index++;
             }
 
+            $totalFinalEntrada = number_format((float)$totalFinalEntrada, 2, '.', ',');
 
             //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
@@ -1635,20 +1636,20 @@ class ReportesController extends Controller
 
     public function indexEntradaReporteEquipos(){
         $equipos = Equipos::orderBy('nombre')->get();
-        return view('backend.admin.reporte.equipos.vistaequiporeporte', compact('equipos'));
+        return view('backend.admin.repuestos.reporte.equipos.vistaequiporeporte', compact('equipos'));
     }
 
     public function indexEntradaReporteEquiposLlantas(){
         $marcas = Marca::orderBy('nombre')->get();
-        return view('backend.admin.reporte.llantas.equipos.vistareportellantaequipo', compact('marcas'));
+        return view('backend.admin.llantas.reportes.equipos.vistareportellantaequipo', compact('marcas'));
     }
 
     public function indexEntradaReporteCantidad(){
-        return view('backend.admin.reporte.cantidad.vistacantidadactual');
+        return view('backend.admin.repuestos.reporte.cantidad.vistacantidadactual');
     }
 
     public function indexEntradaReporteCantidadLlanta(){
-        return view('backend.admin.reporte.llantas.cantidad.vistareportellantacantidad');
+        return view('backend.admin.llantas.reportes.cantidad.vistareportellantacantidad');
     }
 
     public function reportePdfCantidad(){

@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\Validator;
 class EquiposController extends Controller
 {
     public function indexEquipos(){
-        return view('backend.admin.equipos.vistaequipos');
+        return view('backend.admin.repuestos.equipos.vistaequipos');
     }
 
     public function tablaEquipos(){
         $lista = Equipos::orderBy('nombre', 'ASC')->get();
-        return view('backend.admin.equipos.tablaequipos', compact('lista'));
+        return view('backend.admin.repuestos.equipos.tablaequipos', compact('lista'));
     }
 
     public function nuevaEquipos(Request $request){

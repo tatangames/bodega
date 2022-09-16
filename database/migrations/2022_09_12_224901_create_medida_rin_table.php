@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateMedidaRinTable extends Migration
 {
     /**
-     * Run the migrations.
+     * medidas de rin para llantas
      *
      * @return void
      */

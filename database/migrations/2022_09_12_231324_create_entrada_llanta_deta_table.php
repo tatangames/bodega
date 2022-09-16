@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateEntradaLlantaDetaTable extends Migration
 {
     /**
-     * Run the migrations.
+     * detalle entrada de llanta
      *
      * @return void
      */
@@ -19,6 +19,7 @@ class CreateEntradaLlantaDetaTable extends Migration
             $table->bigInteger('id_entrada_llanta')->unsigned();
             $table->bigInteger('id_ubicacion')->unsigned();
 
+
             $table->integer('cantidad');
 
             $table->decimal('precio', 10, 2);
@@ -26,6 +27,7 @@ class CreateEntradaLlantaDetaTable extends Migration
             $table->foreign('id_llanta')->references('id')->on('llantas');
             $table->foreign('id_entrada_llanta')->references('id')->on('entrada_llanta');
             $table->foreign('id_ubicacion')->references('id')->on('ubicacion_llanta');
+
         });
     }
 

@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateEquiposTable extends Migration
 {
     /**
-     * Run the migrations.
+     * lista de equipos
      *
      * @return void
      */
