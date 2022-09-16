@@ -59,12 +59,12 @@ class RolesSeeder extends Seeder
         Permission::create(['name' => 'historial.entrada.llanta', 'description' => 'contenedor de historiales entrada llanta'])->syncRoles($roleLlantas);
 
         Permission::create(['name' => 'sidebar.reporte.repuesto', 'description' => 'contenedor de reporte repuesto'])->syncRoles($roleInventario, $roleAuditora);
-        Permission::create(['name' => 'reporte.llantas.repuesto', 'description' => 'contenedor reporte entrada y salida para repuesto'])->syncRoles($roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.repuestos.entradaysalida', 'description' => 'contenedor reporte entrada y salida para repuesto'])->syncRoles($roleInventario, $roleAuditora);
         Permission::create(['name' => 'reporte.repuesto.equipos', 'description' => 'contenedor reporte repuesto por equipos'])->syncRoles($roleInventario, $roleAuditora);
         Permission::create(['name' => 'reporte.repuesto.cantidades', 'description' => 'contenedor reporte cantidades repuesto'])->syncRoles($roleInventario, $roleAuditora);
 
         Permission::create(['name' => 'sidebar.reporte.llantas', 'description' => 'contenedor de reporte llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
-        Permission::create(['name' => 'reporte.llantas.llantas', 'description' => 'contenedor reporte entrada y salida para llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.llantas.entradaysalida', 'description' => 'contenedor reporte entrada y salida para llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
         Permission::create(['name' => 'reporte.llantas.equipos', 'description' => 'contenedor reporte llantas por equipos'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
         Permission::create(['name' => 'reporte.llantas.cantidades', 'description' => 'contenedor reporte cantidades llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
 

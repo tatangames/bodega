@@ -288,7 +288,7 @@
 
                         <ul class="nav nav-treeview">
 
-                            @can('reporte.entradasalida.repuesto')
+                            @can('reporte.repuestos.entradaysalida')
                                 <li class="nav-item">
                                     <a href="{{ route('admin.entrada.reporte.index') }}" target="frameprincipal" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
@@ -330,7 +330,7 @@
                         </a>
 
                         <ul class="nav nav-treeview">
-                            @can('reporte.entradasalida.llantas')
+                            @can('reporte.llantas.entradaysalida')
                                 <li class="nav-item">
                                     <a href="{{ route('admin.entrada.reporte.llanta.index') }}" target="frameprincipal" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
