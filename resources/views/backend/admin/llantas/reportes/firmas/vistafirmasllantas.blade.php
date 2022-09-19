@@ -85,6 +85,12 @@
                                     <input type="number" class="form-control" value="{{ $lista->distancia }}" id="distancia" placeholder="0">
                                 </div>
 
+                                <label style="font-weight: bold">Distancia Bloque 2 en PX</label>
+
+                                <div class="form-group">
+                                    <input type="number" class="form-control" value="{{ $lista->distancia2 }}" id="distancia2" placeholder="0">
+                                </div>
+
                             </div>
 
                             <div class="card-footer" style="float: right;">
@@ -147,6 +153,7 @@
             var nombre6 = document.getElementById('nombre6').value;
 
             var distancia = document.getElementById('distancia').value;
+            var distancia2 = document.getElementById('distancia2').value;
 
             if(nombre1 === ''){
                 toastr.error('Firma 1: nombre es requerido');
@@ -178,6 +185,16 @@
                 return;
             }
 
+            if(distancia === ''){
+                toastr.error('Distancia es Requerida');
+                return;
+            }
+
+            if(distancia2 === ''){
+                toastr.error('Distancia bloque 2 es Requerida');
+                return;
+            }
+
             var reglaNumeroEntero = /^[0-9]\d*$/;
 
             if(!distancia.match(reglaNumeroEntero)) {
@@ -196,6 +213,23 @@
             }
 
 
+
+            if(!distancia2.match(reglaNumeroEntero)) {
+                toastr.error('Distancia bloque 2 debe ser número Entero y no Negativo');
+                return;
+            }
+
+            if(distancia2 < 0){
+                toastr.error('Distancia bloque 2 no puede ser negativo');
+                return;
+            }
+
+            if(distancia2 > 1000){
+                toastr.error('Distancia bloque 2 máximo 1000 PX');
+                return;
+            }
+
+
             openLoading();
             var formData = new FormData();
             formData.append('nombre1', nombre1);
@@ -205,6 +239,7 @@
             formData.append('nombre5', nombre5);
             formData.append('nombre6', nombre6);
             formData.append('distancia', distancia);
+            formData.append('distancia2', distancia2);
 
             axios.post(url+'/ajuste/firmallanta/editar', formData, {
             })

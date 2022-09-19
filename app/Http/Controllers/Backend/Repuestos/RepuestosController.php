@@ -458,6 +458,7 @@ class RepuestosController extends Controller
             'nombre_5' => $request->nombre5,
             'nombre_6' => $request->nombre6,
             'distancia' => $request->distancia,
+            'distancia2' => $request->distancia2,
         ]);
 
         return ['success' => 1];

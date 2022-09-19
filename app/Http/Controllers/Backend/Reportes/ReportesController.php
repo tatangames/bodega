@@ -570,9 +570,24 @@ class ReportesController extends Controller
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F. __________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F. __________________________________________</td>
                     </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
 
             $tabla .= "<tr>
                     <td width='25%' style='font-weight: bold'>$firmas->nombre_1</td>
@@ -586,12 +601,22 @@ class ReportesController extends Controller
 
             $tabla .= "</tbody></table>";
 
-            $tabla .= "<table width='100%'  style='margin-top: 100px'  id='tablaForTranspa'>
+            $tabla .= "<table width='100%'  id='tablaForTranspa' style='margin-top: $firmas->distancia2'>
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F.__________________________________________</td>
                     </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    </tr>";
+
 
             $tabla .= "<tr>
                     <td width='25%' style='font-weight: bold'>$firmas->nombre_5</td>
@@ -602,8 +627,6 @@ class ReportesController extends Controller
                     </tr>";
 
             $tabla .= "</tbody></table>";
-
-
 
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet,1);
@@ -765,9 +788,24 @@ class ReportesController extends Controller
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F. __________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F. __________________________________________</td>
                     </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
 
             $tabla .= "<tr>
                     <td width='25%' style='font-weight: bold'>$firmas->nombre_1</td>
@@ -781,12 +819,22 @@ class ReportesController extends Controller
 
             $tabla .= "</tbody></table>";
 
-            $tabla .= "<table width='100%'  style='margin-top: 100px'  id='tablaForTranspa'>
+            $tabla .= "<table width='100%'  id='tablaForTranspa' style='margin-top: $firmas->distancia2'>
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F.__________________________________________</td>
                     </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    </tr>";
+
 
             $tabla .= "<tr>
                     <td width='25%' style='font-weight: bold'>$firmas->nombre_5</td>
@@ -797,7 +845,6 @@ class ReportesController extends Controller
                     </tr>";
 
             $tabla .= "</tbody></table>";
-
 
 
             $stylesheet = file_get_contents('css/cssregistro.css');
@@ -1384,9 +1431,24 @@ class ReportesController extends Controller
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F. __________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F. __________________________________________</td>
                     </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
 
             $tabla .= "<tr>
                     <td width='25%' style='font-weight: bold'>$firmas->nombre_1</td>
@@ -1400,12 +1462,22 @@ class ReportesController extends Controller
 
             $tabla .= "</tbody></table>";
 
-            $tabla .= "<table width='100%'  style='margin-top: 100px'  id='tablaForTranspa'>
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia2'>
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F.__________________________________________</td>
                     </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    </tr>";
+
 
             $tabla .= "<tr>
                     <td width='25%' style='font-weight: bold'>$firmas->nombre_5</td>
@@ -1416,8 +1488,6 @@ class ReportesController extends Controller
                     </tr>";
 
             $tabla .= "</tbody></table>";
-
-
 
             $stylesheet = file_get_contents('css/cssregistro.css');
             $mpdf->WriteHTML($stylesheet, 1);
@@ -1588,9 +1658,24 @@ class ReportesController extends Controller
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F. __________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F. __________________________________________</td>
                     </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
 
             $tabla .= "<tr>
                     <td width='25%' style='font-weight: bold'>$firmas->nombre_1</td>
@@ -1604,12 +1689,22 @@ class ReportesController extends Controller
 
             $tabla .= "</tbody></table>";
 
-            $tabla .= "<table width='100%'  style='margin-top: 100px'  id='tablaForTranspa'>
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia2'>
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F.__________________________________________</td>
                     </tr>";
+
+            $tabla .= "</tbody></table>";
+
+            $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    </tr>";
+
 
             $tabla .= "<tr>
                     <td width='25%' style='font-weight: bold'>$firmas->nombre_5</td>
@@ -1620,7 +1715,6 @@ class ReportesController extends Controller
                     </tr>";
 
             $tabla .= "</tbody></table>";
-
 
 
             $stylesheet = file_get_contents('css/cssregistro.css');
@@ -1717,7 +1811,7 @@ class ReportesController extends Controller
 
         //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
         $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
-        $mpdf->SetTitle('Entradas');
+        $mpdf->SetTitle('Actuales');
 
         // mostrar errores
         $mpdf->showImageErrors = false;
@@ -1730,7 +1824,6 @@ class ReportesController extends Controller
         Reporte de Repuestos Actuales <br>
         Fecha: $fechaFormat
         </div>";
-
 
         foreach ($lista as $ll) {
 
@@ -1760,7 +1853,7 @@ class ReportesController extends Controller
 
                 foreach ($ll->detalle as $dd) {
 
-                    if ($dd->dinerobloque > 0) {
+                    if ($dd->totalactual > 0) {
 
                         if ($unavuelta) {
                             $unavuelta = false;
@@ -1885,7 +1978,7 @@ class ReportesController extends Controller
 
         //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
         $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
-        $mpdf->SetTitle('Entradas');
+        $mpdf->SetTitle('Actuales');
 
         // mostrar errores
         $mpdf->showImageErrors = false;
@@ -1907,8 +2000,8 @@ class ReportesController extends Controller
             <tbody>";
 
                 $tabla .= "<tr>
-                <td width='15%' >LLanta</td>
-                <td width='8%'>Medida</td>
+                <td width='15%' >Marca</td>
+                <td width='8%'>Número de RIN</td>
             </tr>";
 
                 $tabla .= "<tr>
@@ -1925,24 +2018,25 @@ class ReportesController extends Controller
 
                 foreach ($ll->detalle as $dd){
 
-                    if($dd->dinerobloque > 0){
+                    if($dd->totalactual > 0){
 
                         if($unavuelta){
                             $unavuelta = false;
+
                             $tabla .= "<tr>
                                 <td width='10%'>Ubicación</td>
                                 <td width='10%'>Cantidad</td>
                                 <td width='10%'>Precio</td>
                                 <td width='10%'>Total</td>
                                 </tr>";
-                            }
+                        }
 
-                                $tabla .= "<tr>
-                        <td width='10%'>$dd->ubicacion</td>
-                        <td width='10%'>$dd->totalactual</td>
-                        <td width='10%'>$$dd->precio</td>
-                        <td width='10%'>$$dd->dinerobloque</td>
-                        </tr>";
+                            $tabla .= "<tr>
+                                <td width='10%'>$dd->ubicacion</td>
+                                <td width='10%'>$dd->totalactual</td>
+                                <td width='10%'>$$dd->precio</td>
+                                <td width='10%'>$$dd->dinerobloque</td>
+                                </tr>";
                     }
                 }
 
@@ -1977,8 +2071,18 @@ class ReportesController extends Controller
             <tbody>";
 
         $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F. __________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F. __________________________________________</td>
+                    </tr>";
+
+        $tabla .= "</tbody></table>";
+
+        $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
+
+        $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
                     </tr>";
 
         $tabla .= "<tr>
@@ -1993,16 +2097,26 @@ class ReportesController extends Controller
 
         $tabla .= "</tbody></table>";
 
-        $tabla .= "<table width='100%'  style='margin-top: 100px'  id='tablaForTranspa'>
+        $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia2'>
             <tbody>";
 
         $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>__________________________________________</td>
+                    <td width='25%' style='font-weight: bold'>F.__________________________________________</td>
+                    </tr>";
+
+        $tabla .= "</tbody></table>";
+
+        $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: 35px'>
+            <tbody>";
+
+        $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>N. __________________________________________</td>
                     </tr>";
 
         $tabla .= "<tr>
                     <td width='25%' style='font-weight: bold'>$firmas->nombre_5</td>
                     </tr>";
+
 
         $tabla .= "<tr>
                     <td width='25%' style='font-size: 16px'>$firmas->nombre_6</td>

@@ -25,6 +25,7 @@ class CreateFirmasLlantasTable extends Migration
             $table->string('nombre_6', 100);
 
             $table->integer('distancia');
+            $table->integer('distancia2');
         });
     }
 
