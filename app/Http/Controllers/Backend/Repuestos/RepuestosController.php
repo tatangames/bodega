@@ -459,6 +459,7 @@ class RepuestosController extends Controller
             'nombre_6' => $request->nombre6,
             'distancia' => $request->distancia,
             'distancia2' => $request->distancia2,
+            'saltopagina' => $request->toggle
         ]);
 
         return ['success' => 1];

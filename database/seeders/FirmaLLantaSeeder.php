@@ -21,7 +21,9 @@ class FirmaLLantaSeeder extends Seeder
             'nombre_4' => 'Jefe de Plantel Maquinaria y Equipo',
             'nombre_5' => 'Autorizado Por',
             'nombre_6' => 'Gerente de Servicio y Desarrollo Territorial',
-            'distancia' => 100
+            'distancia' => 100,
+            'distancia2' => 100,
+            'saltopagina' => 0
         ]);
     }
 }

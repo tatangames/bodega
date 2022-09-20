@@ -566,6 +566,12 @@ class ReportesController extends Controller
             $tabla .= "</tbody></table>";
 
 
+            if($firmas->saltopagina == 1) {
+                $tabla .= "<pagebreak />";
+                $tabla .= "<div style='padding-top: 1px'></div>";
+            }
+
+
             $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia'>
             <tbody>";
 
@@ -600,6 +606,7 @@ class ReportesController extends Controller
                     </tr>";
 
             $tabla .= "</tbody></table>";
+
 
             $tabla .= "<table width='100%'  id='tablaForTranspa' style='margin-top: $firmas->distancia2'>
             <tbody>";
@@ -783,6 +790,12 @@ class ReportesController extends Controller
                 </tr>";
 
             $tabla .= "</tbody></table>";
+
+
+            if($firmas->saltopagina == 1) {
+                $tabla .= "<pagebreak />";
+                $tabla .= "<div style='padding-top: 1px'></div>";
+            }
 
             $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia'>
             <tbody>";
@@ -1319,6 +1332,7 @@ class ReportesController extends Controller
             $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
             $mpdf->SetTitle('Entradas');
 
+
             // mostrar errores
             $mpdf->showImageErrors = false;
 
@@ -1426,6 +1440,11 @@ class ReportesController extends Controller
 
             $tabla .= "</tbody></table>";
 
+
+            if($firmas->saltopagina == 1) {
+                $tabla .= "<pagebreak />";
+                $tabla .= "<div style='padding-top: 1px'></div>";
+            }
 
             $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia'>
             <tbody>";
@@ -1654,6 +1673,11 @@ class ReportesController extends Controller
 
             $tabla .= "</tbody></table>";
 
+            if($firmas->saltopagina == 1) {
+                $tabla .= "<pagebreak />";
+                $tabla .= "<div style='padding-top: 1px'></div>";
+            }
+
             $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia'>
             <tbody>";
 
@@ -1769,6 +1793,8 @@ class ReportesController extends Controller
                 $medida = $dataUnidad->medida;
             }
 
+            $haybloque = false;
+
             // obtener todas las entradas detalle de este material
 
             $entradaDetalle = EntradaDetalle::where('id_material', $item->id)->get();
@@ -1782,24 +1808,30 @@ class ReportesController extends Controller
                     ->sum('cantidad');
 
                 // restar
-                $total = $data->cantidad - $salidaDetalle;
-                $valor = $valor + $total;
+                $totalActual = $data->cantidad - $salidaDetalle;
+                $valor = $valor + $totalActual;
 
-                if($total > 0){
-                    $dinerobloque = $dinerobloque + ($data->precio * $total);
+                if($totalActual > 0){
+                    $dinerobloque = $dinerobloque + ($data->precio * $totalActual);
                     $sumadinerobloque = $sumadinerobloque + $dinerobloque;
                     $data->dinerobloque = number_format((float)$dinerobloque, 2, '.', ',');
-                    $totalarticulos = $totalarticulos + $total;
+                    $totalarticulos = $totalarticulos + $totalActual;
                 }else{
                     $data->dinerobloque = 0;
                 }
+                if($totalActual > 0){
+                    $haybloque = true;
+                }
 
-                $data->totalactual = $total;
+                $data->totalactual = $totalActual;
             }
 
             $totalCantidad = $totalCantidad + $valor;
             $item->medida = $medida;
             $item->total = $valor;
+
+            $item->haybloque = $haybloque;
+
             $totalDinero = $totalDinero + $sumadinerobloque;
             $item->sumadinerobloque = number_format((float)$sumadinerobloque, 2, '.', ',');
 
@@ -1827,7 +1859,7 @@ class ReportesController extends Controller
 
         foreach ($lista as $ll) {
 
-            if ($ll->sumadinerobloque > 0) {
+            if($ll->haybloque){
 
                 $tabla .= "<table width='100%' id='tablaFor'>
                 <tbody>";
@@ -1938,6 +1970,7 @@ class ReportesController extends Controller
 
             $entradaDetalle = EntradaLLantasDeta::where('id_llanta', $item->id)->get();
             $valor = 0;
+            $haybloque = false;
 
             foreach ($entradaDetalle as $data){
                 $dinerobloque = 0;
@@ -1949,26 +1982,36 @@ class ReportesController extends Controller
                 $infoBodega = UbicacionBodega::where('id', $data->id_ubicacion)->first();
 
                 // restar
-                $total = $data->cantidad - $salidaDetalle;
-                $valor = $valor + $total;
+                $totalActual = $data->cantidad - $salidaDetalle;
+                $valor = $valor + $totalActual;
 
-                if($total > 0){
-                    $dinerobloque = $dinerobloque + ($data->precio * $total);
+                if($totalActual > 0){
+
+                    $dinerobloque = $dinerobloque + ($data->precio * $totalActual);
+
                     $sumadinerobloque = $sumadinerobloque + $dinerobloque;
                     $data->dinerobloque = number_format((float)$dinerobloque, 2, '.', ',');
-                    $totalarticulos = $totalarticulos + $total;
+                    $totalarticulos = $totalarticulos + $totalActual;
                 }else{
                     $data->dinerobloque = 0;
                 }
 
+                if($totalActual > 0){
+                    $haybloque = true;
+                }
+
                 $data->ubicacion = $infoBodega->nombre;
-                $data->totalactual = $total;
+                $data->totalactual = $totalActual;
             }
 
             $totalCantidad = $totalCantidad + $valor;
             $item->total = $valor;
             $totalDinero = $totalDinero + $sumadinerobloque;
+
+            $item->haybloque = $haybloque;
+
             $item->sumadinerobloque = number_format((float)$sumadinerobloque, 2, '.', ',');
+            $item->sumadinerobloqueformat = number_format((float)$sumadinerobloque, 2, '.', ',');
 
             $resultsBloque[$index]->detalle = $entradaDetalle;
             $index++;
@@ -1980,8 +2023,9 @@ class ReportesController extends Controller
         $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
         $mpdf->SetTitle('Actuales');
 
-        // mostrar errores
-        $mpdf->showImageErrors = false;
+        $mpdf->AddPage();
+        $mpdf->WriteHTML('', 2);
+
 
         $logoalcaldia = 'images/logo2.png';
 
@@ -1994,7 +2038,7 @@ class ReportesController extends Controller
 
         foreach ($lista as $ll){
 
-            if($ll->sumadinerobloque > 0){
+            if($ll->haybloque){
 
                 $tabla .= "<table width='100%' id='tablaFor'>
             <tbody>";
@@ -2044,14 +2088,14 @@ class ReportesController extends Controller
                         <td width='10%' style='font-weight: bold'>Total</td>
                         <td width='10%' style='font-weight: bold'>$ll->total</td>
                         <td width='10%'></td>
-                        <td width='10%' style='font-weight: bold'>$$ll->sumadinerobloque</td>
+                        <td width='10%' style='font-weight: bold'>$$ll->sumadinerobloqueformat</td>
                         </tr>";
 
                 $tabla .= "</tbody></table>";
             }
         }
 
-        $tabla .= "<table width='100%' id='tablaFor'>
+        $tabla .= "<table width='100%' id='tablaFor' style='margin-top: 25px'>
             <tbody>";
 
         $tabla .= "<tr>
@@ -2065,6 +2109,11 @@ class ReportesController extends Controller
                     ";
 
         $tabla .= "</tbody></table>";
+
+        if($firmas->saltopagina == 1) {
+            $tabla .= "<pagebreak />";
+            $tabla .= "<div style='padding-top: 1px'></div>";
+        }
 
 
         $tabla .= "<table width='100%' id='tablaForTranspa' style='margin-top: $firmas->distancia'>

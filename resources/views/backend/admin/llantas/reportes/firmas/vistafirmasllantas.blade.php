@@ -4,6 +4,7 @@
     <link href="{{ asset('css/adminlte.min.css') }}" type="text/css" rel="stylesheet" />
     <link href="{{ asset('css/dataTables.bootstrap4.css') }}" type="text/css" rel="stylesheet" />
     <link href="{{ asset('css/toastr.min.css') }}" type="text/css" rel="stylesheet" />
+    <link href="{{ asset('css/estiloToggle.css') }}" type="text/css" rel="stylesheet" />
 
 @stop
 
@@ -91,6 +92,18 @@
                                     <input type="number" class="form-control" value="{{ $lista->distancia2 }}" id="distancia2" placeholder="0">
                                 </div>
 
+                                <div class="form-group">
+                                    <label style="font-weight: bold">Salto de Página para Bloque de Firmas</label> <br>
+                                    <label class="switch" style="margin-top:10px">
+                                        <input type="checkbox" id="toggle-editar">
+                                        <div class="slider round">
+                                            <span class="on">Si</span>
+                                            <span class="off">No</span>
+                                        </div>
+                                    </label>
+                                </div>
+
+
                             </div>
 
                             <div class="card-footer" style="float: right;">
@@ -125,6 +138,13 @@
             var ruta = "{{ URL::to('/admin/ajuste/firmallanta/tabla/index') }}";
             $('#tablaDatatable').load(ruta);
 
+            let dato = {{ $lista->saltopagina }};
+            if(dato === 0){
+                $("#toggle-editar").prop("checked", false);
+            }else{
+                $("#toggle-editar").prop("checked", true);
+            }
+
             document.getElementById("divcontenedor").style.display = "block";
         });
     </script>
@@ -154,6 +174,10 @@
 
             var distancia = document.getElementById('distancia').value;
             var distancia2 = document.getElementById('distancia2').value;
+
+            var t = document.getElementById('toggle-editar').checked;
+            var toggle = t ? 1 : 0;
+
 
             if(nombre1 === ''){
                 toastr.error('Firma 1: nombre es requerido');
@@ -240,6 +264,7 @@
             formData.append('nombre6', nombre6);
             formData.append('distancia', distancia);
             formData.append('distancia2', distancia2);
+            formData.append('toggle', toggle);
 
             axios.post(url+'/ajuste/firmallanta/editar', formData, {
             })

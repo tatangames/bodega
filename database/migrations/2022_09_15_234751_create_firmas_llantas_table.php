@@ -26,6 +26,10 @@ class CreateFirmasLlantasTable extends Migration
 
             $table->integer('distancia');
             $table->integer('distancia2');
+
+            //0: no
+            //1: si
+            $table->boolean('saltopagina');
         });
     }
 
