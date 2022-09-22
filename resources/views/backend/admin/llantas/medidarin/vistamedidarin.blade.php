@@ -21,13 +21,13 @@
             <div class="col-sm-6">
                 <button type="button" onclick="modalAgregar()" class="btn btn-primary btn-sm">
                     <i class="fas fa-plus-square"></i>
-                    Nuevo # de RIN
+                    Nuevo Tipo de Llanta
                 </button>
             </div>
 
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item">RIN</li>
+                    <li class="breadcrumb-item">Tipo de llanta</li>
                     <li class="breadcrumb-item active">Lista de Medida</li>
                 </ol>
             </div>
@@ -56,7 +56,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Nuevo # de RIN</h4>
+                    <h4 class="modal-title">Nuevo Tipo de Llanta</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -90,7 +90,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Editar # de RIN</h4>
+                    <h4 class="modal-title">Editar Tipo de Llanta</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

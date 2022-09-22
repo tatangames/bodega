@@ -8,7 +8,7 @@
                             <thead>
                             <tr>
                                 <th style="width: 20%">Marca</th>
-                                <th style="width: 10%"># de RIN</th>
+                                <th style="width: 10%">Tipo de Llanta</th>
                                 <th style="width: 5%">Cantidad</th>
                                 <th style="width: 10%">Precio</th>
                                 <th style="width: 10%">Equipo o Destino</th>
@@ -23,6 +23,7 @@
                                     <td>{{ $dato->cantidad }}</td>
                                     <td>${{ $dato->precio }}</td>
                                     <td>{{ $dato->equipo }}</td>
+
                                 </tr>
                             @endforeach
 

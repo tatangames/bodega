@@ -111,6 +111,13 @@ Route::post('/admin/historial/salida/editar',  [RepuestosController::class,'edit
 Route::get('/admin/entradas/detalle/{id}', [PrincipalController::class,'indexEntradasDetalle']);
 Route::get('/admin/entradas/detalle/tabla/{id}', [PrincipalController::class,'indexEntradasDetalleTabla']);
 
+// detalle historial entrada llanta. para cambiar precio
+Route::post('/admin/entradas/historial/deta/informacion',  [PrincipalController::class,'informacionEntradaHistorialDetalle']);
+Route::post('/admin/entradas/historial/deta/editar',  [PrincipalController::class,'editarEntradaHistorialDetalle']);
+
+
+
+
 // historial detalle para salidas
 Route::get('/admin/salidas/vista', [PrincipalController::class,'indexSalidas'])->name('admin.historial.salida.repuesto.vista.index');
 Route::get('/admin/salidas/tabla', [PrincipalController::class,'indexTablaSalidas']);
@@ -141,7 +148,7 @@ Route::get('/admin/reporte/cantidades', [ReportesController::class,'reportePdfCa
 
 //**************** RUTAS PARA LLANTAS *****************
 
-// registro # de rin llanta
+// registro tipo de llanta
 Route::get('/admin/rinllanta/index', [PrincipalController::class,'indexRinllanta'])->name('admin.rin.llantas.index');
 Route::get('/admin/rinllanta/tabla/index', [PrincipalController::class,'tablaRinllanta']);
 Route::post('/admin/rinllanta/nuevo', [PrincipalController::class, 'nuevaRinllanta']);
@@ -213,6 +220,11 @@ Route::post('/admin/entradas/historialllanta/borrar/registro',  [PrincipalContro
 Route::post('/admin/entradas/historialllanta/guardar/documento',  [PrincipalController::class,'guardarDocumentoLlanta']);
 Route::post('/admin/entradas/historialllanta/informacion',  [RepuestosController::class,'informacionEntradaHistorialLlanta']);
 Route::post('/admin/entradas/historialllanta/editar',  [RepuestosController::class,'editarEntradaHistorialLlanta']);
+
+// detalle historial entrada llanta. para cambiar precio
+Route::post('/admin/entradas/historialllanta/deta/informacion',  [RepuestosController::class,'informacionEntradaHistorialLlantaDetalle']);
+Route::post('/admin/entradas/historialllanta/deta/editar',  [RepuestosController::class,'editarEntradaHistorialLlantaDetalle']);
+
 
 // historial salida para llantas
 Route::get('/admin/historial/salida/llanta/vista', [PrincipalController::class,'indexSalidasLlantas'])->name('admin.historial.salida.llanta.vista.index');

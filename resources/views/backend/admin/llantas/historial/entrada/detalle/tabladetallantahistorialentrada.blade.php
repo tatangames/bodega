@@ -8,10 +8,11 @@
                             <thead>
                             <tr>
                                 <th style="width: 20%">Marca</th>
-                                <th style="width: 10%"># de RIN</th>
+                                <th style="width: 10%">Tipo Llanta</th>
                                 <th style="width: 5%">Cantidad</th>
                                 <th style="width: 10%">Ubicación</th>
                                 <th style="width: 10%">Precio</th>
+                                <th style="width: 10%">Opciones</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -23,6 +24,9 @@
                                     <td>{{ $dato->cantidad }}</td>
                                     <td>{{ $dato->ubicacion }}</td>
                                     <td>${{ $dato->precio }}</td>
+                                    <td> <button type="button" class="btn btn-primary btn-xs" onclick="infoEditar({{ $dato->id }})">
+                                        <i class="fas fa-edit" title="Editar"></i>&nbsp; Editar
+                                    </button></td>
                                 </tr>
                             @endforeach
 

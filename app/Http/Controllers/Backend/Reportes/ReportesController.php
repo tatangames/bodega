@@ -408,7 +408,8 @@ class ReportesController extends Controller
                 ->orderBy('fecha', 'ASC')
                 ->get();
 
-            $totalFinalEntrada = 0;
+            $totalFinalEntrada = 0; // dinero final
+            $totalLLantaEntrada = 0; // cantidad llanta final
             foreach ($listaEntrada as $ll){
 
                 $ll->fecha = date("d-m-Y", strtotime($ll->fecha));
@@ -455,6 +456,7 @@ class ReportesController extends Controller
                 }
 
                 $totalFinalEntrada = $totalFinalEntrada + $totalsumado;
+                $totalLLantaEntrada += $totalcantidad;
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
                 $ll->totalsumado = number_format((float)$totalsumado, 2, '.', ',');
@@ -525,7 +527,7 @@ class ReportesController extends Controller
 
                 $tabla .= "<tr>
                     <td width='25%'>Marca</td>
-                    <td width='8%'># de RIN</td>
+                    <td width='8%'>Tipo Llanta</td>
                     <td width='8%'>Ubicación</td>
                     <td width='8%'>Cantidad</td>
                     <td width='8%'>Precio</td>
@@ -544,12 +546,12 @@ class ReportesController extends Controller
                 }
 
                 $tabla .= "<tr>
-                    <td width='25%'>Total</td>
+                    <td width='25%' style='font-weight: bold'>Total</td>
                     <td width='8%'></td>
                     <td width='8%'></td>
+                    <td width='8%' style='font-weight: bold'>$dd->totalcantidad</td>
                     <td width='8%'></td>
-                    <td width='8%'></td>
-                    <td width='8%'>$$dd->totalsumado</td>
+                    <td width='8%' style='font-weight: bold'>$$dd->totalsumado</td>
                 </tr>";
 
                 $tabla .= "</tbody></table>";
@@ -559,7 +561,12 @@ class ReportesController extends Controller
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>Total de Entradas</td>
+                    <td width='25%' style='font-weight: bold'>Total Entradas</td>
+                    <td width='8%' style='font-weight: bold'>Entrada Dinero</td>
+                </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$totalLLantaEntrada</td>
                     <td width='8%' style='font-weight: bold'>$$totalFinalEntrada</td>
                 </tr>";
 
@@ -652,7 +659,8 @@ class ReportesController extends Controller
                 ->orderBy('fecha', 'ASC')
                 ->get();
 
-            $totalFinalSalida = 0;
+            $totalFinalSalida = 0; // dinero
+            $totalLLantaSalida = 0; // cantidad llantas salieron
 
             foreach ($listaSalida as $ll){
 
@@ -693,6 +701,7 @@ class ReportesController extends Controller
                 }
 
                 $totalFinalSalida = $totalFinalSalida + $totaldinero;
+                $totalLLantaSalida += $totalcantidad;
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
 
@@ -751,7 +760,7 @@ class ReportesController extends Controller
 
                 $tabla .= "<tr>
                     <td width='25%'>Marca</td>
-                    <td width='8%'># de RIN</td>
+                    <td width='8%'>Tipo de Llanta</td>
                     <td width='8%'>Equipo</td>
                     <td width='20px'>Cantidad</td>
                     <td width='8%'>Precio</td>
@@ -770,12 +779,12 @@ class ReportesController extends Controller
                 }
 
                 $tabla .= "<tr>
-                    <td width='25%'>Total</td>
+                    <td width='25%' style='font-weight: bold'>Total</td>
                     <td width='8%'></td>
                     <td width='8%'></td>
-                    <td width='20px'></td>
+                    <td width='20px' style='font-weight: bold'>$dd->totalcantidad</td>
                     <td width='8%'></td>
-                    <td width='8%'>$$dd->totaldinero</td>
+                    <td width='8%' style='font-weight: bold'>$$dd->totaldinero</td>
                 </tr>";
 
                 $tabla .= "</tbody></table>";
@@ -785,7 +794,12 @@ class ReportesController extends Controller
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>Total de Salida</td>
+                    <td width='25%' style='font-weight: bold'>Total Salidas</td>
+                    <td width='8%' style='font-weight: bold'>Salida Dinero</td>
+                </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$totalLLantaSalida</td>
                     <td width='8%' style='font-weight: bold'>$$totalFinalSalida</td>
                 </tr>";
 
@@ -1271,7 +1285,8 @@ class ReportesController extends Controller
                 ->orderBy('fecha', 'ASC')
                 ->get();
 
-            $totalFinalEntrada = 0;
+            $totalFinalEntrada = 0; // total de dinero
+            $totalLLantaEntrada = 0; // total de llantas finales
 
             foreach ($listaEntrada as $ll) {
 
@@ -1317,6 +1332,7 @@ class ReportesController extends Controller
                 }
 
                 $totalFinalEntrada = $totalFinalEntrada + $totalsumado;
+                $totalLLantaEntrada += $totalcantidad;
                 $ll->totalsumado = number_format((float)$totalsumado, 2, '.', ',');
 
                 $ll->totalcantidad = $totalcantidad;
@@ -1399,7 +1415,7 @@ class ReportesController extends Controller
 
                     $tabla .= "<tr>
                     <td width='25%'>Marca</td>
-                    <td width='8%'># de RIN</td>
+                    <td width='8%'>Tipo de Llanta</td>
                     <td width='8%'>Ubicación</td>
                     <td width='8%'>Cantidad</td>
                     <td width='8%'>Precio</td>
@@ -1434,9 +1450,16 @@ class ReportesController extends Controller
             <tbody>";
 
             $tabla .= "<tr>
-                    <td width='25%' style='font-weight: bold'>Total de Entradas</td>
+                    <td width='25%' style='font-weight: bold'>Total Entradas</td>
+                    <td width='8%' style='font-weight: bold'>Entrada Dinero</td>
+                </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$totalLLantaEntrada</td>
                     <td width='8%' style='font-weight: bold'>$$totalFinalEntrada</td>
                 </tr>";
+
+
 
             $tabla .= "</tbody></table>";
 
@@ -1525,7 +1548,7 @@ class ReportesController extends Controller
                 ->get();
 
             $totalFinalSalida = 0;
-
+            $totalLLantaSalida = 0;
             foreach ($listaSalida as $ll) {
 
                 $ll->fecha = date("d-m-Y", strtotime($ll->fecha));
@@ -1560,7 +1583,7 @@ class ReportesController extends Controller
                     $infoEquipo = Equipos::where('id', $dd->id_equipo)->first();
                     $dd->equipo = $infoEquipo->nombre;
                 }
-
+                $totalLLantaSalida += $totalcantidad;
                 $totalFinalSalida = $totalFinalSalida + $totaldinero;
                 $ll->totalcantidad = $totalcantidad;
                 $ll->totaldinero = number_format((float)$totaldinero, 2, '.', ',');
@@ -1667,9 +1690,14 @@ class ReportesController extends Controller
                     <tbody>";
 
             $tabla .= "<tr>
-                        <td width='25%' style='font-weight: bold'>Total de Salida</td>
-                        <td width='8%' style='font-weight: bold'>$$totalFinalSalida</td>
-                    </tr>";
+                    <td width='25%' style='font-weight: bold'>Total Salidas</td>
+                    <td width='8%' style='font-weight: bold'>Salida Dinero</td>
+                </tr>";
+
+            $tabla .= "<tr>
+                    <td width='25%' style='font-weight: bold'>$totalLLantaSalida</td>
+                    <td width='8%' style='font-weight: bold'>$$totalFinalSalida</td>
+                </tr>";
 
             $tabla .= "</tbody></table>";
 
@@ -2045,7 +2073,7 @@ class ReportesController extends Controller
 
                 $tabla .= "<tr>
                 <td width='15%' >Marca</td>
-                <td width='8%'>Número de RIN</td>
+                <td width='8%'>Tipo Llanta</td>
             </tr>";
 
                 $tabla .= "<tr>

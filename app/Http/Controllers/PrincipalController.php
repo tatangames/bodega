@@ -550,7 +550,7 @@ class PrincipalController extends Controller
     public function indexEntradasDetalleTabla($id){
         $lista = DB::table('entradas_detalle AS ed')
             ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
-            ->select('ed.cantidad', 'm.nombre', 'm.codigo', 'ed.id_equipo', 'ed.precio', 'm.id as idmaterial')
+            ->select('ed.cantidad', 'm.nombre', 'ed.id', 'm.codigo', 'ed.id_equipo', 'ed.precio', 'm.id as idmaterial')
             ->where('ed.id_entrada', $id)
             ->orderBy('m.nombre', 'ASC')
             ->get();
@@ -573,6 +573,45 @@ class PrincipalController extends Controller
 
         return view('backend.admin.repuestos.entradas.detalle.tablaentradadetalle', compact('lista'));
     }
+
+
+    public function informacionEntradaHistorialDetalle(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = EntradaDetalle::where('id', $request->id)->first()){
+
+            return ['success' => 1, 'info' => $lista];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function editarEntradaHistorialDetalle(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+            'precio' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        EntradaDetalle::where('id', $request->id)->update([
+            'precio' => $request->precio
+        ]);
+
+        return ['success' => 1];
+    }
+
+
 
 
     //****************************************************************************
@@ -1006,7 +1045,7 @@ class PrincipalController extends Controller
         $lista = DB::table('entrada_llanta_deta AS ed')
             ->join('llantas AS m', 'ed.id_llanta', '=', 'm.id')
             ->join('marca_llanta AS marca', 'm.id_marca', '=', 'marca.id')
-            ->select('ed.cantidad', 'marca.nombre', 'ed.id_ubicacion', 'm.id_medida', 'ed.precio', 'm.id as idllanta')
+            ->select('ed.cantidad', 'ed.id', 'marca.nombre', 'ed.id_ubicacion', 'm.id_medida', 'ed.precio', 'm.id as idllanta')
             ->where('ed.id_entrada_llanta', $id)
             ->orderBy('marca.nombre', 'ASC')
             ->get();

@@ -13,6 +13,7 @@
                                 <th style="width: 10%">Medida</th>
                                 <th style="width: 10%">Equipo o Destino</th>
                                 <th style="width: 10%">Precio</th>
+                                <th style="width: 10%">Opciones</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -25,6 +26,9 @@
                                     <td>{{ $dato->unidad }}</td>
                                     <td>{{ $dato->equipo }}</td>
                                     <td>${{ $dato->precio }}</td>
+                                    <td> <button type="button" class="btn btn-primary btn-xs" onclick="infoEditar({{ $dato->id }})">
+                                            <i class="fas fa-edit" title="Editar"></i>&nbsp; Editar
+                                        </button></td>
                                 </tr>
                             @endforeach
 

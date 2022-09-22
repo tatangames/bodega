@@ -206,6 +206,46 @@ class RepuestosController extends Controller
         return ['success' => 1];
     }
 
+    public function informacionEntradaHistorialLlantaDetalle(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = EntradaLLantasDeta::where('id', $request->id)->first()){
+
+            $ubicacion = UbicacionBodega::orderBy('nombre')->get();
+
+            return ['success' => 1, 'info' => $lista, 'ubicacion' => $ubicacion];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function editarEntradaHistorialLlantaDetalle(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+            'precio' => 'required',
+            'ubicacion' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        EntradaLLantasDeta::where('id', $request->id)->update([
+            'id_ubicacion' => $request->ubicacion,
+            'precio' => $request->precio
+        ]);
+
+        return ['success' => 1];
+    }
+
     //*********************************************
 
     public function informacionSalidaHistorial(Request $request){

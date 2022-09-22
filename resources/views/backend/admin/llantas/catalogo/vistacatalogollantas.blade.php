@@ -80,7 +80,7 @@
 
                             <div class="col-md-5">
                                 <div class="form-group">
-                                    <label># de RIN:</label>
+                                    <label>Tipo de Llanta:</label>
                                     <br>
                                     <select width="60%"  class="form-control" id="select-unidad-nuevo">
                                         @foreach($lUnidad as $sel)
@@ -132,7 +132,7 @@
 
                                     <div class="col-md-5">
                                         <div class="form-group">
-                                            <label># de RIN:</label>
+                                            <label>Tipo de Llanta</label>
                                             <br>
                                             <select style="width: 70%; height: 45px"  class="form-control" id="select-unidad-editar">
                                             </select>
@@ -273,7 +273,7 @@
             }
 
             if(unidad === ''){
-                toastr.error('# de RIN es requerido');
+                toastr.error('Tipo de llanta es requerido');
                 return;
             }
 
@@ -295,7 +295,7 @@
 
                         Swal.fire({
                             title: 'Llanta Repetida',
-                            text: "La nueva llanta, con la marca y # de RIN ya se encuentra registrado",
+                            text: "La nueva llanta, con la marca y Tipo de Llanta ya se encuentra registrado",
                             icon: 'question',
                             showCancelButton: false,
                             confirmButtonColor: '#28a745',
@@ -370,7 +370,7 @@
             var unidad = document.getElementById('select-unidad-editar').value;
 
             if(unidad === ''){
-                toastr.error('# de RIN es requerido');
+                toastr.error('Tipo de llanta es requerido');
                 return;
             }
 
@@ -398,7 +398,7 @@
 
                         Swal.fire({
                             title: 'LLanta Repetida',
-                            text: "La llanta a editar, con la marca y # de RIN ya se encuentra registrado",
+                            text: "La llanta a editar, con la marca y Tipo de llanta ya se encuentra registrado",
                             icon: 'question',
                             showCancelButton: false,
                             confirmButtonColor: '#28a745',

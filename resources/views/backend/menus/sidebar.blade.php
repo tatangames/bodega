@@ -193,7 +193,7 @@
                                 <li class="nav-item">
                                     <a href="{{ route('admin.rin.llantas.index') }}" target="frameprincipal" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>RIN de Llanta</p>
+                                        <p>Tipo de Llanta</p>
                                     </a>
                                 </li>
                             @endcan

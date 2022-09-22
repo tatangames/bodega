@@ -38,6 +38,51 @@
         </div>
     </section>
 
+
+    <!-- modal editar -->
+    <div class="modal fade" id="modalEditar">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editar</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="formulario-editar">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        <input type="hidden" id="id-editar">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Precio</label>
+                                        <input type="number" class="form-control" id="precio-editar">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <select class="form-control" id="select-ubicacion">
+                                        </select>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="editar()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -60,6 +105,107 @@
 
             document.getElementById("divcontenedor").style.display = "block";
         });
+    </script>
+
+    <script>
+
+        function recargar(){
+            let id = {{ $id }};
+            var ruta = "{{ URL::to('/admin/historial/entrada/llantadeta/tabla') }}/" + id;
+            $('#tablaDatatable').load(ruta);
+        }
+
+        function infoEditar(id){
+
+            openLoading();
+            document.getElementById("formulario-editar").reset();
+
+            axios.post(url+'/entradas/historialllanta/deta/informacion',{
+                'id': id
+            })
+                .then((response) => {
+                    closeLoading();
+                    if(response.data.success === 1){
+                        $('#modalEditar').modal('show');
+                        $('#id-editar').val(id);
+                        $('#precio-editar').val(response.data.info.precio);
+
+                        document.getElementById("select-ubicacion").options.length = 0;
+
+                        $.each(response.data.ubicacion, function( key, val ){
+                            if(response.data.info.id_ubicacion == val.id){
+                                $('#select-ubicacion').append('<option value="' +val.id +'" selected="selected">'+ val.nombre +'</option>');
+                            }else{
+                                $('#select-ubicacion').append('<option value="' +val.id +'">'+ val.nombre +'</option>');
+                            }
+                        });
+
+                    }else{
+                        toastr.error('Información no encontrada');
+                    }
+                })
+                .catch((error) => {
+                    closeLoading();
+                    toastr.error('Información no encontrada');
+                });
+        }
+
+
+        function editar(){
+            var id = document.getElementById('id-editar').value;
+            var precio = document.getElementById('precio-editar').value;
+            var ubicacion = document.getElementById('select-ubicacion').value;
+
+            if(precio === ''){
+                toastr.error('Precio es requerido');
+                return;
+            }
+
+            var reglaNumeroDecimal = /^[0-9]\d*(\.\d+)?$/;
+
+            if(!precio.match(reglaNumeroDecimal)) {
+                toastr.error('Precio debe ser número Decimal y no Negativo');
+                return;
+            }
+
+            if(precio <= 0){
+                toastr.error('Precio no debe ser negativo o cero');
+                return;
+            }
+
+            if(precio.length > 10){
+                toastr.error('Precio máximo 10 caracteres');
+                return;
+            }
+
+            openLoading();
+            var formData = new FormData();
+            formData.append('id', id);
+            formData.append('precio', precio);
+            formData.append('ubicacion', ubicacion);
+
+            axios.post(url+'/entradas/historialllanta/deta/editar', formData, {
+            })
+                .then((response) => {
+                    closeLoading();
+
+                    if(response.data.success === 1){
+                        toastr.success('Actualizado correctamente');
+                        $('#modalEditar').modal('hide');
+                        recargar();
+                    }
+                    else {
+                        toastr.error('Error al actualizar');
+                    }
+
+                })
+                .catch((error) => {
+                    toastr.error('Error al actualizar');
+                    closeLoading();
+                });
+        }
+
+
     </script>
 
 

@@ -8,7 +8,7 @@
                             <thead>
                             <tr>
                                 <th style="width: 20%">Marca</th>
-                                <th style="width: 10%"># de RIN</th>
+                                <th style="width: 10%">Tipo de Llanta</th>
                                 <th style="width: 10%">Cantidad</th>
                                 <th style="width: 10%">Dinero</th>
                                 <th style="width: 10%">Opciones</th>

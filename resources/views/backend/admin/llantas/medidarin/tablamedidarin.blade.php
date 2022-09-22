@@ -7,7 +7,7 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th># de RIN</th>
+                                <th>Tipo de Llanta</th>
                                 <th>Opciones</th>
                             </tr>
                             </thead>
