@@ -177,7 +177,7 @@ class ReportesController extends Controller
                     <td width='8%'>Medida</td>
                     <td width='8%'>Equipo</td>
                     <td width='8%'>Cantidad</td>
-                    <td width='8%'>Precio</td>
+                    <td width='8%'>Precio U.</td>
                     <td width='8%'>Total</td>
                 </tr>";
 
@@ -336,7 +336,7 @@ class ReportesController extends Controller
                     <td width='8%'>Medida</td>
                     <td width='8%'>Equipo</td>
                     <td width='20px'>Cantidad</td>
-                    <td width='8%'>Precio</td>
+                    <td width='8%'>Precio U.</td>
                     <td width='8%'>Total</td>
                 </tr>";
 
@@ -530,7 +530,7 @@ class ReportesController extends Controller
                     <td width='8%'>Tipo Llanta</td>
                     <td width='8%'>Ubicación</td>
                     <td width='8%'>Cantidad</td>
-                    <td width='8%'>Precio</td>
+                    <td width='8%'>Precio U.</td>
                     <td width='8%'>Total</td>
                 </tr>";
 
@@ -763,7 +763,7 @@ class ReportesController extends Controller
                     <td width='8%'>Tipo de Llanta</td>
                     <td width='8%'>Equipo</td>
                     <td width='20px'>Cantidad</td>
-                    <td width='8%'>Precio</td>
+                    <td width='8%'>Precio U.</td>
                     <td width='8%'>Total</td>
                 </tr>";
 
@@ -1042,7 +1042,7 @@ class ReportesController extends Controller
                     <td width='8%'>Medida</td>
                     <td width='8%'>Equipo</td>
                     <td width='8%'>Cantidad</td>
-                    <td width='8%'>Precio</td>
+                    <td width='8%'>Precio U.</td>
                     <td width='8%'>Total</td>
                 </tr>";
 
@@ -1212,7 +1212,7 @@ class ReportesController extends Controller
                     <td width='8%'>Medida</td>
                     <td width='8%'>Equipo</td>
                     <td width='8%'>Cantidad</td>
-                    <td width='8%'>Precio</td>
+                    <td width='8%'>Precio U.</td>
                     <td width='8%'>Total</td>
                 </tr>";
 
@@ -1418,7 +1418,7 @@ class ReportesController extends Controller
                     <td width='8%'>Tipo de Llanta</td>
                     <td width='8%'>Ubicación</td>
                     <td width='8%'>Cantidad</td>
-                    <td width='8%'>Precio</td>
+                    <td width='8%'>Precio U.</td>
                     <td width='8%'>Total</td>
                 </tr>";
 
@@ -1658,7 +1658,7 @@ class ReportesController extends Controller
                     <td width='8%'>Medida</td>
                     <td width='8%'>Equipo</td>
                     <td width='8%'>Cantidad</td>
-                    <td width='8%'>Precio</td>
+                    <td width='8%'>Precio U.</td>
                     <td width='8%'>Total</td>
                 </tr>";
 
@@ -1919,7 +1919,7 @@ class ReportesController extends Controller
                             $unavuelta = false;
                             $tabla .= "<tr>
                             <td width='10%'>Cantidad</td>
-                            <td width='10%'>Precio</td>
+                            <td width='10%'>Precio U.</td>
                             <td width='10%'>Total</td>
                             </tr>";
                         }
@@ -2098,7 +2098,7 @@ class ReportesController extends Controller
                             $tabla .= "<tr>
                                 <td width='10%'>Ubicación</td>
                                 <td width='10%'>Cantidad</td>
-                                <td width='10%'>Precio</td>
+                                <td width='10%'>Precio U.</td>
                                 <td width='10%'>Total</td>
                                 </tr>";
                         }

@@ -199,7 +199,7 @@
                         <th style="width: 3%">#</th>
                         <th style="width: 10%">Descripción</th>
                         <th style="width: 6%">Cantidad</th>
-                        <th style="width: 6%">Precio</th>
+                        <th style="width: 6%">Precio Uni.</th>
                         <th style="width: 8%">Equipo</th>
                         <th style="width: 5%">Opciones</th>
                     </tr>
