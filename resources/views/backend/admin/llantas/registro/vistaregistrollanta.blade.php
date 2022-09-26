@@ -169,7 +169,7 @@
                             </div>
 
                             <div class="form-group">
-                                <label class="control-label">Precio $</label>
+                                <label class="control-label">Precio Unitario $</label>
                                 <div class="col-md-6">
                                     <input class='form-control' id="precio" type='number' placeholder="0.00">
                                 </div>
