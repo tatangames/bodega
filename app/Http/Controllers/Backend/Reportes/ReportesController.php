@@ -12,6 +12,7 @@ use App\Models\FirmasLlantas;
 use App\Models\Llantas;
 use App\Models\Marca;
 use App\Models\Materiales;
+use App\Models\MedidaRin;
 use App\Models\SalidaDetalle;
 use App\Models\SalidaLLantas;
 use App\Models\SalidaLLantasDeta;
@@ -2210,6 +2211,153 @@ class ReportesController extends Controller
 
         $mpdf->Output();
     }
+
+
+    public function indexCatalogoMateriales(){
+        return view('backend.admin.repuestos.reporte.catalogo.vistareportecatalogo');
+    }
+
+    public function reporteCatalogoMateriales(){
+
+        $arrayCatalogo = Materiales::orderBy('nombre', 'ASC')->get();
+
+        $fila = 0;
+        foreach ($arrayCatalogo as $dd){
+            $fila += 1;
+            $dd->fila = $fila;
+
+            $medida = '';
+            if($infoMedida = UnidadMedida::where('id', $dd->id_medida)->first()){
+                $medida = $infoMedida->medida;
+            }
+            $dd->medida = $medida;
+        }
+
+        $dt = Carbon::now();
+        $fechaFormat = date("d-m-Y", strtotime($dt));
+
+        //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
+        $mpdf->SetTitle('Catálogo Repuestos');
+
+        $mpdf->AddPage();
+        $mpdf->WriteHTML('', 2);
+
+        $logoalcaldia = 'images/logo2.png';
+
+        $tabla = "<div class='content'>
+        <img id='logo' src='$logoalcaldia'>
+        <p id='titulo'>ALCALDÍA MUNICIPAL DE METAPÁN <br>
+        Reporte de Catálogo de Materiales <br>
+        Fecha: $fechaFormat
+        </div>";
+
+        $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+        $tabla .= "<tr>
+                <td width='5%'>#</td>
+                <td width='15%'>Repuesto</td>
+                <td width='12%'>Unidad Medida</td>
+                <td width='12%'>Código</td>
+            </tr>";
+
+        foreach ($arrayCatalogo as $ll){
+
+                $tabla .= "<tr>
+                <td width='5%'>$ll->fila</td>
+                <td width='15%'>$ll->nombre</td>
+                <td width='12'>$ll->medida</td>
+                  <td width='12%'>$ll->codigo</td>
+            </tr>";
+
+        }
+
+
+        $tabla .= "</tbody></table>";
+
+        $stylesheet = file_get_contents('css/cssregistro.css');
+        $mpdf->WriteHTML($stylesheet,1);
+
+        $mpdf->setFooter("Página: " . '{PAGENO}' . "/" . '{nb}');
+        $mpdf->WriteHTML($tabla, 2);
+
+        $mpdf->Output();
+    }
+
+
+    public function indexCatalogoLLantas(){
+        return view('backend.admin.llantas.reportes.catalogo.vistareportecatalogo');
+    }
+
+    public function reporteCatalogoLlantas(){
+
+        $arrayCatalogo = Llantas::orderBy('id', 'ASC')->get();
+
+        $fila = 0;
+        foreach ($arrayCatalogo as $dd){
+            $fila += 1;
+            $dd->fila = $fila;
+
+            $medida = '';
+            if($infoMedida = MedidaRin::where('id', $dd->id_medida)->first()){
+                $medida = $infoMedida->medida;
+            }
+            $dd->medida = $medida;
+
+            $infoMarca = Marca::where('id', $dd->id_marca)->first();
+
+            $dd->marca = $infoMarca->nombre;
+        }
+
+        $dt = Carbon::now();
+        $fechaFormat = date("d-m-Y", strtotime($dt));
+
+        //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
+        $mpdf->SetTitle('Catálogo Repuestos');
+
+        $mpdf->AddPage();
+        $mpdf->WriteHTML('', 2);
+
+        $logoalcaldia = 'images/logo2.png';
+
+        $tabla = "<div class='content'>
+        <img id='logo' src='$logoalcaldia'>
+        <p id='titulo'>ALCALDÍA MUNICIPAL DE METAPÁN <br>
+        Reporte de Catálogo de Llantas <br>
+        Fecha: $fechaFormat
+        </div>";
+
+        $tabla .= "<table width='100%' id='tablaFor'>
+            <tbody>";
+
+        $tabla .= "<tr>
+                <td width='5%'>#</td>
+                <td width='15%'>Marca</td>
+                <td width='12%'>Tipo Llanta</td>
+            </tr>";
+
+        foreach ($arrayCatalogo as $ll){
+
+            $tabla .= "<tr>
+                <td width='5%'>$ll->fila</td>
+                <td width='15%'>$ll->marca</td>
+                <td width='12'>$ll->medida</td>
+            </tr>";
+        }
+
+        $tabla .= "</tbody></table>";
+
+        $stylesheet = file_get_contents('css/cssregistro.css');
+        $mpdf->WriteHTML($stylesheet,1);
+
+        $mpdf->setFooter("Página: " . '{PAGENO}' . "/" . '{nb}');
+        $mpdf->WriteHTML($tabla, 2);
+
+        $mpdf->Output();
+    }
+
 
 
 }

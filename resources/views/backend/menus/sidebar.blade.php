@@ -314,6 +314,15 @@
                                     </a>
                                 </li>
                             @endcan
+
+                            @can('sidebar.reporte.catalogo.repuestos')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.reporte.catalogo.repuestos.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Catálogo</p>
+                                    </a>
+                                </li>
+                            @endcan
                         </ul>
                     </li>
                 @endcan
@@ -366,6 +375,14 @@
                                 </li>
                             @endcan
 
+                            @can('sidebar.reporte.catalogo.llantas')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.reporte.catalogo.llantas.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Catálogo</p>
+                                    </a>
+                                </li>
+                            @endcan
 
                         </ul>
                     </li>

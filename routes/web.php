@@ -141,6 +141,9 @@ Route::get('/admin/reporte/porequipo/{desde}/{hasta}/{tipo}/{unidad}', [Reportes
 Route::get('/admin/reporte/cantidad/vista', [ReportesController::class,'indexEntradaReporteCantidad'])->name('admin.reporte.cantidad.index');
 Route::get('/admin/reporte/cantidades', [ReportesController::class,'reportePdfCantidad']);
 
+// reporte catálogo de repuestos
+Route::get('/admin/reporte/catalogo/materiales/index', [ReportesController::class,'indexCatalogoMateriales'])->name('admin.reporte.catalogo.repuestos.index');
+Route::get('/admin/reporte/catalogo/materiales', [ReportesController::class,'reporteCatalogoMateriales']);
 
 
 
@@ -248,5 +251,9 @@ Route::get('/admin/reporte/porequipo/llantas/{desde}/{hasta}/{tipo}/{unidad}', [
 // reporte cantidad actual para llantas
 Route::get('/admin/reporte/llantas/cantidad/vista', [ReportesController::class,'indexEntradaReporteCantidadLlanta'])->name('admin.reporte.llanta.cantidad.index');
 Route::get('/admin/reporte/llantas/cantidades', [ReportesController::class,'reportePdfCantidadLlanta']);
+
+// reporte catálogo de llantas
+Route::get('/admin/reporte/catalogo/llantas/index', [ReportesController::class,'indexCatalogoLLantas'])->name('admin.reporte.catalogo.llantas.index');
+Route::get('/admin/reporte/catalogo/llantas', [ReportesController::class,'reporteCatalogoLlantas']);
 
 

@@ -62,11 +62,14 @@ class RolesSeeder extends Seeder
         Permission::create(['name' => 'reporte.repuestos.entradaysalida', 'description' => 'contenedor reporte entrada y salida para repuesto'])->syncRoles($roleInventario, $roleAuditora);
         Permission::create(['name' => 'reporte.repuesto.equipos', 'description' => 'contenedor reporte repuesto por equipos'])->syncRoles($roleInventario, $roleAuditora);
         Permission::create(['name' => 'reporte.repuesto.cantidades', 'description' => 'contenedor reporte cantidades repuesto'])->syncRoles($roleInventario, $roleAuditora);
+        Permission::create(['name' => 'sidebar.reporte.catalogo.repuestos', 'description' => 'ver reporte de catalogo de repuestos'])->syncRoles($roleInventario, $roleAuditora);
+
 
         Permission::create(['name' => 'sidebar.reporte.llantas', 'description' => 'contenedor de reporte llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
         Permission::create(['name' => 'reporte.llantas.entradaysalida', 'description' => 'contenedor reporte entrada y salida para llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
         Permission::create(['name' => 'reporte.llantas.equipos', 'description' => 'contenedor reporte llantas por equipos'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
         Permission::create(['name' => 'reporte.llantas.cantidades', 'description' => 'contenedor reporte cantidades llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
+        Permission::create(['name' => 'sidebar.reporte.catalogo.llantas', 'description' => 'ver reporte de catalogo de llantas'])->syncRoles($roleInventario, $roleAuditora);
 
         //**********************************
         //REPORTES
@@ -94,6 +97,7 @@ class RolesSeeder extends Seeder
 
         Permission::create(['name' => 'btn.historial.salida.btn.editar', 'description' => 'boton editar historial de salida'])->syncRoles($roleInventario);
         Permission::create(['name' => 'btn.historial.salida.llanta.btn.editar', 'description' => 'boton editar historial de salida llanta'])->syncRoles($roleLlantas);
+
 
 
     }
