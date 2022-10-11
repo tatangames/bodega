@@ -132,7 +132,7 @@
         formData.append('usuario', usuario);
         formData.append('password', password);
 
-        axios.post('/bodega/login', formData, {
+        axios.post('/login', formData, {
         })
             .then((response) => {
                 closeLoading();
