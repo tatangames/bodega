@@ -159,7 +159,6 @@
 
                         <ul class="nav nav-treeview">
 
-
                             @can('registro.proveedores')
 
                                 <li class="nav-item">
@@ -216,10 +215,18 @@
                                 </li>
                             @endcan
 
+                            @can('registros.ubicacion.repuestos')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.ubicacion.repuestos.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Ubicación de Repuestos</p>
+                                    </a>
+                                </li>
+                            @endcan
+
                         </ul>
                     </li>
                 @endcan
-
 
 
                 @can('sidebar.historial.repuestos')

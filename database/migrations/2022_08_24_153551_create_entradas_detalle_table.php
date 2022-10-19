@@ -18,6 +18,7 @@ class CreateEntradasDetalleTable extends Migration
             $table->bigInteger('id_material')->unsigned();
             $table->bigInteger('id_entrada')->unsigned();
             $table->bigInteger('id_equipo')->unsigned();
+            $table->bigInteger('id_ubicacion')->unsigned();
 
             $table->integer('cantidad');
 
@@ -26,6 +27,7 @@ class CreateEntradasDetalleTable extends Migration
             $table->foreign('id_material')->references('id')->on('materiales');
             $table->foreign('id_entrada')->references('id')->on('entradas');
             $table->foreign('id_equipo')->references('id')->on('equipos');
+            $table->foreign('id_ubicacion')->references('id')->on('ubicacion_repuesto');
         });
     }
 

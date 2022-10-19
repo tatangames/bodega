@@ -142,6 +142,18 @@
                             </div>
 
                             <div class="form-group" >
+                                <label class="control-label">Seleccionar Ubicación de Bodega</label>
+                                <div class="col-md-6">
+                                    <select id="select-ubicacion" class="form-control">
+                                        <option value="" selected>Seleccionar (Opcional)</option>
+                                        @foreach($ubicaciones as $item)
+                                            <option value="{{$item->id}}">{{ $item->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group" >
                                 <label class="control-label">Cantidad</label>
                                 <div class="col-md-6">
                                     <input id="cantidad" class='form-control' type='number' placeholder="0">
@@ -201,6 +213,7 @@
                         <th style="width: 6%">Cantidad</th>
                         <th style="width: 6%">Precio Uni.</th>
                         <th style="width: 8%">Equipo</th>
+                        <th style="width: 6%">Ubicación</th>
                         <th style="width: 5%">Opciones</th>
                     </tr>
                     </thead>
@@ -256,10 +269,20 @@
                 theme: "bootstrap-5",
                 "language": {
                     "noResults": function(){
-                        return "Busqueda no encontrada";
+                        return "Búsqueda no encontrada";
                     }
                 },
             });
+
+            $('#select-ubicacion').select2({
+                theme: "bootstrap-5",
+                "language": {
+                    "noResults": function(){
+                        return "Búsqueda no encontrada";
+                    }
+                },
+            });
+
         });
     </script>
 
@@ -269,6 +292,9 @@
 
             document.getElementById("formulario-repuesto").reset();
             $('#select-equipo').prop('selectedIndex', 0).change();
+            $('#select-ubicacion').prop('selectedIndex', 0).change();
+
+            $("#select-ubicacion").select2("val", "");
             $('#modalRepuesto').css('overflow-y', 'auto');
             $('#modalRepuesto').modal({backdrop: 'static', keyboard: false})
         }
@@ -280,6 +306,15 @@
             var equipo = document.getElementById('select-equipo').value;
             var equipoNombre = $( "#select-equipo option:selected" ).text();
             var precio = document.getElementById('precio').value;
+
+            var ubicacion = document.getElementById('select-ubicacion').value;
+
+            var ubicacionNombre = '';
+            if(ubicacion === ''){
+                // vacio
+            }else{
+                ubicacionNombre = $( "#select-ubicacion option:selected" ).text();
+            }
 
             if(repuesto.dataset.info == 0){
                 toastr.error("Repuesto es requerido");
@@ -365,6 +400,10 @@
 
                 "<td>" +
                 "<input name='equipoArray[]' disabled data-info='" + equipo + "' value='" + equipoNombre + "' class='form-control' type='text'>" +
+                "</td>" +
+
+                "<td>" +
+                "<input name='ubicacionArray[]' disabled data-infoubi='" + ubicacion + "' value='" + ubicacionNombre + "' class='form-control' type='text'>" +
                 "</td>" +
 
                 "<td>" +
@@ -541,6 +580,8 @@
             var equipoNom = $("input[name='equipoArray[]']").map(function(){return $(this).val();}).get();
             var equipo = $("input[name='equipoArray[]']").map(function(){return $(this).attr("data-info");}).get();
 
+            var ubicacionid = $("input[name='ubicacionArray[]']").map(function(){return $(this).attr("data-infoubi");}).get();
+
             // unicamente no sera verificado con: APORTE PATRONAL (aporte mano de obra)
 
             for(var a = 0; a < cantidad.length; a++){
@@ -654,6 +695,7 @@
                 formData.append('precio[]', precio[p]);
                 formData.append('equipo[]', equipo[p]);
                 formData.append('datainfo[]', descripcionAtributo[p]);
+                formData.append('idubicacion[]', ubicacionid[p]);
             }
 
             openLoading();
@@ -696,6 +738,10 @@
             document.getElementById('factura').value = '';
             document.getElementById('documento').value = '';
 
+            $('#select-equipo').prop('selectedIndex', 0).change();
+            $('#select-ubicacion').prop('selectedIndex', 0).change();
+
+            $("#select-ubicacion").select2("val", "");
 
             document.getElementById('check-nuevo').checked = false;
             document.getElementById('check-inventario').checked = false;

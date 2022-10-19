@@ -71,6 +71,11 @@ class RolesSeeder extends Seeder
         Permission::create(['name' => 'reporte.llantas.cantidades', 'description' => 'contenedor reporte cantidades llantas'])->syncRoles($roleLlantas, $roleInventario, $roleAuditora);
         Permission::create(['name' => 'sidebar.reporte.catalogo.llantas', 'description' => 'ver reporte de catalogo de llantas'])->syncRoles($roleInventario, $roleAuditora);
 
+        Permission::create(['name' => 'registros.ubicacion.repuestos', 'description' => 'sidebar - ubicaciones de repuestos'])->syncRoles($roleInventario);
+
+
+
+
         //**********************************
         //REPORTES
 

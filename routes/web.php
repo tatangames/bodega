@@ -68,6 +68,14 @@ Route::post('/admin/unidadmedida/nuevo', [PrincipalController::class, 'nuevaUnid
 Route::post('/admin/unidadmedida/informacion', [PrincipalController::class, 'informacionUnidadMedida']);
 Route::post('/admin/unidadmedida/editar', [PrincipalController::class, 'editarUnidadMedida']);
 
+// registro de ubicación de repuestos
+Route::get('/admin/ubicacionrepuesto/index', [PrincipalController::class,'indexUbicacionRepuestos'])->name('admin.ubicacion.repuestos.index');
+Route::get('/admin/ubicacionrepuesto/tabla/index', [PrincipalController::class,'tablaUbicacionRepuestos']);
+Route::post('/admin/ubicacionrepuesto/nuevo', [PrincipalController::class, 'nuevaUbicacionRepuestos']);
+Route::post('/admin/ubicacionrepuesto/informacion', [PrincipalController::class, 'informacionUbicacionRepuestos']);
+Route::post('/admin/ubicacionrepuesto/editar', [PrincipalController::class, 'editarUbicacionRepuestos']);
+
+
 // registro de repuestos
 Route::get('/admin/materiales/index', [PrincipalController::class,'indexMateriales'])->name('admin.materiales.index');
 Route::get('/admin/materiales/tabla/index', [PrincipalController::class,'tablaMateriales']);

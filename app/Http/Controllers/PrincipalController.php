@@ -16,6 +16,7 @@ use App\Models\SalidaLLantas;
 use App\Models\SalidaLLantasDeta;
 use App\Models\Salidas;
 use App\Models\UbicacionBodega;
+use App\Models\UbicacionRepuesto;
 use App\Models\UnidadMedida;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -300,7 +301,9 @@ class PrincipalController extends Controller
 
         $equipos = Equipos::orderBy('nombre')->get();
 
-        return view('backend.admin.repuestos.registros.entradaregistro', compact('equipos'));
+        $ubicaciones = UbicacionRepuesto::orderBy('nombre')->get();
+
+        return view('backend.admin.repuestos.registros.entradaregistro', compact('equipos', 'ubicaciones'));
     }
 
     public function buscadorMaterial(Request $request){
@@ -334,7 +337,7 @@ class PrincipalController extends Controller
                     if(!empty($row)){
                         $tiene = false;
                         $output .= '
-                 <li onclick="modificarValor(this)" id="'.$row->id.'"><a href="#" style="margin-left: 3px">'.$row->nombre . ' ' .$row->medida . ' ' .$row->code .'</a></li>
+                 <li onclick="modificarValor(this)" id="'.$row->id.'"><a href="#" style="margin-left: 3px">'.$row->nombre . '  ' .$row->medida . ' ' .$row->code .'</a></li>
                 ';
                     }
                 }
@@ -402,6 +405,7 @@ class PrincipalController extends Controller
                         $rDetalle->cantidad = $request->cantidad[$i];
                         $rDetalle->precio = $request->precio[$i];
                         $rDetalle->id_equipo = $request->equipo[$i];
+                        $rDetalle->id_ubicacion = $request->idubicacion[$i];
                         $rDetalle->save();
                     }
 
@@ -429,6 +433,7 @@ class PrincipalController extends Controller
                     $rDetalle->cantidad = $request->cantidad[$i];
                     $rDetalle->precio = $request->precio[$i];
                     $rDetalle->id_equipo = $request->equipo[$i];
+                    $rDetalle->id_ubicacion = $request->idubicacion[$i];
                     $rDetalle->save();
                 }
 
@@ -1070,6 +1075,88 @@ class PrincipalController extends Controller
         }
 
         return view('backend.admin.llantas.historial.entrada.detalle.tabladetallantahistorialentrada', compact('lista'));
+    }
+
+
+    //***************** REGISTRO DE UBICACIONES DE REPUESTOS  ************************
+
+
+    public function indexUbicacionRepuestos(){
+        return view('backend.admin.repuestos.ubicacion.vistaubicacionrepuesto');
+    }
+
+    public function tablaUbicacionRepuestos(){
+        $lista = UbicacionRepuesto::orderBy('nombre', 'ASC')->get();
+
+        return view('backend.admin.repuestos.ubicacion.tablaubicacionrepuesto', compact('lista'));
+    }
+
+    public function nuevaUbicacionRepuestos(Request $request){
+        $regla = array(
+            'nombre' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if(UbicacionRepuesto::where('nombre', $request->nombre)->first()){
+            return ['success' => 1];
+        }
+
+        $dato = new UbicacionRepuesto();
+        $dato->nombre = $request->nombre;
+
+        if($dato->save()){
+            return ['success' => 2];
+        }else{
+            return ['success' => 99];
+        }
+    }
+
+    public function informacionUbicacionRepuestos(Request $request){
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if($lista = UbicacionRepuesto::where('id', $request->id)->first()){
+
+            return ['success' => 1, 'info' => $lista];
+        }else{
+            return ['success' => 2];
+        }
+    }
+
+    public function editarUbicacionRepuestos(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+            'nombre' => 'required'
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if(UbicacionRepuesto::where('id', $request->id)->first()){
+
+            if(UbicacionRepuesto::where('id', '!=', $request->id)
+                ->where('nombre', $request->nombre)->first()){
+                return ['success' => 1];
+            }
+
+                UbicacionRepuesto::where('id', $request->id)->update([
+                'nombre' => $request->nombre
+            ]);
+
+            return ['success' => 2];
+        }else{
+            return ['success' => 99];
+        }
     }
 
 
