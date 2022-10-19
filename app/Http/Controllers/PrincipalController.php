@@ -317,6 +317,12 @@ class PrincipalController extends Controller
                 }else{
                     $dd->medida = "";
                 }
+
+                if($dd->codigo != null){
+                    $dd->code = "- " . $dd->codigo;
+                }else{
+                    $dd->code = "";
+                }
             }
 
             $output = '<ul class="dropdown-menu" style="display:block; position:relative;">';
@@ -328,7 +334,7 @@ class PrincipalController extends Controller
                     if(!empty($row)){
                         $tiene = false;
                         $output .= '
-                 <li onclick="modificarValor(this)" id="'.$row->id.'"><a href="#" style="margin-left: 3px">'.$row->nombre . ' ' .$row->medida .'</a></li>
+                 <li onclick="modificarValor(this)" id="'.$row->id.'"><a href="#" style="margin-left: 3px">'.$row->nombre . ' ' .$row->medida . ' ' .$row->code .'</a></li>
                 ';
                     }
                 }
@@ -337,7 +343,7 @@ class PrincipalController extends Controller
                     if(!empty($row)){
                         $tiene = false;
                         $output .= '
-                 <li onclick="modificarValor(this)" id="'.$row->id.'"><a href="#" style="margin-left: 3px">'.$row->nombre . ' ' .$row->medida .'</a></li>
+                 <li onclick="modificarValor(this)" id="'.$row->id.'"><a href="#" style="margin-left: 3px">'.$row->nombre . ' ' .$row->medida . ' ' .$row->code .'</a></li>
                    <hr>
                 ';
                     }
