@@ -28,7 +28,6 @@
                                     @endif
                                     </td>
                                     <td>{{ $dato->descripcion }}</td>
-
                                     <td>
                                         <button type="button" class="btn btn-success btn-xs" onclick="informacion({{ $dato->id }})">
                                             <i class="fas fa-file" title="Detalle"></i>&nbsp; Detalle

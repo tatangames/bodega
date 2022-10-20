@@ -561,7 +561,7 @@ class PrincipalController extends Controller
     public function indexEntradasDetalleTabla($id){
         $lista = DB::table('entradas_detalle AS ed')
             ->join('materiales AS m', 'ed.id_material', '=', 'm.id')
-            ->select('ed.cantidad', 'm.nombre', 'ed.id', 'm.codigo', 'ed.id_equipo', 'ed.precio', 'm.id as idmaterial')
+            ->select('ed.cantidad', 'm.nombre', 'ed.id', 'm.codigo', 'ed.id_ubicacion', 'ed.id_equipo', 'ed.precio', 'm.id as idmaterial')
             ->where('ed.id_entrada', $id)
             ->orderBy('m.nombre', 'ASC')
             ->get();
@@ -580,6 +580,12 @@ class PrincipalController extends Controller
             }
             $ll->unidad = $medida;
 
+            $ubicacion = "";
+            if($infoUbi = UbicacionRepuesto::where('id', $ll->id_ubicacion)->first()){
+                $ubicacion = $infoUbi->nombre;
+            }
+
+            $ll->ubicacion = $ubicacion;
         }
 
         return view('backend.admin.repuestos.entradas.detalle.tablaentradadetalle', compact('lista'));

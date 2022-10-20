@@ -145,7 +145,6 @@
                                 <label class="control-label">Seleccionar Ubicación de Bodega</label>
                                 <div class="col-md-6">
                                     <select id="select-ubicacion" class="form-control">
-                                        <option value="" selected>Seleccionar (Opcional)</option>
                                         @foreach($ubicaciones as $item)
                                             <option value="{{$item->id}}">{{ $item->nombre }}</option>
                                         @endforeach
@@ -291,10 +290,6 @@
         function abrirModal(){
 
             document.getElementById("formulario-repuesto").reset();
-            $('#select-equipo').prop('selectedIndex', 0).change();
-            $('#select-ubicacion').prop('selectedIndex', 0).change();
-
-            $("#select-ubicacion").select2("val", "");
             $('#modalRepuesto').css('overflow-y', 'auto');
             $('#modalRepuesto').modal({backdrop: 'static', keyboard: false})
         }
@@ -423,7 +418,6 @@
             })
 
             $(txtContenedorGlobal).attr('data-info', '0');
-            $('#select-equipo').prop('selectedIndex', 0).change();
             document.getElementById("formulario-repuesto").reset();
         }
 
@@ -737,11 +731,6 @@
             document.getElementById('descripcion').value = '';
             document.getElementById('factura').value = '';
             document.getElementById('documento').value = '';
-
-            $('#select-equipo').prop('selectedIndex', 0).change();
-            $('#select-ubicacion').prop('selectedIndex', 0).change();
-
-            $("#select-ubicacion").select2("val", "");
 
             document.getElementById('check-nuevo').checked = false;
             document.getElementById('check-inventario').checked = false;

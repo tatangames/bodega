@@ -2,33 +2,40 @@
 
         @if($hayCantidad)
 
-        <div class="col-md-6">
+        <div class="col-md-12">
             <div class="card card-primary">
                 <div class="card-header">
                     <div class="form-group">
 
                         <div class="row">
-                            <div class="col-sm-4 border-right">
+                            <div class="col-sm-3 border-right">
                                 <div class="description-block">
                                     <h5 class="description-header">{{ $dd['fecha'] }}</h5>
                                     <span class="description-text">Fecha</span>
                                 </div>
                             </div>
 
-                            <div class="col-sm-4 border-right">
+                            <div class="col-sm-3 border-right">
                                 <div class="description-block">
                                     <h5 class="description-header">${{ $dd['precio'] }}</h5>
                                     <span class="description-text">Precio</span>
                                 </div>
                             </div>
 
-                            <div class="col-sm-4">
+                            <div class="col-sm-3 border-right">
                                 <div class="description-block">
-                                    <h5 class="description-header">{{ $dd['cantidadtotal'] }}</h5>
+                                    <h5 class="description-header">${{ $dd['cantidadtotal'] }}</h5>
                                     <span class="description-text">Disponible</span>
                                 </div>
-
                             </div>
+
+                            <div class="col-sm-3">
+                                <div class="description-block">
+                                    <h5 class="description-header">{{ $dd['ubicacion'] }}</h5>
+                                    <span class="description-text">Ubicación</span>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>

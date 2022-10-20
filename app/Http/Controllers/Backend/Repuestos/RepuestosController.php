@@ -19,6 +19,7 @@ use App\Models\SalidaLLantas;
 use App\Models\SalidaLLantasDeta;
 use App\Models\Salidas;
 use App\Models\UbicacionBodega;
+use App\Models\UbicacionRepuesto;
 use App\Models\UnidadMedida;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -57,6 +58,11 @@ class RepuestosController extends Controller
                 ->where('id_material', $id)
                 ->sum('cantidad');
 
+            $ubicacion = "";
+            if($infoUbi = UbicacionRepuesto::where('id', $dd->id_ubicacion)->first()){
+                $ubicacion = $infoUbi->nombre;
+            }
+
             // total de la cantidad actual
             $cantidadtotal = $dd->cantidad - $salidaDetalle;
 
@@ -66,6 +72,7 @@ class RepuestosController extends Controller
                     'fecha' => date("d-m-Y", strtotime($infoEntrada->fecha)),
                     'precio' => number_format((float)$dd->precio, 2, '.', ','),
                     'cantidadtotal' => $cantidadtotal,
+                    'ubicacion' => $ubicacion,
                 ];
             }
         }
