@@ -50,7 +50,6 @@ class RepuestosController extends Controller
         foreach ($lista as $dd){
 
             $infoEntrada = Entradas::where('id', $dd->id_entrada)->first();
-            $dd->fecha =
             $dd->factura = $infoEntrada->factura;
 
             // buscar la entrada_detalle de cada salida. obtener la suma de salidas

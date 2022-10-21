@@ -24,7 +24,7 @@
 
                             <div class="col-sm-3 border-right">
                                 <div class="description-block">
-                                    <h5 class="description-header">${{ $dd['cantidadtotal'] }}</h5>
+                                    <h5 class="description-header">{{ $dd['cantidadtotal'] }}</h5>
                                     <span class="description-text">Disponible</span>
                                 </div>
                             </div>

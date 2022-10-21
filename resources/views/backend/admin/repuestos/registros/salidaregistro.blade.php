@@ -345,7 +345,7 @@
 
                 if(detalleMaxCantidad != 0){
                     // no superar la maxima cantidad
-                    if(datoNumero.length > detalleMaxCantidad){
+                    if(datoNumero > detalleMaxCantidad){
                         divColorRojo(a);
                         toastr.error('La cantidad a Retirar no puede ser mayor a: ' + detalleMaxCantidad);
                         return;
@@ -509,7 +509,7 @@
 
             }else{
                 if(talonario.length > 50){
-                    toastr.error('talonario máximo 50 caracteres');
+                    toastr.error('Talonario máximo 50 caracteres');
                     return;
                 }
             }
@@ -518,7 +518,7 @@
 
             }else{
                 if(descripc.length > 800){
-                    toastr.error('descripción máximo 800 caracteres');
+                    toastr.error('Descripción máximo 800 caracteres');
                     return;
                 }
             }
@@ -577,9 +577,9 @@
                     return;
                 }
 
-                if (datoCantidad.length > 10) {
+                if (datoCantidad > 9000000) {
                     colorRojoTabla(a);
-                    toastr.error('Fila #' + (a + 1) + ' Cantidad de salida debe tener máximo 10 caracteres');
+                    toastr.error('Fila #' + (a + 1) + ' Cantidad de salida debe tener máximo 9 millones');
                     return;
                 }
             }
@@ -631,11 +631,11 @@
                         })
                     }
                     else{
-                        toastr.error('error al guardar');
+                        toastr.error('Error al guardar');
                     }
                 })
                 .catch((error) => {
-                    toastr.error('error al guardar');
+                    toastr.error('Error al guardar');
                     closeLoading();
                 });
         }
