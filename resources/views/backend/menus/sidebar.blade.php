@@ -32,7 +32,7 @@
                             <li class="nav-item">
                                 <a href="{{ route('admin.permisos.index') }}" target="frameprincipal" class="nav-link">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Permisos</p>
+                                    <p>Usuarios</p>
                                 </a>
                             </li>
 
