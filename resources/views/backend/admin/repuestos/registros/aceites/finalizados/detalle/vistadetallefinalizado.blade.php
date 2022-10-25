@@ -1,3 +1,4 @@
+
 @extends('backend.menus.superior')
 
 @section('content-admin-css')
@@ -13,25 +14,20 @@
         /*Ajustar tablas*/
         table-layout:fixed;
     }
-    .select2-container{
-        height: 30px !important;
-    }
-
 </style>
 
 <div id="divcontenedor" style="display: none">
 
     <section class="content-header">
-        <div class="row">
-            <h1 style="margin-left: 5px">Listado de Aceites y Lubricantes Finalizados</h1><br>
-        </div>
+        <label style="font-size: 17px">Fecha Salida de Bodega: {{ $fechasalida }}</label> <br>
+        <label style="font-size: 17px">Viscosidad: {{ $viscosidad }}</label> <br>
     </section>
 
     <section class="content">
         <div class="container-fluid">
             <div class="card card-success">
                 <div class="card-header">
-                    <h3 class="card-title">Listado de Aceites y Lubricantes Finalizados</h3>
+                    <h3 class="card-title">Detalle</h3>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -62,9 +58,9 @@
 
     <script type="text/javascript">
         $(document).ready(function(){
-            var ruta = "{{ URL::to('/admin/aceiteylubricantes/finalizados/tabla/') }}";
+            let id = {{ $id }};
+            var ruta = "{{ URL::to('/admin/aceiteylubricantes/finali/detalle/tabla') }}/" + id;
             $('#tablaDatatable').load(ruta);
-
             document.getElementById("divcontenedor").style.display = "block";
         });
     </script>
@@ -72,15 +68,16 @@
     <script>
 
         function recargar(){
-            var ruta = "{{ url('/admin/aceiteylubricantes/finalizados/tabla/') }}";
+            let id = {{ $id }};
+            var ruta = "{{ URL::to('/admin/aceiteylubricantes/finali/detalle/tabla') }}/" + id;
             $('#tablaDatatable').load(ruta);
         }
 
-        function infoFinalizar(id){
+        function infoBorrar(id){
 
             Swal.fire({
-                title: 'Finalizar USO',
-                text: "Se ha completado el uso del Material",
+                title: 'Borrar Fila',
+                text: "Se eliminara el Detalle",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#28a745',
@@ -89,77 +86,33 @@
                 confirmButtonText: 'Si'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    reutilizarUso(id);
+                    borrarFila(id);
                 }
             })
         }
 
-        function reutilizarUso(id){
+        function borrarFila(id){
 
             openLoading();
-            axios.post(url+'/aceiteylubricantes/reutilizar',{
+            axios.post(url+'/aceiteylubricantes/borrar/fila/detalle',{
                 'id': id
             })
                 .then((response) => {
                     closeLoading();
                     if(response.data.success === 1){
-                        toastr.success('Material en Uso nuevamente');
+                        toastr.success('Detalle Eliminado');
                         recargar();
                     }else{
-                        toastr.error('Información no encontrada');
+                        toastr.error('Error al borrar');
                     }
                 })
                 .catch((error) => {
                     closeLoading();
-                    toastr.error('Información no encontrada');
+                    toastr.error('Error al borrar');
                 });
-        }
-
-        function infoReutilizar(id){
-
-            Swal.fire({
-                title: 'Reutilizar USO',
-                text: "Se podrá agregar mas detalle a está salida",
-                icon: 'info',
-                showCancelButton: true,
-                confirmButtonColor: '#28a745',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Cancelar',
-                confirmButtonText: 'Si'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    reutilizarUso(id);
-                }
-            })
-        }
-
-        function reutilizarUso(id){
-
-            openLoading();
-            axios.post(url+'/aceiteylubricantes/reutilizar',{
-                'id': id
-            })
-                .then((response) => {
-                    closeLoading();
-                    if(response.data.success === 1){
-                        toastr.success('Material en Uso nuevamente');
-                        recargar();
-                    }else{
-                        toastr.error('Información no encontrada');
-                    }
-                })
-                .catch((error) => {
-                    closeLoading();
-                    toastr.error('Información no encontrada');
-                });
-        }
-
-        function informacion(id){
-            window.location.href="{{ url('/admin/aceiteylubricantes/finali/detalle/index') }}/" + id;
         }
 
 
     </script>
-
 
 @endsection

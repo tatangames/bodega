@@ -7,14 +7,12 @@
                         <table id="tabla" class="table table-bordered table-striped">
                             <thead>
                             <tr>
-                                <th style="width: 12%">Fecha Salida de Bodega</th>
-                                <th style="width: 12%">Fecha Finalizo Uso</th>
-                                <th style="width: 13%">Licitación</th>
-                                <th style="width: 13%">Viscosidad</th>
-                                <th style="width: 10%">Cantidad</th>
-                                <th style="width: 10%">Unidad Medida</th>
-                                <th style="width: 11%">Tipo</th>
-                                <th style="width: 14%">Descripción</th>
+                                <th style="width: 5%">Fecha Detalle</th>
+                                <th style="width: 8%">Hora</th>
+                                <th style="width: 9%">Equipo o Destino</th>
+                                <th style="width: 9%">Cantidad Salida</th>
+                                <th style="width: 9%">Medida</th>
+                                <th style="width: 13%">Descripción</th>
                                 <th style="width: 15%">Opciones</th>
                             </tr>
                             </thead>
@@ -23,27 +21,18 @@
                             @foreach($lista as $dato)
                                 <tr>
                                     <td>{{ $dato->fecha }}</td>
-                                    <td>{{ $dato->fecha_finalizo }}</td>
-                                    <td>{{ $dato->empresa }}</td>
-                                    <td>{{ $dato->viscosidad }}</td>
-                                    <td>{{ $dato->cantidad }}</td>
+                                    <td>{{ $dato->hora }}</td>
+                                    <td>{{ $dato->equipo }}</td>
+                                    <td>{{ $dato->cantidad_salida }}</td>
                                     <td>{{ $dato->medida }}</td>
-                                    @if($dato->tipo == 1)
-                                        <td>Aceites</td>
-                                    @else
-                                        <td>Lubricantes</td>
-                                    @endif
                                     <td>{{ $dato->descripcion }}</td>
-                                    <td>
-                                        <button type="button" class="btn btn-primary btn-xs" onclick="informacion({{ $dato->id }})">
-                                            <i class="fas fa-edit" title="Detalle"></i>&nbsp; Detalle
-                                        </button>
 
-                                        <br><br>
-                                        <button type="button" class="btn btn-success btn-xs" onclick="infoReutilizar({{ $dato->id }})">
-                                            <i class="fas fa-check" title="Reutilizar"></i>&nbsp; Reutilizar
+                                    <td>
+                                        <button type="button" class="btn btn-danger btn-xs" onclick="infoBorrar({{ $dato->id }})">
+                                            <i class="fas fa-check" title="Borrar"></i>&nbsp; Borrar
                                         </button>
                                     </td>
+
                                 </tr>
                             @endforeach
 

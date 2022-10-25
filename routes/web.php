@@ -201,6 +201,11 @@ Route::get('/admin/aceiteylubricantes/finalizados', [AceitesController::class,'i
 Route::get('/admin/aceiteylubricantes/finalizados/tabla', [AceitesController::class,'tablaAceitesFinalizados']);
 Route::post('/admin/aceiteylubricantes/reutilizar', [AceitesController::class,'reutilizarUsoAceitesLubricantes']);
 
+// ver detalle de aceite y lubricantes que estan finalizados
+Route::get('/admin/aceiteylubricantes/finali/detalle/index/{id}', [AceitesController::class,'indexFinalizadosAceitesDetalle']);
+Route::get('/admin/aceiteylubricantes/finali/detalle/tabla/{id}', [AceitesController::class,'tablaFinalizadosAceitesDetalle']);
+
+Route::post('/admin/aceiteylubricantes/borrar/fila/detalle', [AceitesController::class,'eliminarDetalleAceites']);
 
 
 

@@ -531,5 +531,62 @@ class AceitesController extends Controller
         return ['success' => 1];
     }
 
+    public function indexFinalizadosAceitesDetalle($id){
+
+        $infoSalida = SalidaAceitesDetalle::where('id', $id)->first();
+        $infoMaterial = MaterialesAceites::where('id', $infoSalida->id_material_aceite)->first();
+        $infoSalidaAceite = SalidaAceites::where('id', $infoSalida->id_salida_aceites)->first();
+
+        $viscosidad = $infoMaterial->nombre;
+        $fechasalida = date("d-m-Y", strtotime($infoSalidaAceite->fecha));
+
+        return view('backend.admin.repuestos.registros.aceites.finalizados.detalle.vistadetallefinalizado', compact('viscosidad', 'fechasalida', 'id'));
+    }
+
+    public function tablaFinalizadosAceitesDetalle($id){
+
+        // ID salida_aceites_detalle
+
+        $lista = RegistroAceiteDetalle::where('id_salida_acei_deta', $id)->orderBy('fecha', 'ASC')->get();
+
+        foreach ($lista as $dd){
+
+            $infoEquipo = Equipos::where('id', $dd->id_equipo)->first();
+            $infoMedida = UnidadMedidaAceites::where('id', $dd->id_medida)->first();
+
+            $dd->fecha = date("d-m-Y", strtotime($dd->fecha));
+
+            if($dd->hora != null){
+                $dd->hora = date("g:i A", strtotime($dd->hora));
+            }
+
+            $dd->equipo = $infoEquipo->nombre;
+            $dd->medida = $infoMedida->nombre;
+        }
+
+        return view('backend.admin.repuestos.registros.aceites.finalizados.detalle.tabladetallefinalizado', compact('lista'));
+    }
+
+
+    public function eliminarDetalleAceites(Request $request){
+
+        $regla = array(
+            'id' => 'required',
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        if(RegistroAceiteDetalle::where('id', $request->id)->first()){
+
+            RegistroAceiteDetalle::where('id', $request->id)->delete();
+
+            return ['success' => 1];
+        }else{
+            return ['success' => 3];
+        }
+    }
+
 
 }
