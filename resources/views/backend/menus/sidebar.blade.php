@@ -73,6 +73,15 @@
                                 </li>
                             @endcan
 
+                            @can('sidebar.catalogo.aceites.lubricantes')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.catalogo.aceites.lubricantes.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Aceites y Lubricantes</p>
+                                    </a>
+                                </li>
+                            @endcan
+
                         </ul>
                     </li>
                 @endcan
@@ -104,6 +113,58 @@
                                     <a href="{{ route('admin.salida.registro.index') }}" target="frameprincipal" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Registrar Salida</p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                        </ul>
+                    </li>
+                @endcan
+
+                @can('sidebar.registros.aceites.lubricantes')
+                    <li class="nav-item">
+
+                        <a href="#" class="nav-link nav-">
+                            <i class="far fa-edit"></i>
+                            <p>
+                                Registro Aceites y Lubricantes
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+
+                        <ul class="nav nav-treeview">
+                            @can('registros.entradas.aceites.lubricantes')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.entrada.registro.aceitelubricantes.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Registrar Entrada</p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            @can('registros.salidas.aceites.lubricantes')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.salida.registro.aceitelubricantes.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Registrar Salida</p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            @can('registros.salidas.aceites.enuso')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.salida.enuso.aceitelubricantes.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>En USO</p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            @can('sidebar.ver.aceites.finalizados')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.finalizados.aceitelubricantes.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Finalizados</p>
                                     </a>
                                 </li>
                             @endcan
@@ -228,7 +289,6 @@
                     </li>
                 @endcan
 
-
                 @can('sidebar.historial.repuestos')
                     <li class="nav-item">
 
@@ -277,6 +337,7 @@
                                     </a>
                                 </li>
                             @endcan
+
                         </ul>
                     </li>
                 @endcan
@@ -394,6 +455,52 @@
                         </ul>
                     </li>
                 @endcan
+
+
+                @can('sidebar.reporte.aceitesylubricantes')
+                    <li class="nav-item">
+
+                        <a href="#" class="nav-link nav-">
+                            <i class="far fa-edit"></i>
+                            <p>
+                                Reporte Aceite y Lubric.
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+
+                        <ul class="nav nav-treeview">
+
+                            @can('reporte.aceitesylubricantes.entradaysalida')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.entrada.reporte.aceitelubricantes.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Entradas y Salidas</p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            @can('reporte.aceitesylubricantes.equipos')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.entrada.reporte.aceitelubricantes.equipos.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Por Equipo</p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            @can('reporte.aceitesylubricantes.cantidades')
+                                <li class="nav-item">
+                                    <a href="{{ route('admin.reporte.aceitelubricantes.cantidad.index') }}" target="frameprincipal" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Cantidad Actual</p>
+                                    </a>
+                                </li>
+                            @endcan
+
+                        </ul>
+                    </li>
+                @endcan
+
 
             </ul>
         </nav>

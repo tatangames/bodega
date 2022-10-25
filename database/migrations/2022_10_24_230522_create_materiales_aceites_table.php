@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateMaterialesAceitesTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('materiales_aceites', function (Blueprint $table) {
+            $table->id();
+            $table->bigInteger('id_medida')->unsigned()->nullable();
+
+            $table->string('nombre', 300);
+
+            // 1: aceites
+            // 2: lubricantes
+
+            $table->integer('tipo');
+
+            $table->foreign('id_medida')->references('id')->on('unidad_medida_aceites');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('materiales_aceites');
+    }
+}

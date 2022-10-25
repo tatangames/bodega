@@ -21,7 +21,7 @@
     <section class="content-header">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h2>Registro de Salidas</h2>
+                <h2>Registro de Salidas para Aceites y Lubricantes</h2>
             </div>
         </div>
     </section>
@@ -41,15 +41,8 @@
 
                             <div class="card-body">
                                 <div class="row">
-                                    <label>Fecha:</label>
+                                    <label>Fecha de Salida:</label>
                                     <input style="width: 35%; margin-left: 25px;" type="date" class="form-control" id="fecha">
-                                </div>
-                            </div>
-
-                            <div style="margin-left: 15px; margin-right: 15px; margin-top: 15px;">
-                                <div class="form-group">
-                                    <label># Talonario:</label>
-                                    <input type="text" class="form-control" autocomplete="off" maxlength="50" id="talonario">
                                 </div>
                             </div>
 
@@ -63,25 +56,11 @@
                             <div class="form-group" style="float: right">
                                 <br>
                                 <button type="button" onclick="abrirModal()" class="btn btn-primary btn-sm float-right" style="margin-top:10px; margin-right: 15px;">
-                                    <i class="fas fa-plus" title="Agregar Repuesto"></i> Agregar Repuesto</button>
+                                    <i class="fas fa-plus" title="Agregar Repuesto"></i> Agregar Registro</button>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <!-- bloque por algun uso
-                <div class="col-md-6">
-                    <div class="card card-danger">
-                        <div class="card-header">
-                            <h3 class="card-title">Tipo de Ingreso</h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                -->
 
 
             </div>
@@ -93,7 +72,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Buscar Repuesto</h4>
+                    <h4 class="modal-title">Buscar Aceite o Lubricantes</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -103,19 +82,8 @@
                     <form id="formulario-repuesto">
                         <div class="card-body">
 
-                            <div class="form-group" >
-                                <label class="control-label">Seleccionar Equipo o Destino</label>
-                                <div class="col-md-6">
-                                    <select id="select-equipo" class="form-control">
-                                        @foreach($equipos as $item)
-                                            <option value="{{$item->id}}">{{ $item->nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-
                             <div class="form-group">
-                                <label class="control-label">Repuesto</label>
+                                <label class="control-label">Viscosidad</label>
 
                                 <table class="table" id="matriz-busqueda" data-toggle="table">
                                     <tbody>
@@ -128,6 +96,14 @@
                                     </tbody>
                                 </table>
                             </div>
+
+                            <div style="margin-left: 15px; margin-right: 15px; margin-top: 15px;">
+                                <div class="form-group">
+                                    <label>Descripción (opcional):</label>
+                                    <input type="text" class="form-control" autocomplete="off" maxlength="300" id="descripcion-aceite">
+                                </div>
+                            </div>
+
 
                             <!-- cargara vista de selección -->
                             <div class="card-body">
@@ -146,9 +122,6 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                    <!--
-                    <button type="button" class="btn btn-primary" onclick="agregarFila()">Agregar</button>
-                    -->
                 </div>
             </div>
         </div>
@@ -173,11 +146,10 @@
                     <thead>
                     <tr>
                         <th style="width: 3%">#</th>
-                        <th style="width: 10%">Repuesto</th>
+                        <th style="width: 10%">Viscosidad</th>
                         <th style="width: 6%">Inventario</th>
                         <th style="width: 6%">Salida</th>
-                        <th style="width: 6%">Precio Uni.</th>
-                        <th style="width: 8%">Equipo</th>
+                        <th style="width: 8%">Descripción</th>
                         <th style="width: 5%">Opciones</th>
                     </tr>
                     </thead>
@@ -251,8 +223,6 @@
             document.getElementById("formulario-repuesto").reset();
             $('#select-equipo').prop('selectedIndex', 0).change();
             $('#modalRepuesto').modal('show');
-           // $('#modalRepuesto').css('overflow-y', 'auto');
-           // $('#modalRepuesto').modal({backdrop: 'static', keyboard: false})
         }
 
         function verificarSalida(){
@@ -281,23 +251,18 @@
 
             var repuesto = document.querySelector('#repuesto');
             var nomRepuesto = document.getElementById('repuesto').value;
-            var equipo = document.getElementById('select-equipo').value;
-            var equipoNombre = $( "#select-equipo option:selected" ).text();
+            var descripcionaceite = document.getElementById('descripcion-aceite').value;
             var reglaNumeroEntero = /^[0-9]\d*$/;
 
             // VERIFICACIONES
             if(repuesto.dataset.info == 0){
-                toastr.error("Repuesto es requerido");
+                toastr.error("Aceite o Lubricante es requerido");
                 return;
             }
 
             if(nomRepuesto === ''){
-                toastr.error('Repuesto es requerido');
+                toastr.error('Aceite o Lubricante es requerido');
             }
-
-            /*for (var i = 0; i < divs.length; i++) {
-                $(divs[i]).css("background-color", "transparent");
-            }*/
 
             // id de entrada_material
             var inputidcantidad = $("input[name='arraysalida[]']").map(function(){return $(this).attr("data-idcantidad");}).get();
@@ -305,9 +270,6 @@
             var inputcantidad = $("input[name='arraysalida[]']").map(function(){return $(this).val();}).get();
             // input max cantidad
             var inputmaxcantidad = $("input[name='arraysalida[]']").map(function(){return $(this).attr("data-maxcantidad");}).get();
-            // precio del material en entrada_detalle
-            var inputprecio = $("input[name='arraysalida[]']").map(function(){return $(this).attr("data-precio");}).get();
-
 
             for(var a = 0; a < inputcantidad.length; a++) {
 
@@ -318,7 +280,7 @@
                 // identifica si el 0 es tipo number o texto
                 if(detalleIdCantidad == 0){
                     divColorRojo(a);
-                    alertaMensaje('info', 'No encontrado', 'En el Bloque de salida #' + (a+1) + " No se encuentra el identificador. Volver a buscar el Repuesto.");
+                    alertaMensaje('info', 'No encontrado', 'En el Bloque de salida #' + (a+1) + " No se encuentra el identificador. Volver a buscar el Aceite o Lubricante.");
                     return;
                 }
 
@@ -342,14 +304,14 @@
                 }
 
                 // ignorar si la cantidad actual es 0
-
                 let maximodeta = parseInt(detalleMaxCantidad);
 
                 if(maximodeta != 0){
                     // no superar la maxima cantidad
+
                     if(datoNumero > maximodeta){
                         divColorRojo(a);
-                        toastr.error('La cantidad a Retirar no puede ser mayor a: ' + maximodeta);
+                        toastr.error('La cantidad a Retirar no puede ser mayor a ' + maximodeta);
                         return;
                     }
                 }
@@ -362,7 +324,6 @@
                 let datoNumero = inputcantidad[z];
                 let detalleIdEntrDeta = inputidcantidad[z]; // id entrada_detalle
                 let detalleMaxCantidad = inputmaxcantidad[z]; // cantidad en inventario de este bloque
-                let detallePrecio = inputprecio[z]; // precio del material
 
                 if(datoNumero > 0){
 
@@ -389,11 +350,7 @@
                         "</td>" +
 
                         "<td>" +
-                        "<input disabled value='$" + detallePrecio + "' class='form-control' type='text'>" +
-                        "</td>" +
-
-                        "<td>" +
-                        "<input name='equipoArray[]' disabled data-infoequipo='" + equipo + "' value='" + equipoNombre + "' class='form-control' type='text'>" +
+                        "<input name='descripcionArray[]' disabled value='" + descripcionaceite + "' class='form-control' type='text'>" +
                         "</td>" +
 
                         "<td>" +
@@ -413,10 +370,10 @@
                     timer: 1500
                 })
 
-                    $(txtContenedorGlobal).attr('data-info', '0');
-                    document.getElementById('tablaRepuesto').innerHTML = "";
-                    $('#select-equipo').prop('selectedIndex', 0).change();
-                    document.getElementById("formulario-repuesto").reset();
+                $(txtContenedorGlobal).attr('data-info', '0');
+                document.getElementById('tablaRepuesto').innerHTML = "";
+                $('#select-equipo').prop('selectedIndex', 0).change();
+                document.getElementById("formulario-repuesto").reset();
             }
         }
 
@@ -480,7 +437,7 @@
                     document.getElementById('tablaRepuesto').innerHTML = "";
                 }
 
-                axios.post(url+'/buscar/material', {
+                axios.post(url+'/aceiteylubricantes/buscar/material', {
                     'query' : texto
                 })
                     .then((response) => {
@@ -501,26 +458,16 @@
 
             var fecha = document.getElementById('fecha').value;
             var descripc = document.getElementById('descripcion').value; // max 800
-            var talonario = document.getElementById('talonario').value; // max 50
 
             if(fecha === ''){
                 toastr.error('Fecha es requerida');
-            }
-
-            if(talonario === ''){
-
-            }else{
-                if(talonario.length > 50){
-                    toastr.error('Talonario máximo 50 caracteres');
-                    return;
-                }
             }
 
             if(descripc === ''){
 
             }else{
                 if(descripc.length > 800){
-                    toastr.error('Descripción máximo 800 caracteres');
+                    toastr.error('descripción máximo 800 caracteres');
                     return;
                 }
             }
@@ -537,7 +484,7 @@
 
             var identradaDetalle = $("input[name='identradadetalleArray[]']").map(function(){return $(this).attr("data-identradadetalle");}).get();
             var salidaDetalle = $("input[name='salidaArray[]']").map(function(){return $(this).val();}).get();
-            var idequipoDetalle = $("input[name='equipoArray[]']").map(function(){return $(this).attr("data-infoequipo");}).get();
+            var descripcionDetalle = $("input[name='descripcionArray[]']").map(function(){return $(this).val();}).get();
 
             // verificar que id entrada detalle exista
             // verificar que salida array detalle exista
@@ -545,19 +492,11 @@
 
                 let detalleS = identradaDetalle[a];
                 let datoCantidad = salidaDetalle[a];
-                let datoIdEquipo = idequipoDetalle[a];
 
                 // identifica si el 0 es tipo number o texto
                 if(detalleS == 0){
                     colorRojoTabla(a);
                     alertaMensaje('info', 'Error', 'En la Fila #' + (a+1) + " El identificador del repuesto no se encontró. Borrar la Fila y agregar de nuevo.");
-                    return;
-                }
-
-                // identifica si el 0 es tipo number o texto
-                if(datoIdEquipo == 0){
-                    colorRojoTabla(a);
-                    alertaMensaje('info', 'Error', 'En la Fila #' + (a+1) + " El identificador del Equipo no se encontró. Borrar la Fila y agregar de nuevo.");
                     return;
                 }
 
@@ -581,7 +520,7 @@
 
                 if (datoCantidad > 9000000) {
                     colorRojoTabla(a);
-                    toastr.error('Fila #' + (a + 1) + ' Cantidad de salida debe tener máximo 9 millones');
+                    toastr.error('Fila #' + (a + 1) + ' Cantidad de salida debe tener máximo 99 millones');
                     return;
                 }
             }
@@ -591,37 +530,30 @@
             // como tienen la misma cantidad de filas, podemos recorrer
             // todas las filas de una vez
             for(var p = 0; p < salidaDetalle.length; p++){
-
                 formData.append('salida[]', salidaDetalle[p]);
-                formData.append('equipo[]', idequipoDetalle[p]);
                 formData.append('identrada[]', identradaDetalle[p]);
+                formData.append('descripciondeta[]', descripcionDetalle[p]);
             }
 
             openLoading();
 
             formData.append('fecha', fecha);
             formData.append('descripcion', descripc);
-            formData.append('talonario', talonario);
 
-            axios.post(url+'/salida/guardar', formData, {
+            axios.post(url+'/aceiteylubricantes/salida/guardar', formData, {
             })
                 .then((response) => {
                     closeLoading();
-                    console.log(response);
 
 
                     if(response.data.success === 1){
-                        toastr.success('Registrado correctamente');
-                        limpiar();
-                    }
-                    else if(response.data.success === 3){
 
                         let fila = response.data.fila;
                         let cantidad = response.data.cantidad;
                         colorRojoTabla(fila);
                         Swal.fire({
                             title: 'Cantidad no Disponible',
-                            text: "Fila #" + (fila+1) + ", el repuesto cuenta con: " + cantidad + " unidades disponible",
+                            text: "Fila #" + (fila+1) + ", el Material cuenta con: " + cantidad + " unidades disponible",
                             icon: 'question',
                             showCancelButton: false,
                             confirmButtonColor: '#28a745',
@@ -632,12 +564,16 @@
                             }
                         })
                     }
+                    else if(response.data.success === 2){
+                        toastr.success('Registrado correctamente');
+                        limpiar();
+                    }
                     else{
-                        toastr.error('Error al guardar');
+                        toastr.error('error al guardar');
                     }
                 })
                 .catch((error) => {
-                    toastr.error('Error al guardar');
+                    toastr.error('error al guardar');
                     closeLoading();
                 });
         }
@@ -660,7 +596,7 @@
             // agregar el id al atributo del input descripcion
             $(txtContenedorGlobal).attr('data-info', edrop.id);
 
-            var ruta = "{{ URL::to('/admin/repuesto/cantidad/bloque') }}/" + edrop.id;
+            var ruta = "{{ URL::to('/admin/aceiteylubricantes/cantidad/bloque/') }}/" + edrop.id;
             $('#tablaRepuesto').load(ruta);
 
             //$(txtContenedorGlobal).data("info");
@@ -668,7 +604,6 @@
 
         function limpiar(){
             document.getElementById('descripcion').value = '';
-            document.getElementById('talonario').value = '';
 
             $("#matriz tbody tr").remove();
         }

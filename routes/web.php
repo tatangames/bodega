@@ -10,6 +10,8 @@ use App\Http\Controllers\Backend\Perfil\PerfilController;
 use App\Http\Controllers\Backend\Equipos\EquiposController;
 use App\Http\Controllers\Backend\Repuestos\RepuestosController;
 use App\Http\Controllers\Backend\Reportes\ReportesController;
+use App\Http\Controllers\Backend\Aceites\AceitesController;
+use App\Http\Controllers\Backend\Reportes\ReportesAceiteController;
 
 // --- RUTA PARA LOGIN ---
 
@@ -119,7 +121,7 @@ Route::post('/admin/historial/salida/editar',  [RepuestosController::class,'edit
 Route::get('/admin/entradas/detalle/{id}', [PrincipalController::class,'indexEntradasDetalle']);
 Route::get('/admin/entradas/detalle/tabla/{id}', [PrincipalController::class,'indexEntradasDetalleTabla']);
 
-// detalle historial entrada llanta. para cambiar precio
+// detalle historial entrada llanta, para cambiar precio
 Route::post('/admin/entradas/historial/deta/informacion',  [PrincipalController::class,'informacionEntradaHistorialDetalle']);
 Route::post('/admin/entradas/historial/deta/editar',  [PrincipalController::class,'editarEntradaHistorialDetalle']);
 
@@ -152,6 +154,80 @@ Route::get('/admin/reporte/cantidades', [ReportesController::class,'reportePdfCa
 // reporte catálogo de repuestos
 Route::get('/admin/reporte/catalogo/materiales/index', [ReportesController::class,'indexCatalogoMateriales'])->name('admin.reporte.catalogo.repuestos.index');
 Route::get('/admin/reporte/catalogo/materiales', [ReportesController::class,'reporteCatalogoMateriales']);
+
+
+
+
+
+
+//*************** ACEITES Y LUBRICANTES
+
+
+
+// registro de catálogo de aceites y lubricantes
+Route::get('/admin/catalogo/aceiteylubricantes/index', [AceitesController::class,'indexCatalogoAceiteLubicantes'])->name('admin.catalogo.aceites.lubricantes.index');
+Route::get('/admin/catalogo/aceiteylubricantes/tabla/index', [AceitesController::class,'tablaCatalogoAceiteLubicantes']);
+Route::post('/admin/catalogo/aceiteylubricantes/nuevo', [AceitesController::class, 'nuevoCatalogoAceiteLubicantes']);
+Route::post('/admin/catalogo/aceiteylubricantes/informacion', [AceitesController::class, 'informacionCatalogoAceiteLubicantes']);
+Route::post('/admin/catalogo/aceiteylubricantes/editar', [AceitesController::class, 'editarCatalogoAceiteLubicantes']);
+
+// registrar entrada de aceite y lubricantes
+Route::get('/admin/aceiteylubricantes/registro/entrada', [AceitesController::class,'indexRegistroEntrada'])->name('admin.entrada.registro.aceitelubricantes.index');
+Route::post('/admin/aceiteylubricantes/buscar/material',  [AceitesController::class,'buscadorAceiteLubricante']);
+Route::post('/admin/aceiteylubricantes/entrada/guardar',  [AceitesController::class,'guardarEntradaAceiteLubricante']);
+
+// registrar salida de aceites y lubricantes
+
+Route::get('/admin/aceiteylubricantes/registro/salida', [AceitesController::class,'indexRegistroSalida'])->name('admin.salida.registro.aceitelubricantes.index');
+
+// bloque de cantidades para elegir cual aceite o lubricante
+Route::get('/admin/aceiteylubricantes/cantidad/bloque/{id}', [AceitesController::class,'bloqueCantidades']);
+// registrar salida para aceites y lubricantes
+Route::post('/admin/aceiteylubricantes/salida/guardar',  [AceitesController::class,'guardarSalidaAceiteLubricante']);
+
+
+// ver salidas de aceites y lubricantes para agregar detalles
+Route::get('/admin/aceiteylubricantes/enuso/index', [AceitesController::class,'indexEnUsoAceites'])->name('admin.salida.enuso.aceitelubricantes.index');
+Route::get('/admin/aceiteylubricantes/enuso/tabla', [AceitesController::class,'tablaEnUsoAceites']);
+Route::post('/admin/aceiteylubricantes/enuso/finalizar', [AceitesController::class,'finalizarUsoAceitesLubricantes']);
+
+// agregar detalle a un registro en uso
+Route::get('/admin/aceiteylubricantes/detalle/uso/{id}', [AceitesController::class,'detalleAceiteLubricanteUso']);
+Route::get('/admin/aceiteylubricantes/detalle/usotabla/{id}', [AceitesController::class,'tablaAceiteLubricanteUso']);
+Route::post('/admin/aceiteylubricantes/guardar/detalles', [AceitesController::class,'guardarDetalleSalida']);
+
+// ver registros finalizados de aceites y lubricantes
+Route::get('/admin/aceiteylubricantes/finalizados', [AceitesController::class,'indexAceitesFinalizados'])->name('admin.finalizados.aceitelubricantes.index');
+Route::get('/admin/aceiteylubricantes/finalizados/tabla', [AceitesController::class,'tablaAceitesFinalizados']);
+Route::post('/admin/aceiteylubricantes/reutilizar', [AceitesController::class,'reutilizarUsoAceitesLubricantes']);
+
+
+
+
+// * REPORTES PARA ACEITES Y LUBRICANTES
+
+// entradas y salidas
+Route::get('/admin/entrada/aceitelubricantes/reporte/vista', [ReportesAceiteController::class,'indexEntradaReporte'])->name('admin.entrada.reporte.aceitelubricantes.index');
+Route::get('/admin/reporte/aceitelubricantes/{tipo}/{desde}/{hasta}', [ReportesAceiteController::class,'reportePdfEntradaAceite']);
+
+// reporte por equipos
+Route::get('/admin/entrada/aceitelubricantes/equipos/vista', [ReportesAceiteController::class,'indexEntradaReporteEquiposAceites'])->name('admin.entrada.reporte.aceitelubricantes.equipos.index');
+Route::get('/admin/reporte/aceitelubricantes/porequipo/{desde}/{hasta}/{unidad}', [ReportesAceiteController::class, 'reportePorEquipoAceites']);
+
+// reporte cantidad actual
+Route::get('/admin/reporte/aceitelubricantes/cantidad/vista', [ReportesAceiteController::class,'indexEntradaReporteCantidadAceites'])->name('admin.reporte.aceitelubricantes.cantidad.index');
+Route::get('/admin/reporte/aceitelubricantes/cantidades', [ReportesAceiteController::class,'reportePdfCantidadAceites']);
+
+
+
+
+
+
+
+
+
+
+
 
 
 

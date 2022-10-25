@@ -72,6 +72,19 @@ class RolesSeeder extends Seeder
         Permission::create(['name' => 'sidebar.reporte.catalogo.llantas', 'description' => 'ver reporte de catalogo de llantas'])->syncRoles($roleInventario, $roleAuditora);
 
         Permission::create(['name' => 'registros.ubicacion.repuestos', 'description' => 'sidebar - ubicaciones de repuestos'])->syncRoles($roleInventario);
+        Permission::create(['name' => 'sidebar.catalogo.aceites.lubricantes', 'description' => 'ver catalogo de aceites y lubricantes'])->syncRoles($roleInventario);
+        Permission::create(['name' => 'sidebar.registros.aceites.lubricantes', 'description' => 'sidebar - registro y salidas de aceites y lubricantes'])->syncRoles($roleInventario);
+        Permission::create(['name' => 'registros.entradas.aceites.lubricantes', 'description' => 'sidebar - registrar entradas de aceites'])->syncRoles($roleInventario);
+        Permission::create(['name' => 'registros.salidas.aceites.lubricantes', 'description' => 'sidebar - registrar salida de aceites'])->syncRoles($roleInventario);
+        Permission::create(['name' => 'registros.salidas.aceites.enuso', 'description' => 'sidebar - registros que estan en uso los aceites y lubricantes'])->syncRoles($roleInventario);
+        Permission::create(['name' => 'sidebar.ver.aceites.finalizados', 'description' => 'sidebar - registro de aceite o lubricantes finalizados'])->syncRoles($roleInventario);
+
+
+
+        Permission::create(['name' => 'sidebar.reporte.aceitesylubricantes', 'description' => 'sidebar - para ver reportes de aceites y lubricantes'])->syncRoles($roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.aceitesylubricantes.entradaysalida', 'description' => 'sidebar - reporte entrada y salida para aceites y lubricantes'])->syncRoles($roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.aceitesylubricantes.equipos', 'description' => 'sidebar - reporte de equipos para aceites y lubricantes'])->syncRoles($roleInventario, $roleAuditora);
+        Permission::create(['name' => 'reporte.aceitesylubricantes.cantidades', 'description' => 'sidebar - reporte de cantidad para aceites y lubricantes'])->syncRoles($roleInventario, $roleAuditora);
 
 
 
