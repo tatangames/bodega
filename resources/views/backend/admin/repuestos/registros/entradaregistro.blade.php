@@ -133,7 +133,7 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            <input id="repuesto" data-info='0' class='form-control' style='width:100%' onkeyup='buscarMaterial(this)' maxlength='400'  type='text'>
+                                            <input id="repuesto" data-info='0' autocomplete="off" class='form-control' style='width:100%' onkeyup='buscarMaterial(this)' maxlength='400'  type='text'>
                                             <div class='droplista' style='position: absolute; z-index: 9; width: 75% !important;'></div>
                                         </td>
                                     </tr>
@@ -155,7 +155,7 @@
                             <div class="form-group" >
                                 <label class="control-label">Cantidad</label>
                                 <div class="col-md-6">
-                                    <input id="cantidad" class='form-control' type='number' placeholder="0">
+                                    <input id="cantidad" class='form-control' autocomplete="off" type='number' placeholder="0">
                                 </div>
                             </div>
 
@@ -173,7 +173,7 @@
                             <div class="form-group">
                                 <label class="control-label">Precio Unitario $</label>
                                 <div class="col-md-6">
-                                    <input class='form-control' id="precio" type='number' placeholder="0.00">
+                                    <input class='form-control' id="precio" autocomplete="off" type='number' placeholder="0.00">
                                 </div>
                             </div>
 

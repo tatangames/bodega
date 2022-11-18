@@ -588,5 +588,39 @@ class AceitesController extends Controller
         }
     }
 
+    function borrarSalidaAceiteLubricantes(Request $request){
+
+        $regla = array(
+            'id' => 'required', // id SalidaAceitesDetalle
+        );
+
+        $validar = Validator::make($request->all(), $regla);
+
+        if ($validar->fails()){ return ['success' => 0];}
+
+        DB::beginTransaction();
+
+        try {
+
+            if($info = SalidaAceitesDetalle::where('id', $request->id)->first()){
+
+                SalidaAceitesDetalle::where('id', $request->id)->delete();
+                SalidaAceites::where('id', $info->id_salida_aceites)->delete();
+
+                DB::commit();
+                return ['success' => 1];
+            }else{
+                return ['success' => 99];
+            }
+
+        }catch(\Throwable $e){
+            Log::info('ee ' . $e);
+            DB::rollback();
+            return ['success' => 99];
+        }
+
+
+    }
+
 
 }

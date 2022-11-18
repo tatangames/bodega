@@ -105,7 +105,7 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label>Descripción</label>
+                                        <label>Descripción (opcional)</label>
                                         <input type="text" maxlength="800" class="form-control" id="descripcion" autocomplete="off">
                                     </div>
 

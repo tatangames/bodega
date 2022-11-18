@@ -158,6 +158,46 @@
             window.location.href="{{ url('/admin/aceiteylubricantes/finali/detalle/index') }}/" + id;
         }
 
+        function infoBorrar(id){
+            // id salida aceite detalle
+
+            Swal.fire({
+                title: 'Borrar Salida',
+                text: "Se borrara la Salida y su Detalle",
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#28a745',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Borrar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    borrarSalida(id);
+                }
+            })
+        }
+
+        function borrarSalida(id){
+            openLoading();
+
+            axios.post(url+'/aceiteylubricantes/borrar/salida',{
+                'id': id
+            })
+                .then((response) => {
+                    closeLoading();
+                    if(response.data.success === 1){
+                       toastr.success('Salida Borrada');
+                       recargar();
+                    }else{
+                        toastr.error('Información no encontrada');
+                    }
+                })
+                .catch((error) => {
+                    closeLoading();
+                    toastr.error('Información no encontrada');
+                });
+        }
+
 
     </script>
 

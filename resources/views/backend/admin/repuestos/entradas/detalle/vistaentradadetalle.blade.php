@@ -62,7 +62,7 @@
 
                                     <div class="form-group">
                                         <label>Precio</label>
-                                        <input type="number" class="form-control" id="precio-editar">
+                                        <input type="number" class="form-control" autocomplete="off" id="precio-editar">
                                     </div>
 
                                 </div>

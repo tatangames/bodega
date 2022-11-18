@@ -207,6 +207,11 @@ Route::get('/admin/aceiteylubricantes/finali/detalle/tabla/{id}', [AceitesContro
 
 Route::post('/admin/aceiteylubricantes/borrar/fila/detalle', [AceitesController::class,'eliminarDetalleAceites']);
 
+// borrar salida de aceites y lubricantes (borra salida y sus detalles)
+Route::post('/admin/aceiteylubricantes/borrar/salida', [AceitesController::class,'borrarSalidaAceiteLubricantes']);
+
+
+
 
 
 // * REPORTES PARA ACEITES Y LUBRICANTES

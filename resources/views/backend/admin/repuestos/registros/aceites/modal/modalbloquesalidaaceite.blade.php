@@ -41,7 +41,7 @@
                 </div>
                 <div class="arraycolor">
                     <div class="card-body row">
-                        <input name="arraysalida[]" type="number" onkeyup="this.value=this.value.replace(/[^\d]/,'')" data-idcantidad="{{$dd['id']}}" data-precio="{{$dd['precio']}}" data-maxcantidad="{{$dd['cantidadtotal']}}" value="0" min="0" max="{{ $dd['cantidadtotal'] }}" step="1"/>
+                        <input name="arraysalida[]" autocomplete="off" type="number" onkeyup="this.value=this.value.replace(/[^\d]/,'')" data-idcantidad="{{$dd['id']}}" data-precio="{{$dd['precio']}}" data-maxcantidad="{{$dd['cantidadtotal']}}" value="0" min="0" max="{{ $dd['cantidadtotal'] }}" step="1"/>
                     </div>
                 </div>
             </div>

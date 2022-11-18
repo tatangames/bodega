@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateSalidaAceitesTable extends Migration
 {
     /**
-     * Run the migrations.
+     * SALIDA DE ACEITE Y LUBRICANTES A USUARIO 'PAPI' A SU BODEGA
      *
      * @return void
      */

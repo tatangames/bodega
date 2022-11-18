@@ -66,12 +66,12 @@
 
                                     <div class="form-group">
                                         <label>Descripción</label>
-                                        <input type="text" maxlength="800" class="form-control" id="descripcion-editar">
+                                        <input type="text" maxlength="800" autocomplete="off" class="form-control" id="descripcion-editar">
                                     </div>
 
                                     <div class="form-group">
                                         <label>Talonario</label>
-                                        <input type="text" maxlength="50" class="form-control" id="talonario-editar">
+                                        <input type="text" maxlength="50" autocomplete="off" class="form-control" id="talonario-editar">
                                     </div>
 
                                 </div>

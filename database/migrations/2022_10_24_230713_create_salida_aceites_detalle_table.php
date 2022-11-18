@@ -7,12 +7,12 @@ use Illuminate\Support\Facades\Schema;
 class CreateSalidaAceitesDetalleTable extends Migration
 {
     /**
-     * Run the migrations.
+     * DESCRIBIR COMO SE UTILIZO ESE ACEITE CUANDO SE ENTREGO AL USUARIO 'PAPI'
      *
      * @return void
      */
-    public function up()
-    {
+    public function up(){
+
         Schema::create('salida_aceites_detalle', function (Blueprint $table) {
             $table->id();
             $table->bigInteger('id_salida_aceites')->unsigned();

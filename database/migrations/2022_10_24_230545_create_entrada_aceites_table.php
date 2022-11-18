@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Schema;
 class CreateEntradaAceitesTable extends Migration
 {
     /**
-     * Run the migrations.
+     * ENTRADA DE ACEITE Y LUBRICANTES
      *
      * @return void
      */

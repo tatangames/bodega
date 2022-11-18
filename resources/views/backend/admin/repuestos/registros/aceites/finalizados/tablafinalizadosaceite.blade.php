@@ -43,6 +43,11 @@
                                         <button type="button" class="btn btn-success btn-xs" onclick="infoReutilizar({{ $dato->id }})">
                                             <i class="fas fa-check" title="Reutilizar"></i>&nbsp; Reutilizar
                                         </button>
+
+                                        <br><br>
+                                        <button type="button" class="btn btn-danger btn-xs" onclick="infoBorrar({{ $dato->id }})">
+                                            <i class="fas fa-check" title="Borrar Salida"></i>&nbsp; Borrar Salida
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach

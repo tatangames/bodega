@@ -48,7 +48,7 @@
 
                             <div style="margin-left: 15px; margin-right: 15px; margin-top: 15px;">
                                 <div class="form-group">
-                                    <label>Descripción:</label>
+                                    <label>Descripción (opcional):</label>
                                     <input type="text" class="form-control" autocomplete="off" maxlength="800" id="descripcion">
                                 </div>
                             </div>
@@ -89,7 +89,7 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            <input id="repuesto" data-info='0' class='form-control' style='width:100%' onkeyup='buscarMaterial(this)' maxlength='400'  type='text'>
+                                            <input id="repuesto" autocomplete="off" data-info='0' class='form-control' style='width:100%' onkeyup='buscarMaterial(this)' maxlength='400'  type='text'>
                                             <div class='droplista' style='position: absolute; z-index: 9; width: 75% !important;'></div>
                                         </td>
                                     </tr>

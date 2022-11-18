@@ -121,7 +121,7 @@
                                     <tbody>
                                     <tr>
                                         <td>
-                                            <input id="repuesto" data-info='0' class='form-control' style='width:100%' onkeyup='buscarMaterial(this)' maxlength='400'  type='text'>
+                                            <input id="repuesto" data-info='0' class='form-control' autocomplete="off" style='width:100%' onkeyup='buscarMaterial(this)' maxlength='400'  type='text'>
                                             <div class='droplista' style='position: absolute; z-index: 9; width: 75% !important;'></div>
                                         </td>
                                     </tr>
