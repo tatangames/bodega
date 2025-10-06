@@ -2360,4 +2360,240 @@ class ReportesController extends Controller
 
 
 
+
+
+
+    public function indexReportePorMateriales()
+    {
+        $arrayMateriales = Materiales::orderBy('nombre', 'ASC')->get();
+
+        return view('backend.admin.repuestos.reporte.materiales.vistareportemateriales', compact('arrayMateriales'));
+    }
+
+
+    public function reportePdfPorMaterialEntradas($desde, $hasta, $idmaterial)
+    {
+        $start = Carbon::parse($desde)->startOfDay();
+        $end = Carbon::parse($hasta)->endOfDay();
+
+        $desdeFormat = date("d/m/Y", strtotime($desde));
+        $hastaFormat = date("d/m/Y", strtotime($hasta));
+
+        $infoMaterial = Materiales::where('id', $idmaterial)->first();
+        $infoMedida = UnidadMedida::where('id', $infoMaterial->id_medida)->first();
+
+        $dt = Carbon::now();
+        $fechaFormat = date("d-m-Y", strtotime($dt));
+
+        $arrayEntradaDetalle = DB::table('entradas_detalle AS ed')
+            ->join('entradas AS e', 'ed.id_entrada', '=', 'e.id')
+            ->select('ed.id_material', 'ed.id_entrada', 'ed.id_equipo', 'ed.cantidad', 'ed.precio',
+                'e.fecha')
+            ->whereBetween('e.fecha', [$start, $end])
+            ->where('ed.id_material', $idmaterial)
+            ->get();
+
+        foreach ($arrayEntradaDetalle as $fila) {
+            $infoEntrada = Entradas::where('id', $fila->id_entrada)->first();
+            $infoEquipo = Equipos::where('id', $fila->id_equipo)->first();
+            $fila->fechaF = date("d-m-Y", strtotime($infoEntrada->fecha));
+
+            $fila->factura = $infoEntrada->factura;
+            $fila->equipo = $infoEquipo->nombre;
+
+            $fila->precioFormat = number_format((float)$fila->precio, 2, '.', ',');
+        }
+
+
+        //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
+
+        $mpdf->SetTitle('Entradas');
+
+        // mostrar errores
+        $mpdf->showImageErrors = false;
+
+        $logoalcaldia = 'images/gobiernologo.jpg';
+        $logosantaana = 'images/logo.png';
+
+        $tabla = "
+            <table style='width: 100%; border-collapse: collapse;'>
+                <tr>
+                    <!-- Logo izquierdo -->
+                    <td style='width: 15%; text-align: left;'>
+                        <img src='$logosantaana' alt='Santa Ana Norte' style='max-width: 100px; height: auto;'>
+                    </td>
+                    <!-- Texto centrado -->
+                    <td style='width: 60%; text-align: center;'>
+                        <h1 style='font-size: 16px; margin: 0; color: #003366; text-transform: uppercase;'>ALCALDÍA MUNICIPAL DE SANTA ANA NORTE</h1>
+                        <h2 style='font-size: 14px; margin: 0; color: #003366; text-transform: uppercase;'></h2>
+                    </td>
+                    <!-- Logo derecho -->
+                    <td style='width: 10%; text-align: right;'>
+                        <img src='$logoalcaldia' alt='Gobierno de El Salvador' style='max-width: 60px; height: auto;'>
+                    </td>
+                </tr>
+            </table>
+            <hr style='border: none; border-top: 2px solid #003366; margin: 0;'>
+            ";
+
+
+
+        $tabla .= "
+            <div style='text-align: center; margin-top: 20px;'>
+                <h1 style='font-size: 15px; margin: 0; color: #000;'>ENTRADAS</h1>
+                <h1 style='font-size: 15px; margin: 0; color: #000;'>DESDE $desdeFormat HASTA $hastaFormat</h1>
+            </div>
+            <p>Material: <strong>$infoMaterial->nombre</strong></p>
+            <div style='text-align: left; margin-top: 10px;'>
+            <p style='font-size: 13px; margin: 0; color: #000;'>Fecha: <strong>$fechaFormat</strong></p>
+        </div>
+      ";
+
+        $tabla .= "<table id='tablaFor' style='width: 100%; border-collapse: collapse; margin-top: 35px'>
+        <tbody>
+            <tr>
+             <th style='text-align: center; font-size:10px; width: 12%; font-weight: bold; border: 1px solid black;'>FECHA</th>
+                <th style='text-align: center; font-size:10px; width: 12%; font-weight: bold; border: 1px solid black;'>EQUIPO</th>
+                 <th style='text-align: center; font-size:10px; width: 8%; font-weight: bold; border: 1px solid black;'>FACTURA</th>
+                <th style='text-align: center; font-size:10px; width: 10%; font-weight: bold; border: 1px solid black;'>CANTIDAD</th>
+                <th style='text-align: center; font-size:10px; width: 8%; font-weight: bold; border: 1px solid black;'>PRECIO</th>
+            </tr>
+        ";
+
+        foreach ($arrayEntradaDetalle as $fila) {
+            $tabla .= "<tr>
+                    <td style='text-align: center; font-size:10px; border: 1px solid black;'>$fila->fechaF</td>
+                    <td style='text-align: center; font-size:10px; border: 1px solid black;'>$fila->equipo</td>
+                    <td style='text-align: center; font-size:10px; border: 1px solid black;'>$fila->factura</td>
+                    <td style='text-align: center; font-size:10px; border: 1px solid black;'>$fila->cantidad</td>
+                    <td style='text-align: center; font-size:10px; border: 1px solid black;'>$fila->precioFormat</td>
+                </tr> ";
+        }
+
+        $tabla .= "</tbody></table>";
+
+        $stylesheet = file_get_contents('css/cssregistro.css');
+        $mpdf->WriteHTML($stylesheet,1);
+
+        $mpdf->setFooter("Página: " . '{PAGENO}' . "/" . '{nb}');
+        $mpdf->WriteHTML($tabla,2);
+
+        $mpdf->Output();
+    }
+
+
+
+    public function reportePdfPorMaterialSalidas($desde, $hasta, $idmaterial)
+    {
+
+        $start = Carbon::parse($desde)->startOfDay();
+        $end = Carbon::parse($hasta)->endOfDay();
+
+        $desdeFormat = date("d/m/Y", strtotime($desde));
+        $hastaFormat = date("d/m/Y", strtotime($hasta));
+
+        $infoMaterial = Materiales::where('id', $idmaterial)->first();
+        $infoMedida = UnidadMedida::where('id', $infoMaterial->id_medida)->first();
+
+        $dt = Carbon::now();
+        $fechaFormat = date("d-m-Y", strtotime($dt));
+
+
+        $arraySalidaDetalle = DB::table('salidas_detalle AS sd')
+            ->join('salidas AS s', 'sd.id_salida', '=', 's.id')
+            ->select('sd.id_material', 'sd.id_salida', 'sd.id_equipo', 'sd.cantidad', 's.fecha')
+            ->whereBetween('s.fecha', [$start, $end])
+            ->where('sd.id_material', $idmaterial)
+            ->get();
+
+        foreach ($arraySalidaDetalle as $fila) {
+            $infoSalida = Salidas::where('id', $fila->id_salida)->first();
+            $infoEquipo = Equipos::where('id', $fila->id_equipo)->first();
+            $fila->fechaF = date("d-m-Y", strtotime($infoSalida->fecha));
+
+            $fila->equipo = $infoEquipo->nombre;
+        }
+
+
+        //$mpdf = new \Mpdf\Mpdf(['format' => 'LETTER']);
+        $mpdf = new \Mpdf\Mpdf(['tempDir' => sys_get_temp_dir(), 'format' => 'LETTER']);
+
+        $mpdf->SetTitle('Salidas');
+
+        // mostrar errores
+        $mpdf->showImageErrors = false;
+
+        $logoalcaldia = 'images/gobiernologo.jpg';
+        $logosantaana = 'images/logo.png';
+
+        $tabla = "
+            <table style='width: 100%; border-collapse: collapse;'>
+                <tr>
+                    <!-- Logo izquierdo -->
+                    <td style='width: 15%; text-align: left;'>
+                        <img src='$logosantaana' alt='Santa Ana Norte' style='max-width: 100px; height: auto;'>
+                    </td>
+                    <!-- Texto centrado -->
+                    <td style='width: 60%; text-align: center;'>
+                        <h1 style='font-size: 16px; margin: 0; color: #003366; text-transform: uppercase;'>ALCALDÍA MUNICIPAL DE SANTA ANA NORTE</h1>
+                        <h2 style='font-size: 14px; margin: 0; color: #003366; text-transform: uppercase;'></h2>
+                    </td>
+                    <!-- Logo derecho -->
+                    <td style='width: 10%; text-align: right;'>
+                        <img src='$logoalcaldia' alt='Gobierno de El Salvador' style='max-width: 60px; height: auto;'>
+                    </td>
+                </tr>
+            </table>
+            <hr style='border: none; border-top: 2px solid #003366; margin: 0;'>
+            ";
+
+
+
+        $tabla .= "
+            <div style='text-align: center; margin-top: 20px;'>
+                <h1 style='font-size: 15px; margin: 0; color: #000;'>SALIDAS</h1>
+                  <h1 style='font-size: 15px; margin: 0; color: #000;'>DESDE $desdeFormat HASTA $hastaFormat</h1>
+            </div>
+            <p>Material: <strong>$infoMaterial->nombre</strong></p>
+            <div style='text-align: left; margin-top: 10px;'>
+            <p style='font-size: 13px; margin: 0; color: #000;'>Fecha: <strong>$fechaFormat</strong></p>
+        </div>
+      ";
+
+        $tabla .= "<table id='tablaFor' style='width: 100%; border-collapse: collapse; margin-top: 35px'>
+        <tbody>
+            <tr>
+             <th style='text-align: center; font-size:10px; width: 12%; font-weight: bold; border: 1px solid black;'>FECHA</th>
+                <th style='text-align: center; font-size:10px; width: 12%; font-weight: bold; border: 1px solid black;'>EQUIPO</th>
+                <th style='text-align: center; font-size:10px; width: 10%; font-weight: bold; border: 1px solid black;'>CANTIDAD</th>
+            </tr>
+        ";
+
+        foreach ($arraySalidaDetalle as $fila) {
+            $tabla .= "<tr>
+                    <td style='text-align: center; font-size:10px; border: 1px solid black;'>$fila->fechaF</td>
+                    <td style='text-align: center; font-size:10px; border: 1px solid black;'>$fila->equipo</td>
+                    <td style='text-align: center; font-size:10px; border: 1px solid black;'>$fila->cantidad</td>
+                </tr> ";
+        }
+
+        $tabla .= "</tbody></table>";
+
+        $stylesheet = file_get_contents('css/cssregistro.css');
+        $mpdf->WriteHTML($stylesheet,1);
+
+        $mpdf->setFooter("Página: " . '{PAGENO}' . "/" . '{nb}');
+        $mpdf->WriteHTML($tabla,2);
+
+        $mpdf->Output();
+    }
+
+
+
+
+
+
+
+
 }

@@ -351,3 +351,11 @@ Route::get('/admin/reporte/catalogo/llantas/index', [ReportesController::class,'
 Route::get('/admin/reporte/catalogo/llantas', [ReportesController::class,'reporteCatalogoLlantas']);
 
 
+
+Route::get('/admin/reporte/por/materiales/index', [ReportesController::class,'indexReportePorMateriales'])->name('admin.reporte.por.material');
+
+
+Route::get('/admin/reporte/pdf/material/entradas/{desde}/{hasta}/{material}', [ReportesController::class, 'reportePdfPorMaterialEntradas']);
+Route::get('/admin/reporte/pdf/material/salidas/{desde}/{hasta}/{material}', [ReportesController::class, 'reportePdfPorMaterialSalidas']);
+
+
