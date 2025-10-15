@@ -132,7 +132,7 @@
         formData.append('usuario', usuario);
         formData.append('password', password);
 
-        axios.post('/bodealcaldia/login', formData, {
+        axios.post('/bodealcaldia.com/login', formData, {
         })
             .then((response) => {
                 closeLoading();
